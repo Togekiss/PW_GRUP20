@@ -1,20 +1,25 @@
 {
-    "name": "marta/silex",
+    "name": "pw20/pwgram",
     "authors": [
         {
             "name": "Marta \"Togekiss\" Zapatero",
             "email": "martazapateroweb@gmail.com"
-        }
+        },
+      {
+          "name": "Roger \"rmarru\" Marrugat",
+          "email": "rogermarrugat96@gmail.com"
+      }
     ],
     "require": {
         "silex/silex": "~2.0",
         "twig/twig": "^2.3",
         "symfony/asset": "^3.2",
-        "symfony/twig-bridge": "^3.2"
+        "symfony/twig-bridge": "^3.2",
+        "doctrine/dbal": "~2.2"
     },
     "autoload": {
         "psr-4": {
-            "SilexApp\\": "src/"
+            "PWGram\\": "src/"
         }
     }
 }

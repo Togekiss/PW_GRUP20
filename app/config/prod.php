@@ -10,8 +10,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/../../src/view/template',
 ));
 
-$app->register(new \SilexApp\providers\HelloServide)
-
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',
@@ -20,4 +18,8 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
         'js' => array('base_path' => 'assets/js'),
         'images' => array('base_urls' => array('http://silexapp.dev/assets/img')),
     ),
+));
+
+$app->register(new \PWGram\providers\HelloServiceProvider(), array(
+   'hello.default_name' => 'Marta',
 ));

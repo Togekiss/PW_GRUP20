@@ -2,17 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: Marta
- * Date: 05/04/2017
- * Time: 19:00
+ * Date: 19/04/2017
+ * Time: 19:24
  */
 
-namespace Marta\Silex\src\model\services;
+namespace PWGram\model\services;
 
 
 class Calculator {
 
-    public function add(int $firstNumber, int $secondNumber) {
-        return $firstNumber + $secondNumber;
+    public function add(int $firstnumber, int $secondnumber) {
+        return $firstnumber + $secondnumber;
     }
 
 }

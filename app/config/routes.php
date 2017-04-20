@@ -6,5 +6,5 @@
  * Time: 15:45
  */
 
-$app->get('/hello', 'SilexApp\\controller\\HelloController::indexAction');
-$app->get('/add/{num1}/{num2}', 'SilexApp\\controller\\HelloController::addAction');
+$app->get('/hello/{name}', 'PWGram\\controller\\HelloController::indexAction');
+$app->get('/add/{num1}/{num2}', 'PWGram\\controller\\HelloController::addAction');

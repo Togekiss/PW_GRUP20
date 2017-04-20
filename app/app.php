@@ -10,8 +10,7 @@ use Silex\Application;
 
 $app = new Application();
 $app['app.name'] = 'SilexApp';
-$app['calc'] = function() {
-    return new Marta\Silex\src\model\services\Calculator();
+$app['calc'] = function(){
+    return new \PWGram\model\services\Calculator();
 };
-
 return $app;
