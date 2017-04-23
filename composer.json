@@ -15,7 +15,8 @@
         "twig/twig": "^2.3",
         "symfony/asset": "^3.2",
         "symfony/twig-bridge": "^3.2",
-        "doctrine/dbal": "~2.2"
+        "doctrine/dbal": "~2.2",
+        "twbs/bootstrap": "^3.3"
     },
     "autoload": {
         "psr-4": {
