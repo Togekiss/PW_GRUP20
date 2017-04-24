@@ -23,3 +23,5 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
 $app->register(new \PWGram\providers\HelloServiceProvider(), array(
    'hello.default_name' => 'Marta',
 ));
+
+$app->register(new Silex\Provider\SessionServiceProvider());
