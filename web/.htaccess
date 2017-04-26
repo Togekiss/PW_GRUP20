@@ -1,9 +1,11 @@
 <IfModule mod_rewrite.c>
-    Options -MultiViews
+    Options -MultiViews +FollowSymLinks
 
     RewriteEngine On
     #RewriteBase /path/to/app
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{http_host} ^grup20.com [nc]
+    RewriteRule ^(.*)$ http://www.grup20.com/$1 [r=301,nc]
     RewriteRule ^ index.php [QSA,L]
 </IfModule>

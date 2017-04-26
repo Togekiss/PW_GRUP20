@@ -9,7 +9,7 @@
 use Silex\Application;
 
 $app = new Application();
-$app['app.name'] = 'SilexApp';
+$app['app.name'] = 'PWGram';
 $app['calc'] = function(){
     return new \PWGram\model\services\Calculator();
 };
