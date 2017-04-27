@@ -16,7 +16,10 @@
         "symfony/asset": "^3.2",
         "symfony/twig-bridge": "^3.2",
         "doctrine/dbal": "~2.2",
-        "twbs/bootstrap": "^3.3"
+        "twbs/bootstrap": "^3.3",
+        "symfony/form": "^3.2",
+        "symfony/validator": "^3.2",
+        "symfony/config": "^3.2"
     },
     "autoload": {
         "psr-4": {

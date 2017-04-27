@@ -25,3 +25,6 @@ $app->register(new \PWGram\providers\HelloServiceProvider(), array(
 ));
 
 $app->register(new Silex\Provider\SessionServiceProvider());
+
+$app->register(new Silex\Provider\FormServiceProvider());
+
