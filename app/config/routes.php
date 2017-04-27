@@ -10,7 +10,17 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
+$before = function (Request $request, Application $app) {
+    if (!$app['session']->has('name')) {
+        $response = new Response();
+        $content = $app['twig']->render('error.twig', ['message' => 'You must be logged']);
+        $response->setContent($content);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        return $response;
+    }
+};
+
+$app->get('/', 'PWGram\\controller\\MainController::renderMainPage')->before($before);
 
 $app->get('/hello/{name}', 'PWGram\\controller\\HelloController::indexAction');
 $app->get('/add/{num1}/{num2}', 'PWGram\\controller\\HelloController::addAction');
