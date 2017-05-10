@@ -7,7 +7,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-        {% block styles %}{% endblock %}
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+            <link rel="stylesheet" type="text/css" href="{{ asset('styles.css', 'css') }}">
+        {% endblock %}
 
         <title>{% block title %}{% endblock %} - PWGram</title>
     {% endblock %}
@@ -36,7 +40,7 @@
         <div class="modal-dialog">
             <div class="loginmodal-container">
                 <h1>Login to Your Account</h1><br>
-                <form>
+                <form method="GET" enctype="multipart/form-data">
                     <input type="text" name="user" placeholder="Username">
                     <input type="password" name="pass" placeholder="Password">
                     <input type="submit" name="login" class="login loginmodal-submit" value="Login">
@@ -52,13 +56,16 @@
 {% endblock %}
 
 <div id="content">{% block content %}{% endblock %}</div>
-<div id="footer">
-    {% block footer %}
-        &copy; Copyright 2017 - {{ app.name }} - Roger Marrugat, Marta Zapatero
-    {% endblock %}
-</div>
 
-{% block scripts %}
+<footer class="footer">
+    <p>
+        {% block footer %}
+            &copy; Copyright 2017 - {{ app.name }} - Roger Marrugat, Marta Zapatero
+        {% endblock %}
+    </p>
+</footer>
+
+{% block javascripts %}
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>    <script src="{{ asset('/app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
