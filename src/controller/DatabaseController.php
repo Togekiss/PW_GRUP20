@@ -34,6 +34,12 @@ class DatabaseController {
 
     }
 
+    public function signUpAction (Application $app, $user) {
+        $sql = "INSERT INTO user (username, email, birthdate, password, img_path, active) VALUES (?, ?, ?, ?, ?, ?)";
+        $ok = $app['db']->fetchAssoc($sql, array($user['name'], $user['email'], $user['birthdate'], $user['password'], $user['img'], 0));
+        return $ok;
+    }
+
     public function updateAction(Application $app, $id, $name, $password, $birthdate, $img) {
         $first = false;
 
