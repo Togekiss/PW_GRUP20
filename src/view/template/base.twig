@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
         {% block stylesheets %}
+            <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css"> -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
             <link rel="stylesheet" type="text/css" href="{{ asset('styles.css', 'css') }}">
         {% endblock %}
@@ -24,8 +25,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="/">PWGram</a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="navbar-nav navbar-right">
                 {% block login %}
                     <button type="button" class="btn btn-sm btn-outline-secondary">
                         <a data-toggle="modal" data-target="#login-modal" class="nav-item nav-link" href="">Login</a>
@@ -75,12 +76,24 @@
 
 {% endblock %}
 
-<div id="content">{% block content %}{% endblock %}</div>
-<div id="footer">
-    {% block footer %}
+{#<div id="content">{% block content %}{% endblock %}</div>
+<div class="footer" id="footer">
+
         &copy; Copyright 2017 - {{ app.name }} - Roger Marrugat, Marta Zapatero
-    {% endblock %}
-</div>
+
+</div>#}
+
+<footer class="fixed-bottom">
+    <div class="container">
+        <span class="text-muted text-center">
+            {% block footer %}
+                &copy; Copyright 2017 - {{ app.name }} - Roger Marrugat, Marta Zapatero
+            {% endblock %}
+            <p></p>
+        </span>
+    </div>
+
+</footer>
 
 {% block javascripts %}
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
