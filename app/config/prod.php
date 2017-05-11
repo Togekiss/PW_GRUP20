@@ -20,11 +20,26 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
     ),
 ));
 
+$app->register(new \Silex\Provider\SessionServiceProvider());
+
+$app->register(new \Silex\Provider\FormServiceProvider());
+
+$app->register(new \Silex\Provider\LocaleServiceProvider());
+
+$app->register(new \Silex\Provider\ValidatorServiceProvider());
+
+$app->register(new \Silex\Provider\TranslationServiceProvider(), array('translator.domains' => array(),));
+
 $app->register(new \PWGram\providers\HelloServiceProvider(), array(
    'hello.default_name' => 'Marta',
 ));
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-$app->register(new Silex\Provider\FormServiceProvider());
-
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array (
+    'db.options' => array(
+        'driver' => 'pdo_mysql',
+        'dbname' => 'pwgram',
+        'user' => 'root',
+        'password' => '',
+    ),));
