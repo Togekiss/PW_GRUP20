@@ -25,7 +25,7 @@ $app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
 
 $app->post('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
-$app->post('/signup', 'PWGram\\controller\\MainController::signUp');
+$app->post('/register', 'PWGram\\controller\\MainController::signUp');
 $app->post('/', 'PWGram\\controller\\MainController::login');
 //$app->post('/login', 'PWGram\\controller\\MainController::login');
 

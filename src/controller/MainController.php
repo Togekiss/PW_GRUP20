@@ -58,7 +58,6 @@ class MainController {
                 'app' => ['name' => $app['app.name']],
                 'message' => 'nope'
             ));
-            //$_POST['user'] = 'pepe';
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -69,6 +68,7 @@ class MainController {
     public function login (Application $app, Request $request) {
         $user = $request->get('user');
         $pass = $request->get('pass');
+        $pass = md5($pass);
 
         $userController = new DatabaseController();
         $this->user = $userController->postAction($app, $user, $pass);
