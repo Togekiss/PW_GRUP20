@@ -6,12 +6,14 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ConstraintViolation;
 use PWGram\controller\UserController as UserC;
 
 
 class SignupController {
 
     public function signUp (Application $app, $user) {
+        $date = date('Y-m-d');
 
         $constraint = new Assert\Collection(array(
             'name' => array(new Assert\NotBlank(), new Assert\Regex(array('pattern' => '/^[A-Za-z0-9]+$/')), new Assert\Length(array('max' => 20))),
@@ -22,6 +24,11 @@ class SignupController {
         ));
 
         $errors = $app['validator']->validate($user, $constraint);
+
+        if ($user['birthdate'] > $date) {
+            $error1 = new ConstraintViolation('This value should not be in the future.', '', [], $user['birthdate'], '[birthdate]', 'birthdate');
+            $errors->add($error1);
+        }
         if (count($errors)) {
             foreach ($errors as $error) {
                 echo $error->getPropertyPath().' '.$error->getMessage()."\n";
