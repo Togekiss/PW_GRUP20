@@ -27,72 +27,79 @@
         <a class="navbar-brand" href="/">PWGram</a>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav navbar-right">
-                {% block login %}
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <a data-toggle="modal" data-target="#login-modal" class="nav-item nav-link" href="">Login</a>
-                    </button>
-                {% endblock %}
-                {% block profile %}
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                        <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Edit Profile</a>
-                    </button>
+                {% block buttons %}
+
+                    {% if user is defined %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{{ notifications.number }} notifications</a>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Upload</a>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{{ user.name }}</a>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Logout</a>
+                        </button>
+                    {% else %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a data-toggle="modal" data-target="#login-modal" class="nav-item nav-link" href="">Login</a>
+                        </button>
+                    {% endif %}
+
                 {% endblock %}
             </div>
         </div>
     </nav>
 
-
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="loginmodal-container">
-                <h1>Login to Your Account</h1><br>
-                <form method="post" href="grup20.com">
-                    <input type="text" name="user" placeholder="Username / Email">
-                    <input type="password" name="pass" placeholder="Password">
-                    <input type="submit" name="login" class="login loginmodal-submit" value="Login">
-                </form>
-
-                <div class="login-help">
-                    <a href="#">Register</a> - <a href="#">Forgot Password</a>
+    {% block buttoncode %}
+        {% if user is defined %}
+            <div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="loginmodal-container">
+                        <h1>Edit your Profile</h1><br>
+                        <form method="post" action="/edit">
+                            <input type="text" name="user" placeholder="New Username">
+                            <input type="password" name="pass" placeholder="New Password">
+                            <input type="date" name="birthdate">
+                            <input type="file" name="img_path" placeholder="New Profile Image">
+                            <input type="submit" name="edit" class="login loginmodal-submit" value="Save Changes">
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        {% else %}
+            <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="loginmodal-container">
+                        <h1>Login to Your Account</h1><br>
+                        <form method="post" href="grup20.com">
+                            <input type="text" name="user" placeholder="Username / Email">
+                            <input type="password" name="pass" placeholder="Password">
+                            <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+                        </form>
 
-    <div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="loginmodal-container">
-                <h1>Edit your Profile</h1><br>
-                <form method="post" action="/edit">
-                    <input type="text" name="user" placeholder="New Username">
-                    <input type="password" name="pass" placeholder="New Password">
-                    <input type="date" name="birthdate">
-                    <input type="file" name="img_path" placeholder="New Profile Image">
-                    <input type="submit" name="edit" class="login loginmodal-submit" value="Save Changes">
-                </form>
+                        <div class="login-help">
+                            <a href="#">Register</a> - <a href="#">Forgot Password</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        {% endif %}
+    {% endblock %}
 
 {% endblock %}
 
-{#<div id="content">{% block content %}{% endblock %}</div>
-<div class="footer" id="footer">
+<div id="content">{% block content %}{% endblock %}</div>
 
-        &copy; Copyright 2017 - {{ app.name }} - Roger Marrugat, Marta Zapatero
-
-</div>#}
-
-<footer class="fixed-bottom">
-    <div class="container">
-        <span class="text-muted text-center">
+<footer class="fixed-bottom text-center">
+        <span class="text-muted">
             {% block footer %}
                 &copy; Copyright 2017 - {{ app.name }} - Roger Marrugat, Marta Zapatero
             {% endblock %}
             <p></p>
         </span>
-    </div>
-
 </footer>
 
 {% block javascripts %}

@@ -1,67 +1,21 @@
-/*
-* Custom variables
-
-$main-font: 'Lato', sans-serif;
-$sub-font: 'Montserrat', sans-serif;
-$fancy-font: 'Kaushan Script', cursive;
-$font-size: 16px;
-
-$black: #000;
-$white: #FFF;
-$grey: #585c65;
-$mediumgrey: #9b9b9b;
-$lightgrey: #eeeeee;
-$blue: #3466a1;
-
-$padding: 10px;
-$margin: 10px;
 
 
-$font-family-sans-serif: $main-font;
+/*Sticky footer styles
 
-@import 'bootstrap';
-*/
-* {
-    position: relative;
-    box-sizing: border-box;
-}
-
-body {
-    color: #585c65;
-    font-size: 16px;
-}
-
-
-header {
-    max-height: 600px;
-    height: 600px;
-    overflow: hidden;
-}
-
-header img {
-    position: fixed;
-    top: 0px;
-    left: 50%;
-    margin-left: -600px;
-    width: 1200px;
-}
-/*
-Sticky footer styles
-
---------------------------------------------------
+--------------------------------------------------*/
 html {
     position: relative;
     min-height: 100%;
 }
 body {
-    //Margin bottom by footer height
+    /*Margin bottom by footer height*/
     margin-bottom: 60px;
 }
 .footer {
     position: absolute;
     bottom: 0;
-    width: 100%;*/
-    /*Set the fixed height of the footer here
+    width: 100%;
+    /*Set the fixed height of the footer here*/
     height: 60px;
     background-color: #f5f5f5;
 }
@@ -71,4 +25,3 @@ p {
     background-color: indianred;
 }
 
-*/
