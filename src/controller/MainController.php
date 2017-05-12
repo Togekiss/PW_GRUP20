@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Session;
 class MainController {
 
     private $user = null;
+    public $default = __DIR__ . '/../../res/default_portrait.png';
 
     public function renderMainPage (Application $app) {
 
@@ -35,25 +36,29 @@ class MainController {
             'birthdate' => $request->get('birthdate'),
             'password' => $request->get('password'),
             'password2' => $request->get('password2'),
-            'img' => $request->get('img')
         );
 
         $signUpController = new SignupController();
         $response = new Response();
 
-        $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        $content = $app['twig']->render('error.twig', array(
-            'app' => ['name' => $app['app.name']],
-            'message' => 'Could not create new user'));
-
         if (!$signUpController->signUp($app, $user)) {
             $userController = new DatabaseController();
+            $user['password'] = md5($user['password']);
+            $user['img'] = $request->get('img');
+            if (!$user['img']) $user['img'] = $this->default;
             if ($userController->signUpAction($app, $user)) {
                 $response->setStatusCode(Response::HTTP_OK);
-                $content = $app['twig']->render('hello.twig', array(
+                $content = $app['twig']->render('MainPage.twig', array(
                     'app' => ['name' => $app['app.name']],
                     'user' => 'Created!'));
             }
+        }else if(isset($_POST['signup'])) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $content = $app['twig']->render('error.twig', array(
+                'app' => ['name' => $app['app.name']],
+                'message' => 'nope'
+            ));
+            //$_POST['user'] = 'pepe';
         }
 
         $response->headers->set('Content-Type', 'text/html');
