@@ -6,13 +6,15 @@
 
 {% block content %}
 
-    <h1>Register</h1><br>
+    <h1>Sign Up Your New Account</h1><br>
     <form method="post" action="/register">
-        <input type="text" name="user" placeholder="New Username">
-        <input type="password" name="pass" placeholder="New Password">
+        <input type="text" name="user" placeholder="Username">
+        <input type="email" name="email" placeholder="Email">
         <input type="date" name="birthdate">
-        <input type="file" name="img_path" placeholder="New Profile Image">
-        <input type="submit" name="edit" value="Save Changes">
+        <input type="password" name="password" placeholder="Password">
+        <input type="password" name="password2" placeholder="Confirm Password">
+        <input type="file" name="img" placeholder="Profile Image">
+        <input type="submit" name="signup" value="Sign Up">
     </form>
 
 {% endblock %}
