@@ -26,6 +26,7 @@ $app->get('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
 $app->get('/login', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/logout', 'PWGram\\controller\\MainController::logout');
 $app->get('/upload-image', 'PWGram\\controller\\MainController::upload')->before($before);
+$app->get('/like/{idImg}', 'PWGram\\controller\\MainController::uploadLike')->before($before);
 
 $app->post('/', 'PWGram\\controller\\MainController::login');
 $app->post('/login', 'PWGram\\controller\\MainController::login');

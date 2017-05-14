@@ -226,14 +226,19 @@ class MainController {
             $userController = new DatabaseController();
             $this->user = $userController->getAction($app, $app['session']->get('name'));
 
-            if ($userController->getComment($app, $idImg, $this->user['id'])) {
-                header('Location: ' . '/', true, 303);
-                die();
+            if (!$userController->getComment($app, $idImg, $this->user['id'])) {
+                $comment['image_id'] = $idImg;
+                $comment['user_id'] = $this->user['id'];
+
+                $notification = 0;
+
+                if ($userController->uploadCommentAction($app, $comment) && $userController->uploadNotificationAction($app, $notification)) {
+                    header('Location: ' . '/', true, 303);
+                    die();
+                }
             }
-            $message = 'We had an issue signing you up. Please try again!';
-
+            $message = 'You can only comment once per photo!';
         }
-
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
@@ -244,6 +249,23 @@ class MainController {
         ));
         $response->setContent($content);
         return $response;
+    }
+
+    public function uploadLike(Application $app, $idImg) {
+
+        $userController = new DatabaseController();
+        $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+        $like = array(
+            'image_id' => $idImg,
+            'user_id' => $this->user['id']
+        );
+
+        if (!$userController->getLike($app, $idImg, $this->user['id'])) $userController->uploadLikeAction($app, $like);
+        else $userController->deleteLikeAction($app, $userController->getLike($app, $idImg, $this->user['id'])['id']);
+
+        header('Location: ' . '/', true, 303);
+        die();
     }
 
     public function logout (Application $app) {
