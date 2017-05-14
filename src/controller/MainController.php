@@ -19,23 +19,16 @@ class MainController {
 
         $response = new Response();
 
-        if (!$app['session']->has('name')) {
-            $content = $app['twig']->render('MainPage.twig', array(
-                'app' => [
-                    'name' => $app['app.name']
-                ]
-            ));
-        }
-        else {
+        $array = array('app' => ['name' => $app['app.name']]);
+
+        if ($app['session']->has('name')) {
             $userController = new DatabaseController();
             $this->user = $userController->getAction($app, $app['session']->get('name'));
-            $content = $app['twig']->render('hello.twig', array(
-                'app' => [
-                    'name' => $app['app.name']
-                ],
-                'user' => $this->user
-            ));
+            $array['user'] = $this->user;
         }
+
+        $content = $app['twig']->render('MainPage.twig', $array);
+
         $response->setStatusCode($response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/html');
         $response->setContent($content);
