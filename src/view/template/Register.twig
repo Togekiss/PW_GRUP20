@@ -1,0 +1,20 @@
+{% extends "base.twig" %}
+
+{# PAGINA AMB FORMULARI PER DONAR-SE D'ALTA #}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+    <h1>Register Your New Account</h1><br>
+    <form method="post" action="/register" enctype="multipart/form-data">
+        <input type="text" name="user" placeholder="Username">
+        <input type="email" name="email" placeholder="Email">
+        <input type="date" name="birthdate">
+        <input type="password" name="password" placeholder="Password">
+        <input type="password" name="password2" placeholder="Confirm Password">
+        <input type="file" name="img" placeholder="Profile Image">
+        <input type="submit" name="signup" value="Sign Up">
+    </form>
+
+{% endblock %}
