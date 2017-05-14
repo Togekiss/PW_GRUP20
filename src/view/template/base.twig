@@ -31,13 +31,13 @@
 
                     {% if user is defined %}
                         <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{{ notifications.number }} notifications</a>
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{#{{  notifications.number }}#} notifications</a>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">
                             <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Upload</a>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{{ user.name }}</a>
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{#{{ user.name }}#}</a>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">
                             <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Logout</a>
@@ -81,7 +81,7 @@
                         </form>
 
                         <div class="login-help">
-                            <a href="/register">Register</a>
+                            <a href="/signup">Register</a>
                         </div>
                     </div>
                 </div>

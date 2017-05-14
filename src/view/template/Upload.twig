@@ -4,11 +4,16 @@
 
 {% block title %} Upload a picture {% endblock %}
 
-<h1>Upload a picture</h1><br>
-<form method="post" action="/upload">
-    <input type="file" name="img" placeholder="Profile Image">
-    <input type="text" name="title" placeholder="Title">
-    Private? <input type="checkbox" name="private">
+{% block content %}
+    <h1>Upload a picture</h1><br>
 
-    <input type="submit" name="signup" value="Sign Up">
-</form>
+    <img src="/res/default_portrait.png">
+
+    <form method="post" action="/upload">
+        <input type="file" name="img" placeholder="Profile Image">
+        <input type="text" name="title" placeholder="Title">
+        Private? <input type="checkbox" name="private">
+
+        <input type="submit" name="upload" value="Upload picture">
+    </form>
+{% endblock %}
