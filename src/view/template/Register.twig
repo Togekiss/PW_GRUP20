@@ -7,15 +7,41 @@
 {% block content %}
 
     <h1>Register Your New Account</h1><br>
-    <form method="post" action="/register" enctype="multipart/form-data">
-        <input type="text" name="user" placeholder="Username">
-        <input type="email" name="email" placeholder="Email">
-        <input type="date" name="birthdate">
-        <input type="password" name="password" placeholder="Password">
-        <input type="password" name="password2" placeholder="Confirm Password">
-        <img src="{{ asset('default_portrait.png', 'images') }}" height="100" width="100">
-        <input type="file" name="img" placeholder="Profile Image">
-        <input type="submit" name="signup" value="Sign Up">
+    <form method="post" action="/register" enctype="multipart/form-data" data-toggle="validator">
+        <div class="form-group has-feedback">
+            <label class="control-label">Username:</label>
+            <input type="text" name="user" placeholder="Username" maxlength="20" pattern="^[_A-z0-9]{1,}$" class="form-control" required>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label">Email:</label>
+            <input type="email" name="email" placeholder="Email" class="form-control" required>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Birthdate:</label>
+            <input type="date" name="birthdate" class="form-control" required>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label">Password:</label>
+            <input type="password" class="form-control" placeholder="Password" name="password" id="password" minlength="6" maxlength="12" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{6,}$" required>
+            <div class="help-block">The password must be 6-12 characters long and contain lowercase, uppercase and numbers.</div>
+        </div>
+        <div class="form-group has-feedback">
+            <label class="control-label">Confirm password:</label>
+            <input type="password" name="password2" placeholder="Confirm Password" class="form-control" data-match="#password" data-match-error="The passwords don't match." required>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Icon:</label>
+            <img src="{{ asset('default_portrait.png', 'images') }}" height="100" width="100">
+            <input type="file" name="img" placeholder="Profile Image">
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+            <input type="submit" name="signup" value="Sign Up">
+        </div>
     </form>{# /assets/img/{{ img.filename }} #}
 
 {% endblock %}
