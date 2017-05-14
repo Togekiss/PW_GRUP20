@@ -8,13 +8,25 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DatabaseController {
 
-    public function getAction(Application $app, $username) {
+    public function getAction (Application $app, $username) {
         $sql = "SELECT * FROM user WHERE username = ?";
         $user = $app['db']->fetchAssoc($sql, array((String)$username));
         return $user;
     }
 
-    public function postAction(Application $app, $name, $password) {
+    public function getActionId (Application $app, $id) {
+        $sql = "SELECT * FROM user WHERE id = ?";
+        $user = $app['db']->fetchAssoc($sql, array((int)$id));
+        return $user;
+    }
+
+    public function getComment (Application $app, $idImg, $idUser) {
+        $sql = "SELECT * FROM comments WHERE user_id = ? AND image_id = ?";
+        $comment = $app['db']->fetchAssoc($sql, array((int)$idUser, (int)$idImg));
+        return $comment;
+    }
+
+    public function postAction (Application $app, $name, $password) {
         $sql = "SELECT * FROM user WHERE username = ? AND password = ?";
         $user = $app['db']->fetchAssoc($sql, array($name, $password));
         if (!$user) {
@@ -36,7 +48,7 @@ class DatabaseController {
             ':created_at' => $date = date('c')));
     }
 
-    public function deleteAction(Application $app) {
+    public function deleteAction (Application $app) {
 
     }
 
@@ -51,7 +63,7 @@ class DatabaseController {
             ':active' => 0));
     }
 
-    public function updateAction(Application $app, $user) {
+    public function updateAction (Application $app, $user) {
         $errors = 0;
 
         if ($user['name']) {
@@ -72,5 +84,13 @@ class DatabaseController {
         }
 
         return $errors;
+    }
+
+    public function mostViewed (Application $app) {
+        return $app['db']->fetchAll('SELECT * FROM images ORDER BY visits DESC LIMIT 5');
+    }
+
+    public function mostRecent (Application $app) {
+        return $app['db']->fetchAll('SELECT * FROM images ORDER BY created_at DESC LIMIT 5');
     }
 }
