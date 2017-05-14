@@ -14,9 +14,9 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',
     'assets.named_packages' => array(
-        'css' => array('base_path' => 'assets/css'),
-        'js' => array('base_path' => 'assets/js'),
-        'images' => array('base_urls' => array('http://pwgram.dev/assets/img')),
+        'css' => array('base_path' => '/assets/css/'),
+        'js' => array('base_path' => '/assets/js/'),
+        'images' => array('base_urls' => array('http://grup20.com/assets/img/')),
     ),
 ));
 

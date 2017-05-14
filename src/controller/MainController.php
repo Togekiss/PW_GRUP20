@@ -16,7 +16,7 @@ class MainController {
 
     public function renderMainPage (Application $app) {
 
-        $content = $app['twig']->render('MainPage.twig', array(
+        $content = $app['twig']->render('Register.twig', array(
             'app' => [
                 'name' => $app['app.name']
             ]

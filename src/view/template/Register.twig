@@ -13,8 +13,9 @@
         <input type="date" name="birthdate">
         <input type="password" name="password" placeholder="Password">
         <input type="password" name="password2" placeholder="Confirm Password">
+        <img src="{{ asset('default_portrait.png', 'images') }}" height="100" width="100">
         <input type="file" name="img" placeholder="Profile Image">
         <input type="submit" name="signup" value="Sign Up">
-    </form>
+    </form>{# /assets/img/{{ img.filename }} #}
 
 {% endblock %}
