@@ -3,18 +3,17 @@
 
 {# PAGINA PER VEURE EL PERFIL D'UN USUARI AMB LES SEVES FOTOS #}
 
-{% block title %}USERNAME{# {{ user.name }} #}''s profile{% endblock %}
+{% block title %}{{ user2.username }}'s profile{% endblock %}
 
 
 {% block content %}
 
     <img src="{# {{ assets('{{ user.icon }}', images) }} #}" alt="Profile pic" height="200" width="200">
-    <h1>USERNAME{# {{ user.name }} #}'s profile</h1>
-    <p>{# {{ user.num_images }} #}0 images</p>
-    <p>{# {{ user.comments }} #}0 comments</p>
-    {# {% if user.id == this.id %} #}
-    {% if true  %}
-        <a href="{# /{{ img.id }}/edit #}">Edit profile</a>
+    <h1>{{ user2.username }}'s profile</h1>
+    <p>{{ user2.num_images }} images</p>
+    <p>{{ user2.comments }} comments</p>
+    {% if user2.id == user.id %}
+        <a href="/edit">Edit profile</a>
         <a href="{# /{{ img.id }}/comments #}">See your comments</a>
     {% endif %}
 

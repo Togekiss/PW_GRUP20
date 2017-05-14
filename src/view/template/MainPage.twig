@@ -21,7 +21,7 @@
             <figure id="{{ img.id }}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="{{ img.title }}" width="400" height="300">
                 <figcaption>
-                    <a href="{#link_al_user_profile#}">{{ user2.username }}</a>
+                    <a href="/user/{{ user2.id }}">{{ user2.username }}</a>
                     <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
                     <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
                     {% if user is defined %}

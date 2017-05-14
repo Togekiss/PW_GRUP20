@@ -2,6 +2,8 @@
 
 namespace PWGram\controller;
 
+//TODO Comments i likes per Javascript
+
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +17,7 @@ class MainController {
     public $default = __DIR__ . '/../../res/default_portrait.png';
     public $upload = __DIR__ . '/../../web/upload/';
 
-    public function renderMainPage (Application $app) {
-
+    public function renderMainPage (Application $app, Request $request) {
         $response = new Response();
         $userController = new DatabaseController();
         $imgViewed = $userController->mostViewed($app);
@@ -75,6 +76,29 @@ class MainController {
             'user' =>  $userController->getAction($app, $app['session']->get('name')));
 
         $content = $app['twig']->render('Image.twig', $array);
+        $response = new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function ShowUser (Application $app, $idUser) {
+        $userController = new DatabaseController();
+        $user = $userController->getActionId($app, $idUser);
+        $user['num_images'] = $userController->getNumImages($app, $idUser);
+        $user['comments'] = $userController->getNumComment($app, $idUser);
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'user2'=> $user);
+
+        if ($app['session']->has('name')) {
+            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $array['user'] = $this->user;
+        }
+
+        $content = $app['twig']->render('Profile.twig', $array);
         $response = new Response();
         $response->setStatusCode($response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/html');
@@ -266,7 +290,7 @@ class MainController {
                 );
 
                 if ($ok && $userController->uploadNotificationAction($app, $notification) &&
-                    $userController->updateNotificationUser($app, $img['user_id'], 1)) {
+                    $userController->updateNotificationUser($app, $img['user_id'], 1, 1)) {
                     header('Location: ' . '/', true, 303);
                     die();
                 }
@@ -285,7 +309,7 @@ class MainController {
         return $response;
     }
 
-    public function uploadLike(Application $app, $idImg) {
+    public function uploadLike(Application $app, Request $request, $idImg) {
 
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
@@ -309,19 +333,30 @@ class MainController {
             );
 
             $userController->uploadNotificationAction($app, $notification);
-            $userController->updateNotificationUser($app, $img['user_id'], 1);
+            $userController->updateNotificationUser($app, $img['user_id'], 1,  1);
             $userController->updateLikeImage ($app, $img['id'], 1);
         }
         else {
             $userController->deleteLikeAction($app, $userController->getLike($app, $idImg, $user['id'])['id']);
             $userController->deleteNotificationAction($app, $userController->getNotification($app, $idImg, $img['user_id'])['id']);
-            $userController->updateNotificationUser($app, $img['user_id'], 0);
+            $userController->updateNotificationUser($app, $img['user_id'], 1, 0);
             $userController->updateLikeImage ($app, $img['id'], 0);
         }
 
         header('Location: ' . '/', true, 303);
         die();
+    }
 
+    public function removeImage (Application $app, $idImg) {
+        $userController = new DatabaseController();
+
+        $userController->updateNotificationUser(
+            $app,
+            $this->user = $userController->getAction($app,
+            $app['session']->get('name')), $userController->getNotificationNum($app, $idImg),
+            0);
+
+        $userController->deleteImageAction($app, $idImg);
     }
 
     public function logout (Application $app) {
