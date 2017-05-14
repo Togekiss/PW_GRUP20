@@ -33,6 +33,7 @@ $app->post('/edit', 'PWGram\\controller\\MainController::edit')->before($before)
 $app->post('/register', 'PWGram\\controller\\MainController::signUp');
 $app->post('/logout', 'PWGram\\controller\\MainController::logout');
 $app->post('/upload-image', 'PWGram\\controller\\MainController::upload');
+$app->post('/comment/{idImg}', 'PWGram\\controller\\MainController::uploadComment')->before($before);
 //$app->post('/login', 'PWGram\\controller\\MainController::login');
 
 $app->get('/register', 'PWGram\\controller\\MainController::ShowsignUp');

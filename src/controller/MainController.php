@@ -18,8 +18,17 @@ class MainController {
     public function renderMainPage (Application $app) {
 
         $response = new Response();
+        $userController = new DatabaseController();
+        $imgViewed = $userController->mostViewed($app);
+        $userViewed = $userController->getActionId($app, $imgViewed[0]['user_id']);
 
-        $array = array('app' => ['name' => $app['app.name']]);
+        $imgRecent = $userController->mostRecent($app);
+        $userRecent = $userController->getActionId($app, $imgRecent[0]['user_id']);
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'img' => $imgViewed[0],
+            'user2'=> $userViewed);
 
         if ($app['session']->has('name')) {
             $userController = new DatabaseController();
@@ -195,6 +204,36 @@ class MainController {
 
             }
         }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function uploadComment(Application $app, Request $request, $idImg) {
+        $comment = array('text' => $request->get('text'));
+
+        $uploadController = new UploadController();
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+
+        if (!$uploadController->uploadComment($app, $comment)) {
+            $userController = new DatabaseController();
+            $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+            if ($userController->getComment($app, $idImg, $this->user['id'])) {
+                header('Location: ' . '/', true, 303);
+                die();
+            }
+            $message = 'We had an issue signing you up. Please try again!';
+
+        }
+
 
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');

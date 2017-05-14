@@ -23,4 +23,19 @@ class UploadController {
         }
         return count($errors);
     }
+
+    public function uploadComment (Application $app, $comment) {
+        $constraint = new Assert\Collection(array(
+            'text' => array(new Assert\NotBlank(), new Assert\Length(array('max' => 255))),
+        ));
+
+        $errors = $app['validator']->validate($comment, $constraint);
+
+        if (count($errors)) {
+            foreach ($errors as $error) {
+                echo $error->getPropertyPath().' '.$error->getMessage()."\n";
+            }
+        }
+        return count($errors);
+    }
 }
