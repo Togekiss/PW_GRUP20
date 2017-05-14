@@ -3,4 +3,36 @@
 
 {# PAGINA PER VEURE EL PERFIL D'UN USUARI AMB LES SEVES FOTOS #}
 
-{% block title %}{{ user.name }}'s profile{% endblock %}
+{% block title %}USERNAME{# {{ user.name }} #}''s profile{% endblock %}
+
+
+{% block content %}
+
+    <img src="{# {{ assets('{{ user.icon }}', images) }} #}" alt="Profile pic" height="200" width="200">
+    <h1>USERNAME{# {{ user.name }} #}'s profile</h1>
+    <p>{# {{ user.num_images }} #}0 images</p>
+    <p>{# {{ user.comments }} #}0 comments</p>
+    {# {% if user.id == this.id %} #}
+    {% if true  %}
+        <a href="{# /{{ img.id }}/edit #}">Edit profile</a>
+    {% endif %}
+
+    <h2>Published images</h2>
+    <ul id="user-img" class="img-list">
+        <li>
+            <figure id="{# {{ img.id }} #}">
+                <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
+                <figcaption>
+                    <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a>
+                    {# {% if user.id == this.id %} #}
+                    {% if true  %}
+                        <a href="{# /{{ img.id }}/edit #}">Edit</a>
+                        <a href="{# /{{ img.id }}/delete #}">Delete</a>
+                    {% endif %}
+                </figcaption>
+            </figure>
+        </li>
+
+    </ul>
+
+{% endblock %}
