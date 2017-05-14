@@ -10,6 +10,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation;
+use PWGram\controller\DatabaseController;
 
 $before = function (Request $request, Application $app) {
     if (!$app['session']->has('name')) {
@@ -21,12 +22,28 @@ $before = function (Request $request, Application $app) {
     }
 };
 
+$imgCheck = function (Request $request, Application $app) {
+    $idImg = $request->get('idImg');
+    $userController = new DatabaseController();
+    $img = $userController->getImageAction($app, $idImg);
+
+    if (!$img || $img['private']) {
+        $response = new Response();
+        $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'The image does not exist or it is private.'));
+        $response->setContent($content);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        return $response;
+    }
+    $userController->updateVisits($app, $idImg);
+};
+
 $app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
 $app->get('/login', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/logout', 'PWGram\\controller\\MainController::logout');
 $app->get('/upload-image', 'PWGram\\controller\\MainController::upload')->before($before);
 $app->get('/like/{idImg}', 'PWGram\\controller\\MainController::uploadLike')->before($before);
+$app->get('/image/{idImg}', 'PWGram\\controller\\MainController::ShowImage')->before($imgCheck);
 
 $app->post('/', 'PWGram\\controller\\MainController::login');
 $app->post('/login', 'PWGram\\controller\\MainController::login');

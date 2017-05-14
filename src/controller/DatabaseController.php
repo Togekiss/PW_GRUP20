@@ -155,6 +155,17 @@ class DatabaseController
         return $stmt->execute(array(':id' => $id));
     }
 
+    public function updateLikeImage (Application $app, $id, $positive) {
+        if ($positive) $stmt = $app['db']->prepare("UPDATE images SET likes = likes + 1 WHERE id=:id");
+        else $stmt = $app['db']->prepare("UPDATE images SET likes = likes - 1 WHERE id=:id");
+        return $stmt->execute(array(':id' => $id));
+    }
+
+    public function updateVisits(Application $app, $id) {
+        $stmt = $app['db']->prepare("UPDATE images SET visits= visits + 1 WHERE id=:id");
+        return $stmt->execute(array(':id' => $id));
+    }
+
     public function deleteLikeAction(Application $app, $id) {
         $stmt = $app['db']->prepare("DELETE FROM likes WHERE id = :id");
         return $stmt->execute(array(':id' => $id));
