@@ -5,9 +5,9 @@ namespace PWGram\controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use DateTime;
 use PWGram\controller\DatabaseController;
 use Symfony\Component\HttpFoundation\Session;
-
 
 class MainController {
 
@@ -44,12 +44,37 @@ class MainController {
         return $response;
     }
 
-    public function ShowsignUp (Application $app, Request $request) {
+    public function ShowsignUp (Application $app) {
         $content = $app['twig']->render('Register.twig', array(
             'app' => [
                 'name' => $app['app.name']
             ]
         ));
+        $response = new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function ShowImage (Application $app, $idImg) {
+        $userController = new DatabaseController();
+        $img = $userController->getImageAction($app, $idImg);
+
+        $user = $userController->getAction($app, $img['user_id']);
+
+        $datetime1 = date_create($img['created_at']);
+        $datetime2 = date_create('now');
+        $interval = date_diff($datetime1, $datetime2);
+        $img['days'] = $interval->format('%a');
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'img' => $img,
+            'user2'=> $user,
+            'user' =>  $userController->getAction($app, $app['session']->get('name')));
+
+        $content = $app['twig']->render('Image.twig', $array);
         $response = new Response();
         $response->setStatusCode($response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/html');
@@ -178,7 +203,7 @@ class MainController {
         $uploadController = new UploadController();
         $message = 'Your introduced data is erroneous. Change the camps with errors!';
 
-        if (!$request->files->get('img')->getError()) {
+        if ($request->files->get('img') && !$request->files->get('img')->getError()) {
             if (!$uploadController->upload($app, $img)) {
                 $userController = new DatabaseController();
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
@@ -285,11 +310,13 @@ class MainController {
 
             $userController->uploadNotificationAction($app, $notification);
             $userController->updateNotificationUser($app, $img['user_id'], 1);
+            $userController->updateLikeImage ($app, $img['id'], 1);
         }
         else {
             $userController->deleteLikeAction($app, $userController->getLike($app, $idImg, $user['id'])['id']);
             $userController->deleteNotificationAction($app, $userController->getNotification($app, $idImg, $img['user_id'])['id']);
             $userController->updateNotificationUser($app, $img['user_id'], 0);
+            $userController->updateLikeImage ($app, $img['id'], 0);
         }
 
         header('Location: ' . '/', true, 303);
