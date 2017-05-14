@@ -11,11 +11,38 @@ use Symfony\Component\HttpFoundation\Session;
 
 class MainController {
 
-    private $user = null;
+    private $user;
     public $default = __DIR__ . '/../../res/default_portrait.png';
+    public $upload = __DIR__ . '/../../web/upload/';
 
     public function renderMainPage (Application $app) {
 
+        $response = new Response();
+
+        if (!$app['session']->has('name')) {
+            $content = $app['twig']->render('MainPage.twig', array(
+                'app' => [
+                    'name' => $app['app.name']
+                ]
+            ));
+        }
+        else {
+            $userController = new DatabaseController();
+            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $content = $app['twig']->render('hello.twig', array(
+                'app' => [
+                    'name' => $app['app.name']
+                ],
+                'user' => $this->user
+            ));
+        }
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function ShowsignUp (Application $app, Request $request) {
         $content = $app['twig']->render('Register.twig', array(
             'app' => [
                 'name' => $app['app.name']
@@ -40,28 +67,36 @@ class MainController {
 
         $signUpController = new SignupController();
         $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
 
         if (!$signUpController->signUp($app, $user)) {
             $userController = new DatabaseController();
             $user['password'] = md5($user['password']);
-            $user['img'] = $request->get('img');
-            if (!$user['img']) $user['img'] = $this->default;
-            if ($userController->signUpAction($app, $user)) {
-                $response->setStatusCode(Response::HTTP_OK);
-                $content = $app['twig']->render('MainPage.twig', array(
-                    'app' => ['name' => $app['app.name']],
-                    'user' => 'Created!'));
+
+            if (!$request->files->get('img')->getError()) {
+                $tmp_name = $request->files->get('img');
+                $name = basename($request->files->get('img')->getClientOriginalName());
+                $name = $this->upload . $name;
+                move_uploaded_file($tmp_name, $name);
+                $user['img'] = $name;
             }
-        }else if(isset($_POST['signup'])) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-            $content = $app['twig']->render('error.twig', array(
-                'app' => ['name' => $app['app.name']],
-                'message' => 'nope'
-            ));
-            //$_POST['user'] = 'pepe';
+
+            if (!$user['img']) $user['img'] = $this->default;
+
+            if ($userController->signUpAction($app, $user)) {
+                $app['session']->set('name', $user['name']);
+                header('Location: ' . '/', true, 303);
+                die();
+            }
+            $message = 'We had an issue signing you up. Please try again!';
         }
 
-        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
         $response->setContent($content);
         return $response;
     }
@@ -69,6 +104,7 @@ class MainController {
     public function login (Application $app, Request $request) {
         $user = $request->get('user');
         $pass = $request->get('pass');
+        $pass = md5($pass);
 
         $userController = new DatabaseController();
         $this->user = $userController->postAction($app, $user, $pass);
@@ -81,51 +117,109 @@ class MainController {
                 'message' => 'User not found'));
         }
         else {
-            $response->setStatusCode(Response::HTTP_OK);
-            $content = $app['twig']->render('hello.twig', array(
-                'app' => [
-                    'name' => $app['app.name']
-                ],
-                'user' => $user
-            ));
-            $app['session']->set('name', 'hola');
+            $app['session']->start();
+            $app['session']->set('name', $this->user['username']);
+            header('Location: ' . '/', true, 303);
+            die();
         }
 
         $response->headers->set('Content-Type', 'text/html');
-        header("Location: grup20.com/login");
         $response->setContent($content);
         return $response;
     }
 
     public function edit (Application $app, Request $request) {
-        $user = $request->get('user');
-        $pass = $request->get('pass');
-        $birthdate = $request->get('birthdate');
-        $img = $request->get('img_path');
 
-        $userController = new DatabaseController();
-        $this->user = $userController->postAction($app, $user, $pass);
+        $user = array(
+            'name' => $request->get('user'),
+            'birthdate' => $request->get('birthdate'),
+            'password' => $request->get('password'),
+        );
+
+        $editController = new EditController();
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+
+        if (!$editController->edit($app, $user)) {
+            $userController = new DatabaseController();
+            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $user = array(
+                'name' => $user['name']?$user['name']:null,
+                'password' => $user['password']?md5($user['password']):null,
+                'birthdate' => $user['birthdate']?$user['birthdate']:null,
+                'img' => $request->get('img')?$request->get('img'):null,
+                'id' => $this->user['id']
+            );
+
+            if ($userController->updateAction($app, $user) == count(array_filter($user))- 1) {
+                if ($user['name']) $app['session']->set('name', $user['name']);
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                header('Location: ' . '/', true, 303);
+                die();
+            }
+            $message = 'We had an issue signing you up. Please try again!';
+        }
+
         $response = new Response();
-
-        if (!$this->user) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-            $content = $app['twig']->render('error.twig', array(
-                'app' => ['name' => $app['app.name']],
-                'message' => 'User not found'));
-        }
-        else {
-            $response->setStatusCode(Response::HTTP_OK);
-            $content = $app['twig']->render('hello.twig', array(
-                'app' => [
-                    'name' => $app['app.name']
-                ],
-                'user' => $user
-            ));
-        }
-
         $response->headers->set('Content-Type', 'text/html');
-        header("Location: grup20.com/login");
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
         $response->setContent($content);
         return $response;
+    }
+
+    public function upload (Application $app, Request $request) {
+        $img = array('title' => $request->get('title'));
+
+        $uploadController = new UploadController();
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+
+        if (!$request->files->get('img')->getError()) {
+            if (!$uploadController->upload($app, $img)) {
+                $userController = new DatabaseController();
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+                $tmp_name = $request->files->get('img');
+                $name = basename($request->files->get('img')->getClientOriginalName());
+                $name = $this->upload . $name;
+                move_uploaded_file($tmp_name, $name);
+
+                $img = array(
+                    'id' => $this->user['id'],
+                    'title' => $request->get('title'),
+                    'img' => $name,
+                    'private' => $request->get('private') ? 1 : 0,
+                );
+
+
+                if ($userController->uploadAction($app, $img)) {
+                    header('Location: ' . '/', true, 303);
+                    die();
+                }
+                $message = 'We had an issue signing you up. Please try again!';
+
+            }
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function logout (Application $app) {
+        if ($app['session']->has('name')) {
+            $this->user = null;
+            $app['session']->clear();
+        }
+        header('Location: ' . '/', true, 303);
+        die();
     }
 }

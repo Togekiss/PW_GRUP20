@@ -23,14 +23,17 @@ $before = function (Request $request, Application $app) {
 
 $app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
-$app->post('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
-$app->post('/signup', 'PWGram\\controller\\MainController::signUp');
+$app->get('/login', 'PWGram\\controller\\MainController::renderMainPage');
+$app->get('/logout', 'PWGram\\controller\\MainController::logout');
+$app->get('/upload-image', 'PWGram\\controller\\MainController::upload')->before($before);
+
 $app->post('/', 'PWGram\\controller\\MainController::login');
+$app->post('/login', 'PWGram\\controller\\MainController::login');
+$app->post('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
+$app->post('/register', 'PWGram\\controller\\MainController::signUp');
+$app->post('/logout', 'PWGram\\controller\\MainController::logout');
+$app->post('/upload-image', 'PWGram\\controller\\MainController::upload');
 //$app->post('/login', 'PWGram\\controller\\MainController::login');
 
-$app->get('/hello/{name}', 'PWGram\\controller\\HelloController::indexAction');
-$app->get('/add/{num1}/{num2}', 'PWGram\\controller\\HelloController::addAction');
+$app->get('/register', 'PWGram\\controller\\MainController::ShowsignUp');
 
-//SESSION
-$app->get('/', 'PWGram\\controller\\BaseController::indexAction');
-$app->get('/admin', 'PWGram\\controller\\BaseController::adminAction')->before($before);

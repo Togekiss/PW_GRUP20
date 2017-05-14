@@ -8,26 +8,32 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DatabaseController {
 
-    public function getAction(Application $app, $id) {
-        $sql = "SELECT * FROM user WHERE id = ?";
-        $user = $app['db']->fetchAssoc($sql, array((int)$id));
-        $response = new Response();
-        if (!$user) {
-            $response->setStatusCode(Response::HTTP_NOT_FOUND);
-            $content = $app['twig']->render('error.twig', ['message' => 'User not found']);
-        }
-        else {
-            $response->setStatusCode(Response::HTTP_OK);
-            $content = $app['twig']->render('user.twig', ['user' => $user]);
-        }
-        $response->setContent($content);
-        return $response;
+    public function getAction(Application $app, $username) {
+        $sql = "SELECT * FROM user WHERE username = ?";
+        $user = $app['db']->fetchAssoc($sql, array((String)$username));
+        return $user;
     }
 
     public function postAction(Application $app, $name, $password) {
         $sql = "SELECT * FROM user WHERE username = ? AND password = ?";
         $user = $app['db']->fetchAssoc($sql, array($name, $password));
+        if (!$user) {
+            $sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+            $user = $app['db']->fetchAssoc($sql, array($name, $password));
+        }
         return $user;
+    }
+
+    public function uploadAction (Application $app, $img) {
+        $stmt = $app['db']->prepare("INSERT INTO images (user_id, title, img_path, visits, private, created_at) 
+        VALUES (:user_id, :title, :img_path, :visits, :private, :created_at)");
+        return $stmt->execute(array(
+            ':user_id' => $img['id'],
+            ':title' => $img['title'],
+            ':img_path' => $img['img'],
+            ':visits' => 0,
+            ':private' => $img['private'],
+            ':created_at' => $date = date('c')));
     }
 
     public function deleteAction(Application $app) {
@@ -35,31 +41,36 @@ class DatabaseController {
     }
 
     public function signUpAction (Application $app, $user) {
-       /* $sql = "INSERT INTO user (username, email, birthdate, password, img_path, active) VALUES (?, ?, ?, ?, ?, ?)";
-        $ok = $app['db']->fetchAssoc($sql, array($user['name'], $user['email'], $user['birthdate'], $user['password'], $user['img'], 0));*/
         $stmt = $app['db']->prepare("INSERT INTO user (username, email, birthdate, password, img_path, active) VALUES (:username, :email, :birthdate, :password, :img_path, :active)");
-        $stmt->execute(array(
+        return $stmt->execute(array(
             ':username' => $user['name'],
             ':email' => $user['email'],
             ':birthdate' => $user['birthdate'],
             ':password' => $user['password'],
             ':img_path' => $user['img'],
             ':active' => 0));
-        echo "Database updated!";
-        return $stmt->get_result();
     }
 
-    public function updateAction(Application $app, $id, $name, $password, $birthdate, $img) {
-        $first = false;
+    public function updateAction(Application $app, $user) {
+        $errors = 0;
 
-        $sql = "UPDATE user SET";
-        if ($name) $sql = $sql . "username=? ,";
-        if ($password) $sql = $sql . "password=? ,";
-        if ($birthdate) $sql = $sql . "birthdate=? ,";
-        if ($img) $sql = $sql . "img_path=? ,";
-        $sql = $sql . "WHERE id=?";
+        if ($user['name']) {
+            $stmt = $app['db']->prepare("UPDATE user SET username=:name WHERE id=:id");
+            $errors += $stmt->execute(array(':name' => $user['name'], ':id' => $user['id']));
+        }
+        if ($user['password']) {
+            $stmt = $app['db']->prepare("UPDATE user SET password=:password WHERE id=:id");
+            $errors += $stmt->execute(array(':password' => $user['password'], ':id' => $user['id']));
+        }
+        if ($user['birthdate']) {
+            $stmt = $app['db']->prepare("UPDATE user SET birthdate=:birthdate WHERE id=:id");
+            $errors += $stmt->execute(array(':birthdate' => $user['birthdate'], ':id' => $user['id']));
+        }
+        if ($user['img']) {
+            $stmt = $app['db']->prepare("UPDATE user SET img_path=:img WHERE id=:id");
+            $errors += $stmt->execute(array(':img' => $user['img'], ':id' => $user['id']));
+        }
 
-        $user = $app['db']->fetchAssoc($sql, array($name, $password));
-        return $user;
+        return $errors;
     }
 }

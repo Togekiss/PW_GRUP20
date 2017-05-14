@@ -6,12 +6,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
         {% block stylesheets %}
             <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css"> -->
-
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-
-            <link rel="stylesheet" type="text/css" href="styles.css">
+            <link rel="stylesheet" type="text/css" href="{{ asset('styles.css', 'css') }}">
         {% endblock %}
 
         <title>{% block title %}{% endblock %} - PWGram</title>
@@ -31,16 +31,16 @@
 
                     {% if user is defined %}
                         <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{#{{  notifications.number }}#} notifications</a>
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{{ user.active }} notifications</a>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Upload</a>
+                            <a data-toggle="modal" data-target="#upload-modal" class="nav-item nav-link" href="">Upload</a>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{#{{ user.name }}#}</a>
+                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">{{ user.username }}</a>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary">
-                            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Logout</a>
+                            <a class="nav-item nav-link" href="/logout">Logout</a>
                         </button>
                     {% else %}
                         <button type="button" class="btn btn-sm btn-outline-secondary">
@@ -55,15 +55,29 @@
 
     {% block buttoncode %}
         {% if user is defined %}
+            <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="loginmodal-container">
+                        <h1>Upload an Image</h1><br>
+                        <form method="post" action="/upload-image" enctype="multipart/form-data">
+                            <input type="file" name="img">
+                            <input type="text" name="title" placeholder="Image Title">
+                            <label><input type="checkbox" value="1" name="private">Make Image Private</label>
+                            <input type="submit" name="edit" class="login loginmodal-submit" value="Upload Image">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                 <div class="modal-dialog">
                     <div class="loginmodal-container">
                         <h1>Edit your Profile</h1><br>
                         <form method="post" action="/edit">
                             <input type="text" name="user" placeholder="New Username">
-                            <input type="password" name="pass" placeholder="New Password">
+                            <input type="password" name="password" placeholder="New Password">
                             <input type="date" name="birthdate">
-                            <input type="file" name="img_path" placeholder="New Profile Image">
+                            <input type="file" name="img" placeholder="New Profile Image">
                             <input type="submit" name="edit" class="login loginmodal-submit" value="Save Changes">
                         </form>
                     </div>
@@ -74,14 +88,14 @@
                 <div class="modal-dialog">
                     <div class="loginmodal-container">
                         <h1>Login to Your Account</h1><br>
-                        <form method="post" href="grup20.com">
+                        <form method="post" action="/login">
                             <input type="text" name="user" placeholder="Username / Email">
                             <input type="password" name="pass" placeholder="Password">
                             <input type="submit" name="login" class="login loginmodal-submit" value="Login">
                         </form>
 
                         <div class="login-help">
-                            <a href="/signup">Register</a>
+                            <a href="/register">Register</a>
                         </div>
                     </div>
                 </div>
@@ -105,8 +119,7 @@
 {% block javascripts %}
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <script src="{{ asset('app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>    <script src="{{ asset('/app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
 </body>

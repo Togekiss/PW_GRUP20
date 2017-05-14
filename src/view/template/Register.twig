@@ -7,7 +7,7 @@
 {% block content %}
 
     <h1>Register Your New Account</h1><br>
-    <form method="post" action="/signup">
+    <form method="post" action="/register" enctype="multipart/form-data">
         <input type="text" name="user" placeholder="Username">
         <input type="email" name="email" placeholder="Email">
         <input type="date" name="birthdate">
