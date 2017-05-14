@@ -37,6 +37,28 @@ $imgCheck = function (Request $request, Application $app) {
     $userController->updateVisits($app, $idImg);
 };
 
+$removeCheck = function (Request $request, Application $app) {
+    if (!$app['session']->has('name')) {
+        $response = new Response();
+        $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You must be logged'));
+        $response->setContent($content);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        return $response;
+    }else {
+        $idImg = $request->get('idImg');
+        $userController = new DatabaseController();
+        $img = $userController->getImageAction($app, $idImg);
+
+        if (!$img || ($img['user_id'] != $userController->getAction($app, $app['session']->get('name')['id']))) {
+            $response = new Response();
+            $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'The image does not exist or you are not the owner.'));
+            $response->setContent($content);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            return $response;
+        }
+    }
+};
+
 $app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/edit', 'PWGram\\controller\\MainController::edit')->before($before);
 $app->get('/login', 'PWGram\\controller\\MainController::renderMainPage');
@@ -44,6 +66,8 @@ $app->get('/logout', 'PWGram\\controller\\MainController::logout');
 $app->get('/upload-image', 'PWGram\\controller\\MainController::upload')->before($before);
 $app->get('/like/{idImg}', 'PWGram\\controller\\MainController::uploadLike')->before($before);
 $app->get('/image/{idImg}', 'PWGram\\controller\\MainController::ShowImage')->before($imgCheck);
+$app->get('/user/{idUser}', 'PWGram\\controller\\MainController::ShowUser');
+$app->get('/remove/{idImg}', 'PWGram\\controller\\MainController::removeImage')->before($removeCheck);
 
 $app->post('/', 'PWGram\\controller\\MainController::login');
 $app->post('/login', 'PWGram\\controller\\MainController::login');

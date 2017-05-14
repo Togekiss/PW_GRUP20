@@ -29,6 +29,16 @@ class DatabaseController
         return $user;
     }
 
+    public function getNumComment(Application $app, $idUser) {
+        $sql = "SELECT id FROM comments WHERE user_id = ?";
+        return count($app['db']->fetchAssoc($sql, array((int)$idUser)));
+    }
+
+    public function getNumImages(Application $app, $idUser) {
+        $sql = "SELECT id FROM images WHERE user_id = ?";
+        return count($app['db']->fetchAssoc($sql, array((int)$idUser)));
+    }
+
     public function getComment(Application $app, $idImg, $idUser)
     {
         $sql = "SELECT * FROM comments WHERE user_id = ? AND image_id = ?";
@@ -47,6 +57,11 @@ class DatabaseController
     {
         $sql = "SELECT * FROM notification WHERE user_id = ? AND image_id = ? AND is_like = 1";
         return $notifications = $app['db']->fetchAssoc($sql, array((int)$idUser, (int)$idImg));
+    }
+
+    public function getNotificationNum(Application $app, $idImg) {
+        $sql = "SELECT id FROM notification WHERE image_id = ?";
+        return count($notifications = $app['db']->fetchAssoc($sql, array((int)$idImg)));
     }
 
     public function postAction(Application $app, $name, $password)
@@ -149,10 +164,10 @@ class DatabaseController
         ));
     }
 
-    public function updateNotificationUser(Application $app, $id, $positive) {
-        if ($positive) $stmt = $app['db']->prepare("UPDATE user SET notifications= notifications + 1 WHERE id=:id");
-        else $stmt = $app['db']->prepare("UPDATE user SET notifications= notifications - 1 WHERE id=:id");
-        return $stmt->execute(array(':id' => $id));
+    public function updateNotificationUser(Application $app, $id, $number, $positive) {
+        if ($positive) $stmt = $app['db']->prepare("UPDATE user SET notifications= notifications + :num WHERE id=:id");
+        else $stmt = $app['db']->prepare("UPDATE user SET notifications= notifications - :num WHERE id=:id");
+        return $stmt->execute(array(':id' => $id, ':num' => $number));
     }
 
     public function updateLikeImage (Application $app, $id, $positive) {
@@ -173,6 +188,11 @@ class DatabaseController
 
     public function deleteNotificationAction(Application $app, $id) {
         $stmt = $app['db']->prepare("DELETE FROM notification WHERE id = :id");
+        return $stmt->execute(array(':id' => $id));
+    }
+
+    public function deleteImageAction (Application $app, $id) {
+        $stmt = $app['db']->prepare("DELETE FROM images WHERE id = :id");
         return $stmt->execute(array(':id' => $id));
     }
 }
