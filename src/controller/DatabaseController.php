@@ -16,6 +16,12 @@ class DatabaseController
         return $user;
     }
 
+    public function getImageAction(Application $app, $id)
+    {
+        $sql = "SELECT * FROM images WHERE id = ?";
+        return $app['db']->fetchAssoc($sql, array((int)$id));
+    }
+
     public function getActionId(Application $app, $id)
     {
         $sql = "SELECT * FROM user WHERE id = ?";
@@ -35,6 +41,12 @@ class DatabaseController
         $sql = "SELECT * FROM likes WHERE user_id = ? AND image_id = ?";
         $comment = $app['db']->fetchAssoc($sql, array((int)$idUser, (int)$idImg));
         return $comment;
+    }
+
+    public function getNotification(Application $app, $idImg, $idUser)
+    {
+        $sql = "SELECT * FROM notification WHERE user_id = ? AND image_id = ? AND is_like = 1";
+        return $notifications = $app['db']->fetchAssoc($sql, array((int)$idUser, (int)$idImg));
     }
 
     public function postAction(Application $app, $name, $password)
@@ -128,22 +140,19 @@ class DatabaseController
     }
 
     public function uploadNotificationAction(Application $app, $notification) {
-        if ($notification['is_like']) {
-            $stmt = $app['db']->prepare("INSERT INTO notification (user_id, image_id, like_id, is_like) VALUES (:user_id, :image_id, :like_id, :is_like)");
-            return $stmt->execute(array(
-                ':user_id' => $notification['user_id'],
-                ':image_id' => $notification['image_id'],
-                ':like_id' => $notification['like_id'],
-                ':is_like' => 1
-            ));
-        } else {
-            $stmt = $app['db']->prepare("INSERT INTO notification (user_id, image_id, is_like) VALUES (:user_id, :image_id, :is_like)");
-            return $stmt->execute(array(
-                ':user_id' => $notification['user_id'],
-                ':image_id' => $notification['image_id'],
-                ':is_like' => 0
-            ));
-        }
+        $stmt = $app['db']->prepare("INSERT INTO notification (user_id, image_id, like_id, is_like) VALUES (:user_id, :image_id, :like_id, :is_like)");
+        return $stmt->execute(array(
+            ':user_id' => $notification['user_id'],
+            ':image_id' => $notification['image_id'],
+            ':like_id' => $notification['like_id'],
+            ':is_like' => $notification['is_like']
+        ));
+    }
+
+    public function updateNotificationUser(Application $app, $id, $positive) {
+        if ($positive) $stmt = $app['db']->prepare("UPDATE user SET notifications= notifications + 1 WHERE id=:id");
+        else $stmt = $app['db']->prepare("UPDATE user SET notifications= notifications - 1 WHERE id=:id");
+        return $stmt->execute(array(':id' => $id));
     }
 
     public function deleteLikeAction(Application $app, $id) {

@@ -224,15 +224,24 @@ class MainController {
 
         if (!$uploadController->uploadComment($app, $comment)) {
             $userController = new DatabaseController();
-            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $img = $userController->getImageAction($app, $idImg);
+            $user = $userController->getAction($app, $app['session']->get('name'));
 
-            if (!$userController->getComment($app, $idImg, $this->user['id'])) {
+            if (!$userController->getComment($app, $idImg, $user['id'])) {
                 $comment['image_id'] = $idImg;
-                $comment['user_id'] = $this->user['id'];
+                $comment['user_id'] = $user['id'];
+                $ok = $userController->uploadCommentAction($app, $comment);
 
-                $notification = 0;
+                $comment = $userController->getComment($app, $idImg, $user['id']);
+                $notification = array (
+                    'user_id' => $img['user_id'],
+                    'image_id' => $idImg,
+                    'like_id' => $comment['id'],
+                    'is_like' => 0
+                );
 
-                if ($userController->uploadCommentAction($app, $comment) && $userController->uploadNotificationAction($app, $notification)) {
+                if ($ok && $userController->uploadNotificationAction($app, $notification) &&
+                    $userController->updateNotificationUser($app, $img['user_id'], 1)) {
                     header('Location: ' . '/', true, 303);
                     die();
                 }
@@ -254,18 +263,38 @@ class MainController {
     public function uploadLike(Application $app, $idImg) {
 
         $userController = new DatabaseController();
-        $this->user = $userController->getAction($app, $app['session']->get('name'));
+        $img = $userController->getImageAction($app, $idImg);
+        $user = $userController->getAction($app, $app['session']->get('name'));
 
         $like = array(
             'image_id' => $idImg,
-            'user_id' => $this->user['id']
+            'user_id' => $user['id']
         );
 
-        if (!$userController->getLike($app, $idImg, $this->user['id'])) $userController->uploadLikeAction($app, $like);
-        else $userController->deleteLikeAction($app, $userController->getLike($app, $idImg, $this->user['id'])['id']);
+        if (!$userController->getLike($app, $idImg, $user['id'])) {
+
+            $userController->uploadLikeAction($app, $like);
+            $like = $userController->getLike($app, $idImg, $user['id']);
+
+            $notification = array (
+                'user_id' => $img['user_id'],
+                'image_id' => $idImg,
+                'like_id' => $like['id'],
+                'is_like' => 1
+            );
+
+            $userController->uploadNotificationAction($app, $notification);
+            $userController->updateNotificationUser($app, $img['user_id'], 1);
+        }
+        else {
+            $userController->deleteLikeAction($app, $userController->getLike($app, $idImg, $user['id'])['id']);
+            $userController->deleteNotificationAction($app, $userController->getNotification($app, $idImg, $img['user_id'])['id']);
+            $userController->updateNotificationUser($app, $img['user_id'], 0);
+        }
 
         header('Location: ' . '/', true, 303);
         die();
+
     }
 
     public function logout (Application $app) {
