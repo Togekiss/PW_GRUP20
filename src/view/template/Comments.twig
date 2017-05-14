@@ -1,0 +1,33 @@
+{% extends "base.twig" %}
+
+
+{# PAGINA PER VEURE ELS COMENTARIS QUE HAS FET #}
+
+{% block title %}USERNAME{# {{ user.name }} #}'s comments{% endblock %}
+
+{% block content %}
+
+    <h1>USERNAME{# {{ user.name }} #}'s comments</h1>
+
+    <ul class="comment-list">
+
+        <li>
+            <a href="{# {{ image.title }} #}TITLE"></a>
+            <p>{# {{ image.comment }} #}Your comment here</p>
+            <a href="{# {{ comment.id }}/delete #}">Delete</a>
+        </li>
+        <li>
+            <a href="{# {{ image.title }} #}TITLE"></a>
+            <p>{# {{ image.comment }} #}Your comment here</p>
+            <a href="{# {{ comment.id }}/delete #}">Delete</a>
+        </li>
+        <li>
+            <a href="{# {{ image.title }} #}">IMAGE TITLE</a>
+            <p>{# {{ image.comment }} #}Your comment here</p>
+            <a href="{# {{ comment.id }}/delete #}">Delete</a>
+        </li>
+
+    </ul>
+
+
+{% endblock %}

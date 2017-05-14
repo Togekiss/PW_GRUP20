@@ -6,8 +6,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-
         {% block stylesheets %}
             <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css"> -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -60,10 +58,10 @@
                     <div class="loginmodal-container">
                         <h1>Upload an Image</h1><br>
                         <form method="post" action="/upload-image" enctype="multipart/form-data">
-                            <input type="file" name="img">
-                            <input type="text" name="title" placeholder="Image Title">
+                            <input type="file" name="img" class="form-control">
+                            <input type="text" name="title" placeholder="Image Title" class="form-control">
                             <label><input type="checkbox" value="1" name="private">Make Image Private</label>
-                            <input type="submit" name="edit" class="login loginmodal-submit" value="Upload Image">
+                            <input type="submit" name="edit" class="login loginmodal-submit form-control" value="Upload Image">
                         </form>
                     </div>
                 </div>
@@ -89,9 +87,9 @@
                     <div class="loginmodal-container">
                         <h1>Login to Your Account</h1><br>
                         <form method="post" action="/login">
-                            <input type="text" name="user" placeholder="Username / Email">
-                            <input type="password" name="pass" placeholder="Password">
-                            <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+                            <input type="text" name="user" placeholder="Username / Email" class="form-control">
+                            <input type="password" name="pass" placeholder="Password" class="form-control">
+                            <input type="submit" name="login" class="login loginmodal-submit form-control" value="Login" class="form-control">
                         </form>
 
                         <div class="login-help">
@@ -119,7 +117,9 @@
 {% block javascripts %}
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>    <script src="{{ asset('/app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js" integrity="sha256-UiqIqgNXwR8ChFMaD8VrY0tBUIl/soqb7msaauJWZVc=" crossorigin="anonymous"></script>
+    <script src="{{ asset('/app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
 </body>
