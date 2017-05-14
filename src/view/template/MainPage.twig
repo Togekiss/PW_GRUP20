@@ -22,12 +22,13 @@
                 <figcaption>
                     <a href="{#link_al_user_profile#}">{{ user2.username }}</a>
                     <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
-                    <a href="{#link_a_la_imatge#}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
+                    <a href="{#/image/{{ image.id }}#}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
                     {% if user is defined %}
                         <a href="/like/{{ img.id }}">Like</a>
                         <form method="post" action="/comment/{{ img.id }}">
-                            <input type="text" name="text" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -42,9 +43,10 @@
                     <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a> <span class="date">1/1/1{# {{ img.date }} #}</span>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -59,9 +61,10 @@
                     <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a> <span class="date">1/1/1{# {{ img.date }} #}</span>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -76,9 +79,10 @@
                     <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a> <span class="date">1/1/1{# {{ img.date }} #}</span>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -93,9 +97,10 @@
                     <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a> <span class="date">1/1/1{# {{ img.date }} #}</span>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -116,9 +121,10 @@
                     <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -134,9 +140,10 @@
                     <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -152,9 +159,10 @@
                     <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -170,9 +178,10 @@
                     <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -188,9 +197,10 @@
                     <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
@@ -206,9 +216,10 @@
                     <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
                     {% if user is defined %}
                         <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/{# {{ img.id }}/ #}comment">
-                            <input type="text" name="user" placeholder="Comment">
-                            <input type="submit" name="edit" value="Comment">
+                        <form method="post" action="/comment/{{ img.id }}">
+                            <div class="form-group comment">
+                                <input type="text" name="text" placeholder="Comment" required>
+                            </div> <input type="submit" name="edit" value="Comment">
                         </form>
                     {% endif %}
                 </figcaption>
