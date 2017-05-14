@@ -12,11 +12,12 @@
 
 
 {% block content %}
-    <h1>Welcome to PWGram</h1>
+    <h1 class="text-center">Welcome to PWGram</h1>
 
     <h2>Most viewed images</h2>
-    <ul id="top-list" class="img-list">
-        <li>
+    <ul id="top-list" class="img-list list-unstyled">
+        <div class="row">
+        <li class="col-md-6 col-lg-4">
             <figure id="{{ img.id }}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="{{ img.title }}" width="400" height="300">
                 <figcaption>
@@ -34,7 +35,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -52,7 +53,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -70,7 +71,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -88,7 +89,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -106,12 +107,14 @@
                 </figcaption>
             </figure>
         </li>
+        </div>
     </ul>
 
     <h2>Recent images</h2>
 
-    <ul class="img-list" id="recent-list">
-        <li>
+    <ul class="img-list list-unstyled" id="recent-list">
+        <div class="row">
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -130,7 +133,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -149,7 +152,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -168,7 +171,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -187,7 +190,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
+        <li class="col-md-6 col-lg-4">
             <figure id="{# {{ img.id }} #}">
                 <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
                 <figcaption>
@@ -206,25 +209,7 @@
                 </figcaption>
             </figure>
         </li>
-        <li>
-            <figure id="{# {{ img.id }} #}">
-                <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300">
-                <figcaption>
-                    <a href="{#link_al_user_profile#}">User{# {{ user.name }}#}</a>
-                    <span class="likes">0{# {{ img.likes }}#}</span><span class="visits">0{# {{ img.visits }} #}</span>
-                    <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a> <span class="date">1/1/1{# {{ img.date }} #}</span>
-                    <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
-                    {% if user is defined %}
-                        <a href="{# /{{ img.id }}/like #}">Like</a>
-                        <form method="post" action="/comment/{{ img.id }}">
-                            <div class="form-group comment">
-                                <input type="text" name="text" placeholder="Comment" required>
-                            </div> <input type="submit" name="edit" value="Comment">
-                        </form>
-                    {% endif %}
-                </figcaption>
-            </figure>
-        </li>
+        </div>
     </ul>
 
     <a href="{# more images #}">Load more images</a>
