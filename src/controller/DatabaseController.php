@@ -148,15 +148,20 @@ class DatabaseController
         return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY visits DESC LIMIT 5');
     }
 
-    public function mostRecent(Application $app)
+    public function mostRecent(Application $app, $offset)
     {
-        return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY created_at DESC LIMIT 5');
+        return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY created_at DESC LIMIT 5 OFFSET '. $offset);
     }
 
     public function mostRecentComment(Application $app, $idImg)
     {
         $sql = "SELECT * FROM comments WHERE image_id = ? ORDER BY id DESC LIMIT 1";
         return $app['db']->fetchAssoc($sql, array((int)$idImg));
+    }
+
+    public function getImageComments(Application $app, $idImg, $offset)
+    {
+        return $app['db']->fetchAll('SELECT * FROM comments WHERE image_id = '. $idImg.' ORDER BY id DESC LIMIT 3 OFFSET '. $offset);
     }
 
     public function uploadCommentAction(Application $app, $comment) {

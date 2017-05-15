@@ -22,7 +22,7 @@ class MainController {
         $userController = new DatabaseController();
         $i = 0;
         $imgViewed = $userController->mostViewed($app);
-        $imgRecent = $userController->mostRecent($app);
+        $imgRecent = $userController->mostRecent($app, 0);
 
         for ($i = 0; $i < count($imgViewed); $i++) {
             $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
@@ -71,7 +71,7 @@ class MainController {
     public function ShowImage (Application $app, $idImg) {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
-
+        $comments = $userController->getImageComments($app, $idImg, 0);
         $user = $userController->getAction($app, $img['user_id']);
 
         $datetime1 = date_create($img['created_at']);
@@ -82,6 +82,7 @@ class MainController {
         $array = array(
             'app' => ['name' => $app['app.name']],
             'img' => $img,
+            'comments' => $comments,
             'user2'=> $user,
             'user' =>  $userController->getAction($app, $app['session']->get('name')));
 

@@ -29,13 +29,13 @@
                     <figure id="{# {{ img.id }} #}">
                         <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300" class="img-rounded">
                         <figcaption>
-                            <a href="{#/img/{{ img.id }}#}">Titol{# {{ img.title }}#}</a>
+                            <a href="/image/{#{{ img.id }}#}">Titol{# {{ img.title }}#}</a>
                             {% if user is defined and user.id == user2.id %}
                                 {#<a href=" /image/{{ img.id }}/edit ">Edit</a>#}
                                 <button type="button" class="btn btn-sm btn-outline-secondary">
                                     <a data-toggle="modal" data-target="#edit-image-modal" class="nav-item nav-link" href="">Edit</a>
                                 </button>
-                                <a href="/remove/{{ img.id }}">Delete</a>
+                                <a href="/remove/{#{{ img.id }}#}">Delete</a>
                             {% endif %}
                         </figcaption>
                     </figure>
