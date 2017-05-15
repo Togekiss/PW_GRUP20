@@ -20,16 +20,26 @@ class MainController {
     public function renderMainPage (Application $app, Request $request) {
         $response = new Response();
         $userController = new DatabaseController();
+        $i = 0;
         $imgViewed = $userController->mostViewed($app);
-        $userViewed = $userController->getActionId($app, $imgViewed[0]['user_id']);
-
         $imgRecent = $userController->mostRecent($app);
-        $userRecent = $userController->getActionId($app, $imgRecent[0]['user_id']);
+
+        for ($i = 0; $i < count($imgViewed); $i++) {
+            $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
+        }
+
+        for ($i = 0; $i < count($imgRecent); $i++) {
+            $imgRecent[$i]['username'] = $userController->getActionId($app, $imgRecent[$i]['user_id'])['username'];
+            $comment = $userController->mostRecentComment($app, $imgRecent[$i]['id']);
+            $imgRecent[$i]['userc_id'] = $comment['user_id'];
+            $imgRecent[$i]['textc'] = htmlentities($comment['text']);
+            $imgRecent[$i]['usernamec'] = $userController->getActionId($app, $comment['user_id'])['username'];
+        }
 
         $array = array(
             'app' => ['name' => $app['app.name']],
-            'img' => $imgViewed[0],
-            'user2'=> $userViewed);
+            'most_viewed_images' => $imgViewed,
+            'most_recent_images' => $imgRecent);
 
         if ($app['session']->has('name')) {
             $userController = new DatabaseController();
@@ -88,14 +98,20 @@ class MainController {
         $user = $userController->getActionId($app, $idUser);
         $user['num_images'] = $userController->getNumImages($app, $idUser);
         $user['comments'] = $userController->getNumComment($app, $idUser);
+        $img = $userController->getPublicImages($app, $idUser);
 
         $array = array(
             'app' => ['name' => $app['app.name']],
-            'user2'=> $user);
+            'user2'=> $user,
+            'images' => $img);
 
         if ($app['session']->has('name')) {
             $this->user = $userController->getAction($app, $app['session']->get('name'));
             $array['user'] = $this->user;
+            if ($user['id'] == $this->user['id']) {
+                $img = $userController->getAllImages($app, $idUser);
+                $array['images'] = $img;
+            }
         }
 
         $content = $app['twig']->render('Profile.twig', $array);
@@ -125,7 +141,7 @@ class MainController {
             $userController = new DatabaseController();
             $user['password'] = md5($user['password']);
 
-            if (!$request->files->get('img')->getError()) {
+            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
                 $tmp_name = $request->files->get('img');
                 $name = basename($request->files->get('img')->getClientOriginalName());
                 $name = $this->upload . $name;
@@ -136,6 +152,7 @@ class MainController {
             if (!$user['img']) $user['img'] = $this->default;
 
             if ($userController->signUpAction($app, $user)) {
+
                 $app['session']->set('name', $user['name']);
                 header('Location: ' . '/', true, 303);
                 die();
