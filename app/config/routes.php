@@ -49,7 +49,7 @@ $removeCheck = function (Request $request, Application $app) {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
 
-        if (!$img || ($img['user_id'] != $userController->getAction($app, $app['session']->get('name')['id']))) {
+        if (!$img || ($img['user_id'] != $userController->getAction($app, $app['session']->get('name'))['id'])) {
             $response = new Response();
             $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'The image does not exist or you are not the owner.'));
             $response->setContent($content);
