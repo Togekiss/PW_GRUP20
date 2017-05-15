@@ -25,7 +25,7 @@
                         <figcaption>
                             <a href="/user/{{ user2.id }}">{{ user2.username }}</a>
                             <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
-                            <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
+                            <a href="/img/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
                             {% if user is defined %}
                                 <a href="/like/{{ img.id }}">Like</a>
                                 <form method="post" action="/comment/{{ img.id }}">

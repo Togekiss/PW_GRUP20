@@ -9,7 +9,7 @@
         {% block stylesheets %}
             <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css"> -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-            <link rel="stylesheet" type="text/css" href="{{ asset('styles.css', 'css') }}">
+             <link rel="stylesheet" type="text/css" href="{{ asset('styles.css', 'css') }}">
         {% endblock %}
 
         <title>{% block title %}{% endblock %} - PWGram</title>
@@ -77,20 +77,6 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                <div class="modal-dialog">
-                    <div class="loginmodal-container">
-                        <h1>Edit your Profile</h1><br>
-                        <form method="post" action="/edit-profile">
-                            <input type="text" name="user" placeholder="New Username">
-                            <input type="password" name="password" placeholder="New Password">
-                            <input type="date" name="birthdate">
-                            <input type="file" name="img" placeholder="New Profile Image">
-                            <input type="submit" name="edit" class="login loginmodal-submit" value="Save Changes">
-                        </form>
-                    </div>
-                </div>
-            </div>
         {% else %}
             <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                 <div class="modal-dialog">

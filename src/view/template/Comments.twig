@@ -9,23 +9,16 @@
 
     <h1>USERNAME{# {{ user.name }} #}'s comments</h1>
 
-    <ul class="comment-list">
+    <ul class="comment-list list-unstyled">
 
+    {# {% for image in images %} #}
+        {% for i in 0..5 %}
         <li>
-            <a href="{# {{ image.title }} #}TITLE"></a>
+            <a href="{# /img/{{ image.id }} #}TITLE"></a>
             <p>{# {{ image.comment }} #}Your comment here</p>
-            <a href="{# {{ comment.id }}/delete #}">Delete</a>
+            <a href="{# /comment/{{ image.comment.id }}/delete #}">Delete</a>
         </li>
-        <li>
-            <a href="{# {{ image.title }} #}TITLE"></a>
-            <p>{# {{ image.comment }} #}Your comment here</p>
-            <a href="{# {{ comment.id }}/delete #}">Delete</a>
-        </li>
-        <li>
-            <a href="{# {{ image.title }} #}">IMAGE TITLE</a>
-            <p>{# {{ image.comment }} #}Your comment here</p>
-            <a href="{# {{ comment.id }}/delete #}">Delete</a>
-        </li>
+        {% endfor %}
 
     </ul>
 
