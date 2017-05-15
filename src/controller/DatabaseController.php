@@ -181,6 +181,25 @@ class DatabaseController
         return $stmt->execute(array(':id' => $id));
     }
 
+    public function updateImage (Application $app, $img) {
+        $errors = 0;
+
+        if ($img['title']) {
+            $stmt = $app['db']->prepare("UPDATE images SET title=:title WHERE id=:id");
+            $errors += $stmt->execute(array(':title' => $img['title'], ':id' => $img['id']));
+        }
+        if ($img['img']) {
+            $stmt = $app['db']->prepare("UPDATE images SET img_path=:img WHERE id=:id");
+            $errors += $stmt->execute(array(':img' => $img['img'], ':id' => $img['id']));
+        }
+        if ($img['private']) {
+            $stmt = $app['db']->prepare("UPDATE images SET private=:private WHERE id=:id");
+            $errors += $stmt->execute(array(':private' => $img['private'], ':id' => $img['id']));
+        }
+
+        return $errors;
+    }
+
     public function deleteLikeAction(Application $app, $id) {
         $stmt = $app['db']->prepare("DELETE FROM likes WHERE id = :id");
         return $stmt->execute(array(':id' => $id));

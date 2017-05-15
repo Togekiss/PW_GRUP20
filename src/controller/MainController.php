@@ -361,6 +361,52 @@ class MainController {
         die();
     }
 
+    public function editImage (Application $app, Request $request, $idImg) {
+        $userController = new DatabaseController();
+
+        $imgCheck = array('title' => $request->get('title'));
+
+        $uploadController = new UploadController();
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+
+        if (!$uploadController->update($app, $imgCheck)) {
+
+            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+                $tmp_name = $request->files->get('img');
+                $name = basename($request->files->get('img')->getClientOriginalName());
+                $name = $this->upload . $name;
+                move_uploaded_file($tmp_name, $name);
+            }
+
+            $img = array(
+                'id' => $idImg,
+                'title' => $request->get('title')?$request->get('title'):null,
+                'img' => $name?$name:null,
+                'private' => $request->get('private') ? 1 : 0,
+            );
+
+            if ($userController->updateImage($app, $img) == count(array_filter($img))- 1) {
+                header('Location: ' . '/user/' . $userController->getAction($app, $app['session']->get('name'))['id'], true, 303);
+                die();
+            }
+            $message = 'We had an issue signing you up. Please try again!';
+
+        }
+
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
     public function logout (Application $app) {
         if ($app['session']->has('name')) {
             $this->user = null;
