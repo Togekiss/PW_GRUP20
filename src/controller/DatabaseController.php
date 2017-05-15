@@ -31,12 +31,16 @@ class DatabaseController
 
     public function getNumComment(Application $app, $idUser) {
         $sql = "SELECT id FROM comments WHERE user_id = ?";
-        return count($app['db']->fetchAssoc($sql, array((int)$idUser)));
+        $num = count($app['db']->fetchAssoc($sql, array((int)$idUser)));
+        if ($num) return count($num);
+        return 0;
     }
 
     public function getNumImages(Application $app, $idUser) {
         $sql = "SELECT id FROM images WHERE user_id = ?";
-        return count($app['db']->fetchAssoc($sql, array((int)$idUser)));
+        $num = $app['db']->fetchAssoc($sql, array((int)$idUser));
+        if ($num) return count($num);
+        return 0;
     }
 
     public function getComment(Application $app, $idImg, $idUser)
@@ -44,6 +48,16 @@ class DatabaseController
         $sql = "SELECT * FROM comments WHERE user_id = ? AND image_id = ?";
         $comment = $app['db']->fetchAssoc($sql, array((int)$idUser, (int)$idImg));
         return $comment;
+    }
+
+    public function getPublicImages(Application $app, $idUser) {
+        $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ?";
+        return $app['db']->fetchAssoc($sql, array((int)$idUser));
+    }
+
+    public function getAllImages(Application $app, $idUser) {
+        $sql = "SELECT * FROM images WHERE user_id = ?";
+        return $app['db']->fetchAssoc($sql, array((int)$idUser));
     }
 
     public function getLike(Application $app, $idImg, $idUser)
@@ -137,6 +151,12 @@ class DatabaseController
     public function mostRecent(Application $app)
     {
         return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY created_at DESC LIMIT 5');
+    }
+
+    public function mostRecentComment(Application $app, $idImg)
+    {
+        $sql = "SELECT * FROM comments WHERE image_id = ? ORDER BY id DESC LIMIT 1";
+        return $app['db']->fetchAssoc($sql, array((int)$idImg));
     }
 
     public function uploadCommentAction(Application $app, $comment) {
