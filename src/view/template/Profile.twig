@@ -23,11 +23,10 @@
     <h2>Published images</h2>
     <ul id="user-img" class="img-list list-unstyled">
         <div class="row">
-            {#{% for img in images %}#}
-            {% for i in 0..4 %}
+            {% for img in images %}
                 <li class="col-md-6 col-lg-4">
-                    <figure id="{# {{ img.id }} #}">
-                        <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="Titol{# {{ img.title }}#}" width="400" height="300" class="img-rounded">
+                    <figure id="{{ img.id }}">
+                        <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="{{ img.title }}" width="400" height="300" class="img-rounded">
                         <figcaption>
                             <a href="/image/{#{{ img.id }}#}">Titol{# {{ img.title }}#}</a>
                             {% if user is defined and user.id == user2.id %}
@@ -35,7 +34,7 @@
                                 <button type="button" class="btn btn-sm btn-outline-secondary">
                                     <a data-toggle="modal" data-target="#edit-image-modal" class="nav-item nav-link" href="">Edit</a>
                                 </button>
-                                <a href="/remove/{#{{ img.id }}#}">Delete</a>
+                                <a href="/remove/{{ img.id }}">Delete</a>
                             {% endif %}
                         </figcaption>
                     </figure>

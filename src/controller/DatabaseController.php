@@ -31,14 +31,20 @@ class DatabaseController
 
     public function getNumComment(Application $app, $idUser) {
         $sql = "SELECT id FROM comments WHERE user_id = ?";
-        $num = count($app['db']->fetchAssoc($sql, array((int)$idUser)));
+        $stmt  = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idUser);
+        $stmt->execute();
+        $num = $stmt->fetchAll();
         if ($num) return count($num);
         return 0;
     }
 
     public function getNumImages(Application $app, $idUser) {
         $sql = "SELECT id FROM images WHERE user_id = ?";
-        $num = $app['db']->fetchAssoc($sql, array((int)$idUser));
+        $stmt  = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idUser);
+        $stmt->execute();
+        $num = $stmt->fetchAll();
         if ($num) return count($num);
         return 0;
     }
@@ -52,12 +58,18 @@ class DatabaseController
 
     public function getPublicImages(Application $app, $idUser) {
         $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ?";
-        return $app['db']->fetchAssoc($sql, array((int)$idUser));
+        $stmt  = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idUser);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public function getAllImages(Application $app, $idUser) {
         $sql = "SELECT * FROM images WHERE user_id = ?";
-        return $app['db']->fetchAssoc($sql, array((int)$idUser));
+        $stmt  = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idUser);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public function getLike(Application $app, $idImg, $idUser)
@@ -75,7 +87,10 @@ class DatabaseController
 
     public function getNotificationNum(Application $app, $idImg) {
         $sql = "SELECT id FROM notification WHERE image_id = ?";
-        return count($notifications = $app['db']->fetchAssoc($sql, array((int)$idImg)));
+        $stmt  = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idImg);
+        $stmt->execute();
+        return count($stmt->fetchAll());
     }
 
     public function postAction(Application $app, $name, $password)

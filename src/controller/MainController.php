@@ -15,7 +15,7 @@ class MainController {
 
     private $user;
     public $default = __DIR__ . '/../../res/default_portrait.png';
-    public $upload = __DIR__ . '/../../web/upload/';
+    public $upload = __DIR__ . '/../../web/assets/img/';
 
     public function renderMainPage (Application $app, Request $request) {
         $response = new Response();
@@ -375,7 +375,7 @@ class MainController {
             0);
 
         $userController->deleteImageAction($app, $idImg);
-        header('Location: ' . '/', true, 303);
+        header('Location: ' . '/user/' . $this->user['id'], true, 303);
         die();
     }
 
