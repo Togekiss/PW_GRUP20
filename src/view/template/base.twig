@@ -9,7 +9,8 @@
         {% block stylesheets %}
             <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css"> -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-             <link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap-imageupload.css', 'css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'css') }}">
         {% endblock %}
 
         <title>{% block title %}{% endblock %} - PWGram</title>
@@ -53,13 +54,19 @@
 
     {% block buttoncode %}
         {% if user is defined %}
-            <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="loginmodal-container">
                         <h1>Upload an Image</h1><br>
                         <form method="post" action="/upload-image" enctype="multipart/form-data" data-toggle="validator">
-                            <div class="form-group">
-                                <input type="file" name="img" class="form-control" required>
+                            <div class="imageupload panel panel-default form-group">
+                                <div class="file-tab panel-body">
+                                    <label class="btn btn-default btn-file">
+                                        <span>Browse</span>
+                                        <input type="file" name="img" class="form-control" required>
+                                    </label>
+                                    <button type="button" class="btn btn-default">Remove</button>
+                                </div>
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
@@ -123,7 +130,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js" integrity="sha256-UiqIqgNXwR8ChFMaD8VrY0tBUIl/soqb7msaauJWZVc=" crossorigin="anonymous"></script>
-    <script src="{{ asset('/app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ asset('bootstrap-imageupload.min.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ asset('app.js', 'js') }}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
 </body>
