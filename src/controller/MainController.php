@@ -357,6 +357,8 @@ class MainController {
             0);
 
         $userController->deleteImageAction($app, $idImg);
+        header('Location: ' . '/', true, 303);
+        die();
     }
 
     public function logout (Application $app) {
