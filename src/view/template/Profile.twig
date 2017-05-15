@@ -13,7 +13,10 @@
     <p>{{ user2.num_images }} images</p>
     <p>{{ user2.comments }} comments</p>
     {% if user2.id == user.id %}
-        <a href="/edit-profile">Edit profile</a>
+        <!--<a href="/edit">Edit profile</a>-->
+        <button type="button" class="btn btn-sm btn-outline-secondary">
+            <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Edit your profile</a>
+        </button>
         <a href="{# /{{ img.id }}/comments #}">See your comments</a>
     {% endif %}
 
@@ -26,13 +29,54 @@
                     <a href="{#link_a_la_imatge#}">Titol{# {{ img.title }}#}</a>
                     {# {% if user.id == this.id %} #}
                     {% if true  %}
-                        <a href="{# /{{ img.id }}/edit #}">Edit</a>
+                        {#<a href=" /{{ img.id }}/edit ">Edit</a>#}
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <a data-toggle="modal" data-target="#upload-modal" class="nav-item nav-link" href="">Edit</a>
+                        </button>
                         <a href="{# /{{ img.id }}/delete #}">Delete</a>
                     {% endif %}
                 </figcaption>
             </figure>
         </li>
-
     </ul>
+
+    <div class="modal fade" id="edit-profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="loginmodal-container">
+                <h1>Edit your Profile</h1><br>
+                <form method="post" action="/edit-profile">
+                    <input type="text" name="user" placeholder="New Username">
+                    <input type="password" name="password" placeholder="New Password">
+                    <input type="date" name="birthdate">
+                    <input type="file" name="img" placeholder="New Profile Image">
+                    <input type="submit" name="edit" class="login loginmodal-submit" value="Save Changes">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+            <h1>Edit this image</h1><br>
+            <form method="post" action="/upload-image" enctype="multipart/form-data" data-toggle="validator">
+                <div class="form-group">
+                    <input type="file" name="img" class="form-control" required>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="title" placeholder="Image Title" class="form-control" required maxlength="255">
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    <label>Make Image Private</label><input type="checkbox" value="1" name="private">
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="edit" class="login loginmodal-submit form-control" value="Upload Image">
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
 
 {% endblock %}
