@@ -8,7 +8,7 @@
 
 {% block content %}
 
-    <img src="/assets/img/default_portrait.png{# {{ assets('{{ user2.icon }}', images) }} #}" alt="Profile pic" class="img-circle" height="200" width="200">
+    <img src="{{ user2.img_path }}" alt="Profile pic" class="img-circle" height="200" width="200">
     <h1>{{ user2.username }}'s profile</h1>
     <p>{{ user2.num_images }} images</p>
     <p>{{ user2.comments }} comments</p>
@@ -17,7 +17,7 @@
         <button type="button" class="btn btn-sm btn-outline-secondary">
             <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Edit your profile</a>
         </button>
-        <a href="{# /user/{{ user.id }}/comments #}">See your comments</a>
+        <a href="/user/{{ user.id }}{#/comments#}">See your comments</a>
     {% endif %}
 
     <h2>Published images</h2>
