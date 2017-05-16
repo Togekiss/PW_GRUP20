@@ -13,13 +13,29 @@
 
     {% for comment in comments %}
         <li>
-            <a href="/image/{{ comment.image_id }}">{{ comment.title }}</a>
-            <p>{{ comment.text }}</p>
-            <a href="/remove-comment/{{ comment.id }}">Delete</a>
+            <p>Comment in image <a href="/image/{{ comment.image_id }}">{{ comment.title }}</a>: {{ comment.text }} <a data-toggle="modal" data-target="#edit-comment-modal" href="/modify-comment/{{ comment.id }}">Modify </a><a href="/remove-comment/{{ comment.id }}">Delete</a></p>
         </li>
         {% endfor %}
 
     </ul>
+
+
+    <div class="modal fade" id="edit-comment-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="loginmodal-container">
+                <h1>Modify this comment</h1><br>
+                <form method="post" action="/modify-comment/" enctype="multipart/form-data" data-toggle="validator">
+                    <div class="form-group">
+                        <input type="text" name="text" placeholder="New Text" class="form-control" required maxlength="255">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="edit" class="login loginmodal-submit form-control" value="Modify Comment">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}

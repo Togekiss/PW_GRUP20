@@ -90,8 +90,9 @@ class MainController {
             'app' => ['name' => $app['app.name']],
             'img' => $img,
             'comments' => $comments,
-            'user2'=> $user,
-            'user' =>  $userController->getAction($app, $app['session']->get('name')));
+            'user2'=> $user);
+
+        if ($userController->getAction($app, $app['session']->get('name'))) $array['user'] = $userController->getAction($app, $app['session']->get('name'));
 
         $content = $app['twig']->render('Image.twig', $array);
         $response = new Response();
@@ -104,30 +105,39 @@ class MainController {
     public function ShowUser (Application $app, $idUser) {
         $userController = new DatabaseController();
         $user = $userController->getActionId($app, $idUser);
-        $user['num_images'] = $userController->getNumImages($app, $idUser);
-        $user['comments'] = $userController->getNumComment($app, $idUser);
-        $img = $userController->getPublicImages($app, $idUser);
 
-        $array = array(
-            'app' => ['name' => $app['app.name']],
-            'user2'=> $user,
-            'images' => $img);
+        if ($user) {
+            $user['num_images'] = $userController->getNumImages($app, $idUser);
+            $user['comments'] = $userController->getNumComment($app, $idUser);
+            $img = $userController->getPublicImages($app, $idUser);
 
-        if ($app['session']->has('name')) {
-            $this->user = $userController->getAction($app, $app['session']->get('name'));
-            $array['user'] = $this->user;
-            if ($user['id'] == $this->user['id']) {
-                $img = $userController->getAllImages($app, $idUser);
-                $array['images'] = $img;
+            $array = array(
+                'app' => ['name' => $app['app.name']],
+                'user2' => $user,
+                'images' => $img);
+
+            if ($app['session']->has('name')) {
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                $array['user'] = $this->user;
+                if ($user['id'] == $this->user['id']) {
+                    $img = $userController->getAllImages($app, $idUser);
+                    $array['images'] = $img;
+                }
             }
-        }
 
-        $content = $app['twig']->render('Profile.twig', $array);
-        $response = new Response();
-        $response->setStatusCode($response::HTTP_OK);
-        $response->headers->set('Content-Type', 'text/html');
-        $response->setContent($content);
-        return $response;
+            $content = $app['twig']->render('Profile.twig', $array);
+            $response = new Response();
+            $response->setStatusCode($response::HTTP_OK);
+            $response->headers->set('Content-Type', 'text/html');
+            $response->setContent($content);
+            return $response;
+        }else {
+            $response = new Response();
+            $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'Requested user does not exist!'));
+            $response->setContent($content);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            return $response;
+        }
     }
 
     public function signUp (Application $app, Request $request) {
@@ -458,6 +468,28 @@ class MainController {
         $content = $app['twig']->render('error.twig', array(
             'app' => ['name' => $app['app.name']],
             'message' => $message
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function modifyComment (Application $app, Request $request, $idComment) {
+        $userController = new DatabaseController();
+
+        $comment = array('id' => $idComment, 'text' => $request->get('text'));
+
+        if ($userController->updateComment($app, $comment)) {
+            header('Location: ' . '/comment-list/' . $userController->getAction($app, $app['session']->get('name'))['id'], true, 303);
+            die();
+        }
+
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => 'The update of the comment failed. Please, try again!'
         ));
         $response->setContent($content);
         return $response;

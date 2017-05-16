@@ -91,7 +91,7 @@
         <div class="modal-dialog">
             <div class="loginmodal-container">
                 <h1>Edit this image</h1><br>
-                <form method="post" action="/image/{#{{ img.id }}#}/edit" enctype="multipart/form-data" data-toggle="validator">
+                <form method="post" action="/edit-image/{{ img.id }}" enctype="multipart/form-data" data-toggle="validator">
                     <div class="imageupload panel panel-default form-group">
                         <div class="file-tab panel-body">
                             <label class="btn btn-default btn-file">
