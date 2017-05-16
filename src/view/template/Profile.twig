@@ -17,7 +17,7 @@
         <button type="button" class="btn btn-sm btn-outline-secondary">
             <a data-toggle="modal" data-target="#edit-profile-modal" class="nav-item nav-link" href="">Edit your profile</a>
         </button>
-        <a href="/user/{{ user.id }}{#/comments#}">See your comments</a>
+        <a href="/comment-list/{{ user.id }}">See your comments</a>
     {% endif %}
 
     <h2>Published images</h2>
@@ -26,11 +26,10 @@
             {% for img in images %}
                 <li class="col-md-6 col-lg-4">
                     <figure id="{{ img.id }}">
-                        <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="{{ img.title }}" width="400" height="300" class="img-rounded">
+                        <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300" class="img-rounded">
                         <figcaption>
-                            <a href="/image/{#{{ img.id }}#}">Titol{# {{ img.title }}#}</a>
+                            <a href="/image/{{ img.id }}">{{ img.title }}</a>
                             {% if user is defined and user.id == user2.id %}
-                                {#<a href=" /image/{{ img.id }}/edit ">Edit</a>#}
                                 <button type="button" class="btn btn-sm btn-outline-secondary">
                                     <a data-toggle="modal" data-target="#edit-image-modal" class="nav-item nav-link" href="">Edit</a>
                                 </button>
