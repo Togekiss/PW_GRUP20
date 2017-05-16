@@ -79,6 +79,50 @@ $userCheck = function (Request $request, Application $app) {
     }
 };
 
+$notificationCheck = function (Request $request, Application $app) {
+    if (!$app['session']->has('name')) {
+        $response = new Response();
+        $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You must be logged'));
+        $response->setContent($content);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        return $response;
+    } else {
+        $idNot = $request->get('notificationId');
+        $userController = new DatabaseController();
+        $notification = $userController->getNotificationId($app, $idNot);
+
+        if ($notification['user_id'] != $userController->getAction($app, $app['session']->get('name'))['id']) {
+            $response = new Response();
+            $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You cannot access other account notifications!'));
+            $response->setContent($content);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            return $response;
+        }
+    }
+};
+
+$commentCheck = function (Request $request, Application $app) {
+    if (!$app['session']->has('name')) {
+        $response = new Response();
+        $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You must be logged'));
+        $response->setContent($content);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN);
+        return $response;
+    }else {
+        $idCom = $request->get('idComment');
+        $userController = new DatabaseController();
+        $comment = $userController->getCommentId($app, $idCom);
+
+        if ($comment['user_id'] != $userController->getAction($app, $app['session']->get('name'))['id']) {
+            $response = new Response();
+            $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You cannot access other account comments!'));
+            $response->setContent($content);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            return $response;
+        }
+    }
+};
+
 $app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
 //$app->get('/edit-profile', 'PWGram\\controller\\MainController::edit')->before($before);
 $app->get('/login', 'PWGram\\controller\\MainController::renderMainPage');
@@ -90,6 +134,9 @@ $app->get('/user/{idUser}', 'PWGram\\controller\\MainController::ShowUser');
 $app->get('/comment-list/{idUser}', 'PWGram\\controller\\MainController::ShowComments')->before($userCheck);
 $app->get('/remove/{idImg}', 'PWGram\\controller\\MainController::removeImage')->before($removeCheck);
 $app->get('/ajax/images', 'PWGram\\controller\\MainController::loadMoreImages');
+$app->get('/notifications', 'PWGram\\controller\\MainController::ShowNotifications')->before($before);
+$app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($commentCheck);
+$app->get('/remove-notification/{notificationId}', 'PWGram\\controller\\MainController::removeNotification')->before($notificationCheck);
 $app->get('/ajax/comments/{idImg}', 'PWGram\\controller\\MainController::loadMoreComments');
 //$app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($removeCheck);
 

@@ -374,15 +374,36 @@ class MainController {
 
     public function removeImage (Application $app, $idImg) {
         $userController = new DatabaseController();
+        $img = $userController->getImageAction($app, $idImg);
 
-        $userController->updateNotificationUser(
-            $app,
-            $this->user = $userController->getAction($app,
-            $app['session']->get('name')), $userController->getNotificationNum($app, $idImg),
-            0);
+        if ($userController->getNotificationNum($app, $idImg)) {
+            $userController->updateNotificationUser($app, $img['user_id'], $userController->getNotificationNum($app, $idImg), 0);
+        }
 
         $userController->deleteImageAction($app, $idImg);
-        header('Location: ' . '/user/' . $this->user['id'], true, 303);
+        header('Location: ' . '/user/' . $img['user_id'], true, 303);
+        die();
+    }
+
+    public function removeComment (Application $app, $idComment) {
+        $userController = new DatabaseController();
+        $com = $userController->getCommentId($app, $idComment);
+
+        if ($userController->getNumComment($app, $idComment)) {
+            $userController->updateNotificationUser($app, $com['user_id'], $userController->getNumComment($app, $idComment), 0);
+        }
+
+        $userController->deleteCommentAction($app, $idComment);
+        header('Location: ' . '/comment-list/' . $com['user_id'], true, 303);
+        die();
+    }
+
+    public function removeNotification (Application $app, $notificationId) {
+        $userController = new DatabaseController();
+
+        $userController->updateNotificationUser($app, $userController->getAction($app, $app['session']->get('name'))['id'], 1, 0);
+        $userController->deleteNotificationAction($app, $notificationId);
+        header('Location: ' . '/notifications', true, 303);
         die();
     }
 
@@ -447,6 +468,35 @@ class MainController {
             'comments' => $comments);
 
         $content = $app['twig']->render('Comments.twig', $array);
+        $response = new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function ShowNotifications (Application $app, Request $request) {
+        $userController = new DatabaseController();
+        $user = $userController->getAction($app, $app['session']->get('name'));
+        $notifications = $userController->getAllNotifications($app, $user['id']);
+
+        for ($i = 0; $i < count($notifications); $i++) {
+            $notifications[$i]['title'] = $userController->getImageAction($app, $notifications[$i]['image_id'])['title'];
+            if ($notifications[$i]['is_like']) {
+                $notifications[$i]['user_id'] = $userController->getLike($app, $notifications[$i]['image_id'], $notifications[$i]['user_id'])['user_id'];
+                $notifications[$i]['username'] = $userController->getActionId($app, $notifications[$i]['user_id'])['username'];
+            }else {
+                $notifications[$i]['user_id'] = $userController->getComment($app, $notifications[$i]['image_id'], $notifications[$i]['user_id'])['user_id'];
+                $notifications[$i]['username'] = $userController->getActionId($app, $notifications[$i]['user_id'])['username'];
+            }
+        }
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'user'=> $user,
+            'notifications' => $notifications);
+
+        $content = $app['twig']->render('Notifications.twig', $array);
         $response = new Response();
         $response->setStatusCode($response::HTTP_OK);
         $response->headers->set('Content-Type', 'text/html');
