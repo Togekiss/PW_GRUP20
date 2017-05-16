@@ -22,7 +22,7 @@ class MainController {
         $response = new Response();
         $userController = new DatabaseController();
         $imgViewed = $userController->mostViewed($app);
-        $imgRecent = $userController->mostRecent($app, 0);
+        $imgRecent = $userController->mostRecent($app, 5);
 
         for ($i = 0; $i < count($imgViewed); $i++) {
             $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
@@ -71,7 +71,7 @@ class MainController {
     public function ShowImage (Application $app, $idImg) {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
-        $comments = $userController->getImageComments($app, $idImg, 0);
+        $comments = $userController->getImageComments($app, $idImg, 3);
         $user = $userController->getActionId($app, $img['user_id']);
 
         $datetime1 = date_create($img['created_at']);
@@ -455,4 +455,15 @@ class MainController {
         header('Location: ' . '/', true, 303);
         die();
     }
+
+
+    public function loadMoreImages()
+    {
+        $entity = $em->getRepository('PublishDemandsBundle:Demands')->findAll();
+
+        return $this->render('PublishDemandsBundle:Demands:liste.html.twig', array(
+            'entity' => $entity
+        ));
+    }
+
 }

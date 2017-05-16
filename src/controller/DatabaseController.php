@@ -172,9 +172,9 @@ class DatabaseController
         return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY visits DESC LIMIT 5');
     }
 
-    public function mostRecent(Application $app, $offset)
+    public function mostRecent(Application $app, $limit)
     {
-        return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY created_at DESC LIMIT 5 OFFSET '. $offset);
+        return $app['db']->fetchAll('SELECT * FROM images WHERE private = 0 ORDER BY created_at DESC LIMIT '. $limit);
     }
 
     public function mostRecentComment(Application $app, $idImg)
@@ -183,10 +183,10 @@ class DatabaseController
         return $app['db']->fetchAssoc($sql, array((int)$idImg));
     }
 
-    public function getImageComments(Application $app, $idImg, $offset)
+    public function getImageComments(Application $app, $idImg, $limit)
     {
         return $app['db']->fetchAll('SELECT comments.*, user.username FROM comments, user
-                                      WHERE user.id = comments.user_id AND image_id = '. $idImg.' ORDER BY id DESC LIMIT 3 OFFSET '. $offset);
+                                      WHERE user.id = comments.user_id AND image_id = '. $idImg.' ORDER BY id DESC LIMIT '. $limit);
 
     }
 
