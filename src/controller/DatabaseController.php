@@ -56,9 +56,24 @@ class DatabaseController
         return $comment;
     }
 
+    public function getCommentId(Application $app, $idCom)
+    {
+        $sql = "SELECT * FROM comments WHERE id = ?";
+        return $app['db']->fetchAssoc($sql, array((int)$idCom));
+    }
+
     public function getAllComments(Application $app, $idUser)
     {
         $sql = "SELECT * FROM comments WHERE user_id = ?";
+        $stmt = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idUser);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getAllNotifications (Application $app, $idUser)
+    {
+        $sql = "SELECT * FROM notification WHERE user_id = ?";
         $stmt = $app['db']->prepare($sql);
         $stmt->bindValue(1, $idUser);
         $stmt->execute();
@@ -92,6 +107,12 @@ class DatabaseController
     {
         $sql = "SELECT * FROM notification WHERE user_id = ? AND image_id = ? AND is_like = 1";
         return $notifications = $app['db']->fetchAssoc($sql, array((int)$idUser, (int)$idImg));
+    }
+
+    public function getNotificationId(Application $app, $idNot)
+    {
+        $sql = "SELECT * FROM notification WHERE id = ?";
+        return $app['db']->fetchAssoc($sql, array((int)$idNot));
     }
 
     public function getNotificationNum(Application $app, $idImg) {
@@ -258,6 +279,11 @@ class DatabaseController
 
     public function deleteNotificationAction(Application $app, $id) {
         $stmt = $app['db']->prepare("DELETE FROM notification WHERE id = :id");
+        return $stmt->execute(array(':id' => $id));
+    }
+
+    public function deleteCommentAction(Application $app, $id) {
+        $stmt = $app['db']->prepare("DELETE FROM comments WHERE id = :id");
         return $stmt->execute(array(':id' => $id));
     }
 
