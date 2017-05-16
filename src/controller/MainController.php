@@ -11,6 +11,8 @@ use DateTime;
 use PWGram\controller\DatabaseController;
 use Symfony\Component\HttpFoundation\Session;
 
+
+
 class MainController {
 
     private $user;
@@ -23,6 +25,8 @@ class MainController {
         $userController = new DatabaseController();
         $imgViewed = $userController->mostViewed($app);
         $imgRecent = $userController->mostRecent($app, 5);
+        session_start();
+        unset($_SESSION['images']);
 
         for ($i = 0; $i < count($imgViewed); $i++) {
             $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
@@ -73,6 +77,9 @@ class MainController {
         $img = $userController->getImageAction($app, $idImg);
         $comments = $userController->getImageComments($app, $idImg, 3);
         $user = $userController->getActionId($app, $img['user_id']);
+        session_start();
+        unset($_SESSION['comments']);
+
 
         $datetime1 = date_create($img['created_at']);
         $datetime2 = date_create('now');
@@ -510,7 +517,13 @@ class MainController {
     public function loadMoreImages(Application $app) {
         $response = new Response();
         $userController = new DatabaseController();
-        $imgRecent = $userController->mostRecent($app, 10);
+        session_start();
+        if(!isset($_SESSION['images'])) {
+            $_SESSION['images'] = 10;
+        } else {
+            $_SESSION['images'] = $_SESSION['images'] + 5;
+        }
+        $imgRecent = $userController->mostRecent($app, $_SESSION['images']);
 
 
         for ($i = 0; $i < count($imgRecent); $i++) {
@@ -538,5 +551,39 @@ class MainController {
         $response->setContent($content);
         return $response;
     }
+
+
+    public function loadMoreComments (Application $app, $idImg) {
+        $userController = new DatabaseController();
+        $img = $userController->getImageAction($app, $idImg);
+        session_start();
+        if(!isset($_SESSION['comments'])) {
+            $_SESSION['comments'] = 6;
+        } else {
+            $_SESSION['comments'] = $_SESSION['comments'] + 3;
+        }
+        $comments = $userController->getImageComments($app, $idImg, $_SESSION['comments']);
+        $user = $userController->getActionId($app, $img['user_id']);
+
+        $datetime1 = date_create($img['created_at']);
+        $datetime2 = date_create('now');
+        $interval = date_diff($datetime1, $datetime2);
+        $img['days'] = $interval->format('%a');
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'img' => $img,
+            'comments' => $comments,
+            'user2'=> $user,
+            'user' =>  $userController->getAction($app, $app['session']->get('name')));
+
+        $content = $app['twig']->render('CommentList.twig', $array);
+        $response = new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setContent($content);
+        return $response;
+    }
+
 
 }

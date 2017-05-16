@@ -137,6 +137,8 @@ $app->get('/ajax/images', 'PWGram\\controller\\MainController::loadMoreImages');
 $app->get('/notifications', 'PWGram\\controller\\MainController::ShowNotifications')->before($before);
 $app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($commentCheck);
 $app->get('/remove-notification/{notificationId}', 'PWGram\\controller\\MainController::removeNotification')->before($notificationCheck);
+$app->get('/ajax/comments/{idImg}', 'PWGram\\controller\\MainController::loadMoreComments');
+//$app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($removeCheck);
 
 $app->post('/', 'PWGram\\controller\\MainController::login');
 $app->post('/login', 'PWGram\\controller\\MainController::login');
