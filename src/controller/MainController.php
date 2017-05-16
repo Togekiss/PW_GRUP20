@@ -457,13 +457,36 @@ class MainController {
     }
 
 
-    public function loadMoreImages()
-    {
-        $entity = $em->getRepository('PublishDemandsBundle:Demands')->findAll();
+    public function loadMoreImages(Application $app) {
+        $response = new Response();
+        $userController = new DatabaseController();
+        $imgRecent = $userController->mostRecent($app, 10);
 
-        return $this->render('PublishDemandsBundle:Demands:liste.html.twig', array(
-            'entity' => $entity
-        ));
+
+        for ($i = 0; $i < count($imgRecent); $i++) {
+            $imgRecent[$i]['username'] = $userController->getActionId($app, $imgRecent[$i]['user_id'])['username'];
+            $comment = $userController->mostRecentComment($app, $imgRecent[$i]['id']);
+            $imgRecent[$i]['userc_id'] = $comment['user_id'];
+            $imgRecent[$i]['textc'] = htmlentities($comment['text']);
+            $imgRecent[$i]['usernamec'] = $userController->getActionId($app, $comment['user_id'])['username'];
+        }
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'most_recent_images' => $imgRecent);
+
+        if ($app['session']->has('name')) {
+            $userController = new DatabaseController();
+            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $array['user'] = $this->user;
+        }
+
+        $content = $app['twig']->render('ImageList.twig', $array);
+
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setContent($content);
+        return $response;
     }
 
 }

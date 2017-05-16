@@ -89,6 +89,7 @@ $app->get('/image/{idImg}', 'PWGram\\controller\\MainController::ShowImage')->be
 $app->get('/user/{idUser}', 'PWGram\\controller\\MainController::ShowUser');
 $app->get('/comment-list/{idUser}', 'PWGram\\controller\\MainController::ShowComments')->before($userCheck);
 $app->get('/remove/{idImg}', 'PWGram\\controller\\MainController::removeImage')->before($removeCheck);
+$app->get('/ajax/images', 'PWGram\\controller\\MainController::loadMoreImages');
 //$app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($removeCheck);
 
 $app->post('/', 'PWGram\\controller\\MainController::login');

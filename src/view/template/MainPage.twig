@@ -43,35 +43,14 @@
     <h2>Recent images</h2>
 
     <ul class="img-list list-unstyled" id="recent-list">
-        <div class="row">
-            {% block recentlist %}
-                {% for img in most_recent_images %}
-                    <li class="col-md-6 col-lg-4">
-                        <figure id="{{ img.id }}">
-                            <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300">
-                            <figcaption>
-                                <a href="/user/{{ img.user_id }}">{{ img.username }}</a>
-                                <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
-                                <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
-                                <div class="comment"> <a href="/user/{{ img.userc_id }}">{{ img.usernamec }}</a><span>{{ img.textc }}</span></div>
-                                {% if user is defined %}
-                                    <a href="/like/{{ img.id }}">Like</a>
-                                    <form method="post" action="/comment/{{ img.id }}">
-                                        <div class="form-group comment">
-                                            <input type="text" name="text" placeholder="Comment" required>
-                                        </div> <input type="submit" name="edit" value="Comment">
-                                    </form>
-                                {% endif %}
-                            </figcaption>
-                        </figure>
-                    </li>
-                {% endfor %}
+        <div class="row" id="recent-images">
+            {% block imagelist %}
+                {% include 'ImageList.twig' %}
             {% endblock %}
-
         </div>
     </ul>
 
-    <a href="{# more images #}">Load more images</a>
+    <a href="/ajax/images" id="load_more">Load more images</a>
     <br><br><br><br><br>
 
 {% endblock %}

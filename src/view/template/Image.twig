@@ -20,9 +20,9 @@
                     </div> <input type="submit" name="edit" value="Comment">
                 </form>
             {% endif %}
-            {% for comment in comments %}
-                <div class="comment"><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a><span>{{ comment.text }}</span></div>
-            {% endfor %}
+            {% block commentlist %}
+                {% include 'CommentList.twig' %}
+            {% endblock %}
             <a href="{# more images #}">Load more comments</a>
         </figcaption>
     </figure>
