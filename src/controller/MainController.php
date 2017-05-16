@@ -11,6 +11,8 @@ use DateTime;
 use PWGram\controller\DatabaseController;
 use Symfony\Component\HttpFoundation\Session;
 
+
+
 class MainController {
 
     private $user;
@@ -23,6 +25,8 @@ class MainController {
         $userController = new DatabaseController();
         $imgViewed = $userController->mostViewed($app);
         $imgRecent = $userController->mostRecent($app, 5);
+        session_start();
+        unset($_SESSION['images']);
 
         for ($i = 0; $i < count($imgViewed); $i++) {
             $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
@@ -460,7 +464,14 @@ class MainController {
     public function loadMoreImages(Application $app) {
         $response = new Response();
         $userController = new DatabaseController();
-        $imgRecent = $userController->mostRecent($app, 10);
+        session_start();
+
+        if(!isset($_SESSION['images'])) {
+            $_SESSION['images'] = 10;
+        } else {
+            $_SESSION['images'] = $_SESSION['images'] + 5;
+        }
+        $imgRecent = $userController->mostRecent($app, $_SESSION['images']);
 
 
         for ($i = 0; $i < count($imgRecent); $i++) {
