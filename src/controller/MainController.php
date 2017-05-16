@@ -14,13 +14,13 @@ use Symfony\Component\HttpFoundation\Session;
 class MainController {
 
     private $user;
-    public $default = __DIR__ . '/../../res/default_portrait.png';
+    public $default = '/assets/img/default_portrait.png';
     public $upload = __DIR__ . '/../../web/assets/img/';
+    public $path = '/assets/img/';
 
     public function renderMainPage (Application $app, Request $request) {
         $response = new Response();
         $userController = new DatabaseController();
-        $i = 0;
         $imgViewed = $userController->mostViewed($app);
         $imgRecent = $userController->mostRecent($app, 0);
 
@@ -144,10 +144,10 @@ class MainController {
 
             if ($request->files->get('img') && !$request->files->get('img')->getError()) {
                 $tmp_name = $request->files->get('img');
-                $name = basename($request->files->get('img')->getClientOriginalName());
-                $name = $this->upload . $name;
+                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+                $name = $this->upload . $nameBase;
                 move_uploaded_file($tmp_name, $name);
-                $user['img'] = $name;
+                $user['img'] = $this->path . $nameBase;
             }
 
             if (!$user['img']) $user['img'] = $this->default;
@@ -251,14 +251,14 @@ class MainController {
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
 
                 $tmp_name = $request->files->get('img');
-                $name = basename($request->files->get('img')->getClientOriginalName());
-                $name = $this->upload . $name;
+                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+                $name = $this->upload . $nameBase;
                 move_uploaded_file($tmp_name, $name);
 
                 $img = array(
                     'id' => $this->user['id'],
                     'title' => $request->get('title'),
-                    'img' => $name,
+                    'img' => $this->path . $nameBase,
                     'private' => $request->get('private') ? 1 : 0,
                 );
 
@@ -421,6 +421,28 @@ class MainController {
             'app' => ['name' => $app['app.name']],
             'message' => $message
         ));
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function ShowComments (Application $app, Request $request, $idUser) {
+        $userController = new DatabaseController();
+        $user = $userController->getActionId($app, $idUser);
+        $comments = $userController->getAllComments($app, $idUser);
+
+        for ($i = 0; $i < count($comments); $i++) {
+            $comments[$i]['title'] = $userController->getImageAction($app, $comments[$i]['image_id'])['title'];
+        }
+
+        $array = array(
+            'app' => ['name' => $app['app.name']],
+            'user'=> $user,
+            'comments' => $comments);
+
+        $content = $app['twig']->render('Comments.twig', $array);
+        $response = new Response();
+        $response->setStatusCode($response::HTTP_OK);
+        $response->headers->set('Content-Type', 'text/html');
         $response->setContent($content);
         return $response;
     }

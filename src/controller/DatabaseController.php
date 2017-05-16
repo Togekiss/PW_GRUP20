@@ -56,6 +56,15 @@ class DatabaseController
         return $comment;
     }
 
+    public function getAllComments(Application $app, $idUser)
+    {
+        $sql = "SELECT * FROM comments WHERE user_id = ?";
+        $stmt = $app['db']->prepare($sql);
+        $stmt->bindValue(1, $idUser);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     public function getPublicImages(Application $app, $idUser) {
         $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ?";
         $stmt  = $app['db']->prepare($sql);

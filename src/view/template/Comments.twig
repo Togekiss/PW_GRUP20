@@ -3,20 +3,19 @@
 
 {# PAGINA PER VEURE ELS COMENTARIS QUE HAS FET #}
 
-{% block title %}USERNAME{# {{ user.name }} #}'s comments{% endblock %}
+{% block title %}{{ user.username }}'s comments{% endblock %}
 
 {% block content %}
 
-    <h1>USERNAME{# {{ user.name }} #}'s comments</h1>
+    <h1>{{ user.username }}'s comments</h1>
 
     <ul class="comment-list list-unstyled">
 
-    {# {% for image in images %} #}
-        {% for i in 0..5 %}
+    {% for comment in comments %}
         <li>
-            <a href="{# /img/{{ image.id }} #}TITLE"></a>
-            <p>{# {{ image.comment }} #}Your comment here</p>
-            <a href="{# /comment/{{ image.comment.id }}/delete #}">Delete</a>
+            <a href="/image/{{ comment.image_id }}">{{ comment.title }}</a>
+            <p>{{ comment.text }}</p>
+            <a href="/remove-comment/{{ comment.id }}">Delete</a>
         </li>
         {% endfor %}
 
