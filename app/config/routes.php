@@ -124,7 +124,7 @@ $commentCheck = function (Request $request, Application $app) {
 };
 
 $app->get('/', 'PWGram\\controller\\MainController::renderMainPage');
-//$app->get('/edit-profile', 'PWGram\\controller\\MainController::edit')->before($before);
+$app->get('/edit-profile', 'PWGram\\controller\\MainController::edit')->before($before);
 $app->get('/login', 'PWGram\\controller\\MainController::renderMainPage');
 $app->get('/logout', 'PWGram\\controller\\MainController::logout');
 $app->get('/upload-image', 'PWGram\\controller\\MainController::upload')->before($before);
