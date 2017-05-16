@@ -13,11 +13,11 @@ $(document).on('click', '#load_more', function(event) {
     });
 });
 
-/*
-$('#load_more').click(function(event) {
+$(document).on('click', '.load_more_comments', function(event) {
     event.preventDefault();
-    $.get("/ajax/images", function (data) {
-        $('#recent-images').html(data);
+    alert(event.target.id);
+    $.get("/ajax/comments/" + event.target.id, function (data) {
+        alert("LOADED");
+        $('#comments-list').html(data);
     });
 });
-*/
