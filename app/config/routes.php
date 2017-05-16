@@ -132,12 +132,15 @@ $app->get('/like/{idImg}', 'PWGram\\controller\\MainController::uploadLike')->be
 $app->get('/image/{idImg}', 'PWGram\\controller\\MainController::ShowImage')->before($imgCheck);
 $app->get('/user/{idUser}', 'PWGram\\controller\\MainController::ShowUser');
 $app->get('/comment-list/{idUser}', 'PWGram\\controller\\MainController::ShowComments')->before($userCheck);
+$app->get('/comment/{idImg}', 'PWGram\\controller\\MainController::uploadComment')->before($before);
 $app->get('/remove/{idImg}', 'PWGram\\controller\\MainController::removeImage')->before($removeCheck);
 $app->get('/ajax/images', 'PWGram\\controller\\MainController::loadMoreImages');
 $app->get('/notifications', 'PWGram\\controller\\MainController::ShowNotifications')->before($before);
 $app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($commentCheck);
+$app->get('/modify-comment/{idComment}', 'PWGram\\controller\\MainController::modifyComment')->before($commentCheck);
 $app->get('/remove-notification/{notificationId}', 'PWGram\\controller\\MainController::removeNotification')->before($notificationCheck);
 $app->get('/ajax/comments/{idImg}', 'PWGram\\controller\\MainController::loadMoreComments');
+$app->get('/edit-image/{idImg}', 'PWGram\\controller\\MainController::editImage')->before($removeCheck);
 //$app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($removeCheck);
 
 $app->post('/', 'PWGram\\controller\\MainController::login');
@@ -148,6 +151,7 @@ $app->post('/logout', 'PWGram\\controller\\MainController::logout');
 $app->post('/upload-image', 'PWGram\\controller\\MainController::upload');
 $app->post('/comment/{idImg}', 'PWGram\\controller\\MainController::uploadComment')->before($before);
 $app->post('/edit-image/{idImg}', 'PWGram\\controller\\MainController::editImage')->before($removeCheck);
+$app->post('/modify-comment/{idComment}', 'PWGram\\controller\\MainController::modifyComment')->before($commentCheck);
 //$app->post('/login', 'PWGram\\controller\\MainController::login');
 
 $app->get('/register', 'PWGram\\controller\\MainController::ShowsignUp');

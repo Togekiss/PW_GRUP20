@@ -272,6 +272,16 @@ class DatabaseController
         return $errors;
     }
 
+    public function updateComment (Application $app, $comment) {
+
+        if ($comment['text']) {
+            $stmt = $app['db']->prepare("UPDATE comments SET text=:text WHERE id=:id");
+            return $stmt->execute(array(':text' => $comment['text'], ':id' => $comment['id']));
+        }
+
+        return false;
+    }
+
     public function deleteLikeAction(Application $app, $id) {
         $stmt = $app['db']->prepare("DELETE FROM likes WHERE id = :id");
         return $stmt->execute(array(':id' => $id));
