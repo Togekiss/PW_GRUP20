@@ -7,21 +7,22 @@
 
 {% block content %}
     <figure id="{{ img.id }}">
-        <img src="/assets/img/default_portrait.png{# /img/{{ img.filename }} #}" alt="{{ img.title }}" width="400" height="300">
+        <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300">
         <figcaption>
-            <a href="{#link_al_user_profile#}">{{ user.username }}</a>
+            <a href="/user/{{ img.user_id }}">{{ user2.username }}</a>
             <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
             <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.days }} days ago</span>
             {% if user is defined %}
                 <a href="/like/{{ img.id }}">Like</a>
                 <form method="post" action="/comment/{{ img.id }}">
-                    <input type="text" name="user" placeholder="Comment">
-                    <input type="submit" name="edit" value="Comment">
+                    <div class="form-group comment">
+                        <input type="text" name="text" placeholder="Comment" required>
+                    </div> <input type="submit" name="edit" value="Comment">
                 </form>
             {% endif %}
-            <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
-            <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
-            <div class="comment"> <a href="{# /user/{{ user.id }} #}">Name{# {{ user.name }} #}</a><span>Hey cool photo</span></div>
+            {% for comment in comments %}
+                <div class="comment"><a href="/user/{{ comment.user_id }}">{{ comment.username }}</a><span>{{ comment.text }}</span></div>
+            {% endfor %}
             <a href="{# more images #}">Load more comments</a>
         </figcaption>
     </figure>
