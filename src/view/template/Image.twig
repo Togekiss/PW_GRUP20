@@ -10,10 +10,12 @@
         <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300">
         <figcaption>
             <a href="/user/{{ img.user_id }}">{{ user2.username }}</a>
-            <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
+            <div id="reload-{{ img.id }}">
+                {% include 'ReloadLike.twig' %}
+            </div><span class="visits">{{ img.visits }}</span>
             <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.days }} days ago</span>
             {% if user is defined %}
-                <a href="/like/{{ img.id }}">Like</a>
+                <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}">Like</a>
                 <form method="post" action="/comment/{{ img.id }}">
                     <div class="form-group comment">
                         <input type="text" name="text" placeholder="Comment" required>

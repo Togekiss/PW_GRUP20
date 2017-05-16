@@ -4,11 +4,13 @@
             <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300">
             <figcaption>
                 <a href="/user/{{ img.user_id }}">{{ img.username }}</a>
-                <span class="likes">{{ img.likes }}</span><span class="visits">{{ img.visits }}</span>
+                <div id="reload-{{ img.id }}">
+                    {% include 'ReloadLike.twig' %}
+                </div><span class="visits">{{ img.visits }}</span>
                 <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
                 <div class="comment"> <a href="/user/{{ img.userc_id }}">{{ img.usernamec }}</a><span>{{ img.textc }}</span></div>
                 {% if user is defined %}
-                    <a href="/like/{{ img.id }}">Like</a>
+                    <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}">Like</a>
                     <form method="post" action="/comment/{{ img.id }}">
                         <div class="form-group comment">
                             <input type="text" name="text" placeholder="Comment" required>

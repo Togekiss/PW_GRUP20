@@ -15,9 +15,14 @@ $(document).on('click', '#load_more', function(event) {
 
 $(document).on('click', '.load_more_comments', function(event) {
     event.preventDefault();
-    alert(event.target.id);
     $.get("/ajax/comments/" + event.target.id, function (data) {
-        alert("LOADED");
         $('#comments-list').html(data);
+    });
+});
+
+$(document).on('click', '.like', function(event) {
+    event.preventDefault();
+    $.get("/like/" + event.target.id, function (data) {
+        $('#reload-' + event.target.id).html(data);
     });
 });
