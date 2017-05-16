@@ -72,7 +72,7 @@ class MainController {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
         $comments = $userController->getImageComments($app, $idImg, 0);
-        $user = $userController->getAction($app, $img['user_id']);
+        $user = $userController->getActionId($app, $img['user_id']);
 
         $datetime1 = date_create($img['created_at']);
         $datetime2 = date_create('now');

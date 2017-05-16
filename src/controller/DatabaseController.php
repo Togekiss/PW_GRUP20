@@ -176,7 +176,9 @@ class DatabaseController
 
     public function getImageComments(Application $app, $idImg, $offset)
     {
-        return $app['db']->fetchAll('SELECT * FROM comments WHERE image_id = '. $idImg.' ORDER BY id DESC LIMIT 3 OFFSET '. $offset);
+        return $app['db']->fetchAll('SELECT comments.*, user.username FROM comments, user
+                                      WHERE user.id = comments.user_id AND image_id = '. $idImg.' ORDER BY id DESC LIMIT 3 OFFSET '. $offset);
+
     }
 
     public function uploadCommentAction(Application $app, $comment) {
