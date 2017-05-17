@@ -15,7 +15,7 @@
         <li>
             <p>Comment in image <a href="/image/{{ comment.image_id }}">{{ comment.title }}</a>: {{ comment.text }} <a data-toggle="modal" data-target="#edit-comment-modal" href="/modify-comment/{{ comment.id }}">Modify </a><a href="/remove-comment/{{ comment.id }}">Delete</a></p>
         </li>
-        {% endfor %}
+
 
     </ul>
 
@@ -24,7 +24,7 @@
         <div class="modal-dialog">
             <div class="loginmodal-container">
                 <h1>Modify this comment</h1><br>
-                <form method="post" action="/modify-comment/" enctype="multipart/form-data" data-toggle="validator">
+                <form method="post" action="/modify-comment/{{ comment.id }}" enctype="multipart/form-data" data-toggle="validator">
                     <div class="form-group">
                         <input type="text" name="text" placeholder="New Text" class="form-control" required maxlength="255">
                         <div class="help-block with-errors"></div>
@@ -37,5 +37,5 @@
         </div>
     </div>
 
-
+    {% endfor %}
 {% endblock %}

@@ -272,6 +272,42 @@ class MainController {
                 $name = $this->upload . $nameBase;
                 move_uploaded_file($tmp_name, $name);
 
+                header('Content-Type: image/jpeg');
+
+                $thumb = imagecreatetruecolor(400, 300);
+                $info = getimagesize($name);
+                list($width, $height) = getimagesize($name);
+
+                if ($info['mime'] == 'image/jpeg')
+                    $image = imagecreatefromjpeg($name);
+
+                else if ($info['mime'] == 'image/gif')
+                    $image = imagecreatefromgif($name);
+
+                else if ($info['mime'] == 'image/png')
+                    $image = imagecreatefrompng($name);
+
+                imagecopyresized($thumb, $image, 0, 0, 0, 0, 400, 300, $width, $height);
+
+                imagejpeg($thumb, $this->upload . substr($nameBase, 0, strlen($nameBase) - 4)  . "400x300.jpg", 75);
+
+                $thumb = imagecreatetruecolor(16, 16);
+                $info = getimagesize($name);
+                list($width, $height) = getimagesize($name);
+
+                if ($info['mime'] == 'image/jpeg')
+                    $image = imagecreatefromjpeg($name);
+
+                else if ($info['mime'] == 'image/gif')
+                    $image = imagecreatefromgif($name);
+
+                else if ($info['mime'] == 'image/png')
+                    $image = imagecreatefrompng($name);
+
+                imagecopyresized($thumb, $image, 0, 0, 0, 0, 16, 16, $width, $height);
+
+                imagejpeg($thumb, $this->upload . substr($nameBase, 0, strlen($nameBase) - 4) . "16x16.jpg", 75);
+
                 $img = array(
                     'id' => $this->user['id'],
                     'title' => $request->get('title'),
@@ -441,15 +477,15 @@ class MainController {
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
 
                 $tmp_name = $request->files->get('img');
-                $name = basename($request->files->get('img')->getClientOriginalName());
-                $name = $this->upload . $name;
+                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+                $name = $this->upload . $nameBase;
                 move_uploaded_file($tmp_name, $name);
             }
 
             $img = array(
                 'id' => $idImg,
                 'title' => $request->get('title')?$request->get('title'):null,
-                'img' => $name?$name:null,
+                'img' => $nameBase?$this->path . $nameBase:null,
                 'private' => $request->get('private') ? 1 : 0,
             );
 
