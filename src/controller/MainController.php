@@ -172,7 +172,6 @@ class MainController {
 
             if ($userController->signUpAction($app, $user)) {
                 $this->sendMail($user['email'], $user['activate_string']);
-                //$app['session']->set('name', $user['name']);
                 header('Location: ' . '/', true, 303);
                 die();
             }
