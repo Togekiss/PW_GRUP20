@@ -142,6 +142,7 @@ $app->get('/remove-notification/{notificationId}', 'PWGram\\controller\\MainCont
 $app->get('/ajax/comments/{idImg}', 'PWGram\\controller\\MainController::loadMoreComments');
 $app->get('/edit-image/{idImg}', 'PWGram\\controller\\MainController::editImage')->before($removeCheck);
 //$app->get('/remove-comment/{idComment}', 'PWGram\\controller\\MainController::removeComment')->before($removeCheck);
+$app->get('/activateUser/{idActivate}', 'PWGram\\controller\\MainController::activateUser');
 
 $app->post('/', 'PWGram\\controller\\MainController::login');
 $app->post('/login', 'PWGram\\controller\\MainController::login');
