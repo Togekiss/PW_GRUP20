@@ -1,15 +1,55 @@
-.modal {
-  display: none;
+body {
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
-button img {
+h1, h2 {
+  margin: 5px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.container-fluid {
+  padding: 0px;
+}
+
+figure {
+  border: solid darkgrey 1px;
+  width: 410px;
+  margin: 10px 0 10px 0;
+}
+figure img {
+  margin: 5px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  /* Do not scale the image */
+  -o-object-position: center;
+     object-position: center;
+  /* Center the image within the element */
+  height: 300px;
+  width: 400px;
+}
+figure figcaption {
+  background-color: whitesmoke;
+  margin: 5px;
+}
+figure figcaption .title {
+  font-family: 'Montserrat', sans-serif;
+  display: block;
+}
+figure figcaption .like {
+  color: red;
+  text-align: right;
+  float: right;
+  margin-top: -40px;
+  margin-right: 10px;
+}
+figure figcaption .box {
+  background-color: white;
   position: absolute;
-  right: -40px;
-  display: inline-block;
+  margin: -45px 0 0 7px;
+  padding: 0 5px 0 5px;
+  border-radius: 10px;
 }
-
-button {
-  position: relative;
+figure figcaption .visits {
+  margin: -45px 0 0 350px;
 }
-
 /*# sourceMappingURL=style.css.map */

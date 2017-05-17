@@ -18,19 +18,19 @@
     <ul id="top-list" class="img-list list-unstyled">
         <div class="row">
             {% for img in most_viewed_images %}
-                <li class="col-md-6 col-lg-4">
-                    <figure id="{{ img.id }}">
-                        <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300">
-                        <figcaption>
-                            <a href="/user/{{ img.user_id }}">{{ img.username }}</a>
+                <li class="col-sm-12 col-md-6">
+                    <figure id="{{ img.id }}" class="rounded">
+                        <img src="{{ img.img_path }}" alt="{{ img.title }}" class="rounded">
+                        <figcaption class="rounded">
                             {% block reload %}
-                            <div id="reload-{{ img.id }}">
-                                {% include 'ReloadLike.twig' %}
-                            </div>
-                            {% endblock %}<span class="visits">{{ img.visits }}</span>
-                            <a href="/image/{{ img.id }}">{{ img.title }}</a> <span class="date">{{ img.created_at }}</span>
+                            <span class="box" id="reload-{{ img.id }}">
+                                <i class="fa fa-heart"></i>{% include 'ReloadLike.twig' %}
+                            </span>
+                            {% endblock %}<span class="box visits"><i class="fa fa-eye"></i>{{ img.visits }}</span>
+                            <a href="/user/{{ img.user_id }}">{{ img.username }}</a> <span class="date">{{ img.created_at }}</span>
+                            <a href="/image/{{ img.id }}" class="title">{{ img.title }}</a>
                             {% if user is defined %}
-                                <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}">Like</a>
+                                <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}"><i class="fa fa-heart"> Like</i></a>
                                 <form method="post" action="/comment/{{ img.id }}">
                                     <div class="form-group comment">
                                         <input type="text" name="text" placeholder="Comment" required>

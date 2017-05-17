@@ -1,3 +1,59 @@
-.modal {
-  display: none;
+
+body {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+h1, h2 {
+  margin: 5px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.container-fluid {
+  padding: 0px;
+}
+
+figure {
+  border: solid darkgrey 1px;
+  width: 410px;
+  margin: 10px 0 10px 0;
+
+  img {
+    margin: 5px;
+    object-fit: cover; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    height: 300px;
+    width: 400px;
+  }
+
+  figcaption {
+    background-color: whitesmoke;
+    margin: 5px;
+
+    .title {
+      font-family: 'Montserrat', sans-serif;
+      display: block;
+    }
+
+    .like {
+      color: red;
+      text-align: right;
+      float: right;
+      margin-top: -40px;
+      margin-right: 10px;
+    }
+
+    .box {
+      background-color: white;
+      position: absolute;
+      margin: -45px 0 0 7px;
+      padding: 0 5px 0 5px;
+      border-radius: 10px;
+    }
+
+    .visits {
+      margin: -45px 0 0 350px;
+    }
+
+  }
+
 }
