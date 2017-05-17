@@ -1,3 +1,3 @@
 {% for comment in comments %}
-    <div class="comment"><a href="/user/{{ comment.user_id }}/1">{{ comment.username }}</a><span>{{ comment.text }}</span></div>
+    <div class="comment-view"><a href="/user/{{ comment.user_id }}/1">{{ comment.username }}</a><span class="comment-text">{{ comment.text }}</span></div>
 {% endfor %}

@@ -7,14 +7,143 @@ h1, h2 {
   font-family: 'Montserrat', sans-serif;
 }
 
+h1 {
+  margin: 20px;
+}
+
+.popup {
+  background: dimgrey;
+  padding: 20px;
+  margin-top: 70px;
+  border-radius: 20px;
+}
+.popup h1 {
+  color: whitesmoke;
+}
+.popup .register-link {
+  color: lightskyblue;
+  font-size: 18px;
+}
+.popup .browse-button {
+  background-color: #DDDDDD;
+  border: solid gray 1px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 50px;
+}
+.popup .radio-label {
+  font-size: 20px;
+  margin-right: 10px;
+  color: whitesmoke;
+}
+
+.comment-list {
+  padding: 10px;
+}
+@media screen and (min-width: 560px) {
+  .comment-list {
+    width: 550px;
+    margin: auto;
+  }
+}
+.comment-list li {
+  padding: 10px;
+  border: solid darkgrey 1px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.tiny {
+  -o-object-fit: cover;
+     object-fit: cover;
+  /* Do not scale the image */
+  -o-object-position: center;
+     object-position: center;
+  /* Center the image within the element */
+  height: 25px;
+  width: 25px;
+}
+
+.register-form {
+  padding: 10px;
+}
+@media screen and (min-width: 650px) {
+  .register-form {
+    width: 650px;
+    margin: auto;
+  }
+}
+
 .container-fluid {
   padding: 0px;
+  margin-bottom: 100px;
+}
+
+.foot {
+  padding-top: 20px;
+  background-color: rgba(245, 245, 245, 0.7);
+}
+
+#load_more {
+  font-size: 24px;
+}
+
+.mig {
+  margin: auto;
+  margin-top: 50px;
+}
+
+.profile-pic {
+  margin: -40px 40px 40px 40px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  /* Do not scale the image */
+  -o-object-position: center;
+     object-position: center;
+  /* Center the image within the element */
+  height: 200px;
+  width: 200px;
+}
+@media screen and (max-width: 720px) {
+  .profile-pic {
+    display: block;
+    margin: 40px auto auto auto;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  .profile-header {
+    display: inline-block;
+    margin-top: 40px;
+  }
+}
+.profile-header p {
+  margin-left: 25px;
+  display: inline-block;
+}
+
+.profile-buttons {
+  margin-left: 20px;
+}
+.profile-buttons .boto-raro {
+  padding: 11px 20px 11px 20px;
+}
+
+.image-buttons {
+  float: right;
+}
+
+.select {
+  max-width: 500px;
+  margin: 20px 40px 20px 20px;
 }
 
 figure {
   border: solid darkgrey 1px;
   width: 410px;
-  margin: 10px 0 10px 0;
+  margin: 10px auto 10px auto;
 }
 figure img {
   margin: 5px;
@@ -30,16 +159,18 @@ figure img {
 figure figcaption {
   background-color: whitesmoke;
   margin: 5px;
+  padding: 5px;
 }
 figure figcaption .title {
   font-family: 'Montserrat', sans-serif;
   display: block;
+  margin-bottom: 5px;
 }
 figure figcaption .like {
   color: red;
   text-align: right;
   float: right;
-  margin-top: -40px;
+  margin-top: -45px;
   margin-right: 10px;
 }
 figure figcaption .box {
@@ -52,4 +183,15 @@ figure figcaption .box {
 figure figcaption .visits {
   margin: -45px 0 0 350px;
 }
+figure figcaption .send-comment {
+  margin-top: -10px;
+}
+figure figcaption .comment-view {
+  margin: 8px 5px 5px 5px;
+  font-size: 16px;
+}
+figure figcaption .comment-view .comment-text {
+  margin-left: 7px;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -169,13 +169,11 @@ class MainController {
 
             if (!$user['img']) $user['img'] = $this->default;
             $user['activate_string'] = md5(uniqid(rand()));
-
             if ($userController->signUpAction($app, $user)) {
                 $this->sendMail($user['email'], $user['activate_string']);
                 header('Location: ' . '/', true, 303);
                 die();
             }
-
             $message = 'We had an issue signing you up. Please try again!';
         }
 
@@ -195,14 +193,12 @@ class MainController {
         $mail->SMTPSecure = "ssl";
         $mail->Host="smtp.gmail.com";
         $mail->Port=465;
-
         $mail->Username ="rogermarrugat96@gmail.com";
         $mail->Password="power123";
         $mail->SetFrom('rogermarrugat96@gmail.com','PWGRAM - GRUP 20');
         $mail->addReplyTo('rogermarrugat96@gmail.com','PWGRAM - GRUP 20');
         $mail->Subject="ACTIVATE USER PWGRAM";
         $mail->msgHTML("www.grup20.com/activateUser/". $id);
-
         $mail->addAddress($email," ");
         if(!$mail->send()) {
             echo "Error in mail: " . $mail->ErrorInfo;
@@ -210,16 +206,13 @@ class MainController {
             echo "Mail sent!";
         }
     }
-
     public function activateUser (Application $app, Request $request, $idActivate) {
         if ($app['session']->has('name')) {
             $this->user = null;
             $app['session']->clear();
         }
-
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
-
         $userController = new DatabaseController();
         if ($userController->activateUser ($app, $idActivate)) {
             $user = $userController->getActionIdActive($app, $idActivate);
@@ -238,6 +231,7 @@ class MainController {
         }
     }
 
+
     public function login (Application $app, Request $request) {
         $user = $request->get('user');
         $pass = $request->get('pass');
@@ -253,18 +247,16 @@ class MainController {
                 'app' => ['name' => $app['app.name']],
                 'message' => 'User not found'));
         }
-        else {
-            if ($this->user['active']) {
-                $app['session']->start();
-                $app['session']->set('name', $this->user['username']);
-                header('Location: ' . '/', true, 303);
-                die();
-            } else {
-                $response->setStatusCode(Response::HTTP_NOT_FOUND);
-                $content = $app['twig']->render('error.twig', array(
-                    'app' => ['name' => $app['app.name']],
-                    'message' => 'You must activate your account! You will found a link in your email!'));
-            }
+        if ($this->user['active']) {
+            $app['session']->start();
+            $app['session']->set('name', $this->user['username']);
+            header('Location: ' . '/', true, 303);
+            die();
+        } else {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $content = $app['twig']->render('error.twig', array(
+                'app' => ['name' => $app['app.name']],
+                'message' => 'You must activate your account! You will found a link in your email!'));
         }
 
         $response->headers->set('Content-Type', 'text/html');
@@ -297,7 +289,7 @@ class MainController {
             if ($userController->updateAction($app, $user) == count(array_filter($user))- 1) {
                 if ($user['name']) $app['session']->set('name', $user['name']);
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
-                header('Location: ' . '/', true, 303);
+                header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
                 die();
             }
             $message = 'We had an issue signing you up. Please try again!';
@@ -658,6 +650,7 @@ class MainController {
         die();
     }
 
+
     public function loadMoreImages(Application $app) {
         $response = new Response();
         $userController = new DatabaseController();
@@ -695,6 +688,7 @@ class MainController {
         $response->setContent($content);
         return $response;
     }
+
 
     public function loadMoreComments (Application $app, $idImg) {
         $userController = new DatabaseController();
