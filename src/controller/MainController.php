@@ -121,7 +121,6 @@ class MainController {
                 $array['user'] = $this->user;
                 if ($user['id'] == $this->user['id']) {
                     $img = $userController->getAllImages($app, $idUser, $selection);
-                    var_dump($img);
                     $array['images'] = $img;
                 }
             }

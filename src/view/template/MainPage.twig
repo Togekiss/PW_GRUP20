@@ -14,11 +14,11 @@
 {% block content %}
     <h1 class="text-center">Welcome to PWGram</h1>
 
-    <h2>Most viewed images</h2>
+    <h2 class="text-center">Most viewed images</h2>
     <ul id="top-list" class="img-list list-unstyled">
         <div class="row">
             {% for img in most_viewed_images %}
-                <li class="col-sm-12 col-md-6">
+                <li class="col-sm-12 col-md-6 col-xl-4">
                     <figure id="{{ img.id }}" class="rounded">
                         <img src="{{ img.img_path }}" alt="{{ img.title }}" class="rounded">
                         <figcaption class="rounded">
@@ -27,7 +27,7 @@
                                 {% include 'ReloadLike.twig' %}
                             </span>
                             {% endblock %}<span class="box visits"><i class="fa fa-eye"></i>{{ img.visits }}</span>
-                            <a href="/user/{{ img.user_id }}">{{ img.username }}</a> <span class="date">{{ img.created_at }}</span>
+                            <a href="/user/{{ img.user_id }}/1">{{ img.username }}</a> <span class="date">{{ img.created_at }}</span>
                             <a href="/image/{{ img.id }}" class="title">{{ img.title }}</a>
                             {% if user is defined %}
                                 <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}"><i class="fa fa-heart"></i>Like</a>
@@ -44,7 +44,7 @@
         </div>
     </ul>
 
-    <h2>Recent images</h2>
+    <h2 class="text-center">Recent images</h2>
 
     <ul class="img-list list-unstyled" id="recent-list">
         <div class="row" id="recent-images">

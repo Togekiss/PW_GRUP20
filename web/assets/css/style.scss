@@ -46,6 +46,25 @@ h1 {
 
 }
 
+.comment-list {
+  padding: 10px;
+
+  @media screen and (min-width: 560px){
+    width: 550px;
+    margin: auto;
+  }
+
+  li {
+
+    padding: 10px;
+    border: solid darkgrey 1px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+
+  }
+
+}
+
 .tiny {
   object-fit: cover; /* Do not scale the image */
   object-position: center; /* Center the image within the element */
@@ -77,10 +96,57 @@ h1 {
   margin-top: 50px;
 }
 
+.profile-pic {
+
+  margin: -40px 40px 40px 40px;
+  object-fit: cover; /* Do not scale the image */
+  object-position: center; /* Center the image within the element */
+  height: 200px;
+  width: 200px;
+
+  @media screen and (max-width: 720px){
+    display: block;
+    margin: 40px auto auto auto;
+  }
+
+}
+
+.profile-header {
+
+  @media screen and (min-width: 720px){
+    display: inline-block;
+    margin-top: 40px;
+  }
+
+  p {
+    margin-left: 25px;
+    display: inline-block;
+  }
+
+}
+.profile-buttons {
+
+  margin-left: 20px;
+
+  .boto-raro {
+    padding: 11px 20px 11px 20px;
+  }
+
+}
+
+.image-buttons {
+  float: right;
+}
+
+.select {
+  max-width: 500px;
+  margin: 20px 40px 20px 20px;
+}
+
 figure {
   border: solid darkgrey 1px;
   width: 410px;
-  margin: 10px 0 10px 0;
+  margin: 10px auto 10px auto;
 
   img {
     margin: 5px;

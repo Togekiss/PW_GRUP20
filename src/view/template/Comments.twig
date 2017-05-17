@@ -7,20 +7,28 @@
 
 {% block content %}
 
-    <h1>{{ user.username }}'s comments</h1>
+    <h1 class="text-center">{{ user.username }}'s comments</h1>
 
     <ul class="comment-list list-unstyled">
 
     {% for comment in comments %}
         <li>
-            <p>Comment in image <a href="/image/{{ comment.image_id }}">{{ comment.title }}</a>: {{ comment.text }} <a data-toggle="modal" data-target="#edit-comment-modal" id="{{ comment.id }}" class="modify" href="/modify-comment/{{ comment.id }}">Modify </a><a href="/remove-comment/{{ comment.id }}">Delete</a></p>
+            <p>Comment in image <a href="/image/{{ comment.image_id }}">{{ comment.title }}</a>: {{ comment.text }}</p>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary boto-raro">
+                    <a data-toggle="modal" data-target="#edit-comment-modal" id="{{ comment.id }}" class="modify" href="/modify-comment/{{ comment.id }}">Modify</a>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary boto-raro">
+                    <a href="/remove-comment/{{ comment.id }}">Delete</a>
+                </button>
+
         </li>
     {% endfor %}
     </ul>
 
 
     <div class="modal fade" id="edit-comment-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog popup">
             <div class="loginmodal-container">
                 <h1>Modify this comment</h1><br>
                 <form method="post" id="modifyform" action="" enctype="multipart/form-data" data-toggle="validator">
