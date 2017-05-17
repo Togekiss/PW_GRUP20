@@ -80,16 +80,32 @@ class DatabaseController
         return $stmt->fetchAll();
     }
 
-    public function getPublicImages(Application $app, $idUser) {
-        $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ?";
+    public function getPublicImages(Application $app, $idUser, $selection) {
+        if ($selection == 1) {
+            $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ? ORDER BY likes DESC";
+        }else if ($selection == 2) {
+            $sql = "SELECT images.*, count(comments.id) AS comment FROM images, comments WHERE private = 0 AND images.user_id = ? AND images.id = comments.image_id GROUP BY images.id ORDER BY comment DESC";
+        }else if ($selection == 3) {
+            $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ? ORDER BY visits DESC";
+        }else {
+            $sql = "SELECT * FROM images WHERE private = 0 AND user_id = ? ORDER BY created_at DESC";
+        }
         $stmt  = $app['db']->prepare($sql);
         $stmt->bindValue(1, $idUser);
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
-    public function getAllImages(Application $app, $idUser) {
-        $sql = "SELECT * FROM images WHERE user_id = ?";
+    public function getAllImages(Application $app, $idUser, $selection) {
+        if ($selection == 1) {
+            $sql = "SELECT * FROM images WHERE  user_id = ? ORDER BY likes DESC";
+        }else if ($selection == 2) {
+            $sql = "SELECT images.*, count(comments.id) AS comment FROM images, comments WHERE images.user_id = ? AND images.id = comments.image_id GROUP BY images.id ORDER BY comment DESC";
+        }else if ($selection == 3) {
+            $sql = "SELECT * FROM images WHERE user_id = ? ORDER BY visits DESC";
+        }else {
+            $sql = "SELECT * FROM images WHERE user_id = ? ORDER BY created_at DESC";
+        }
         $stmt  = $app['db']->prepare($sql);
         $stmt->bindValue(1, $idUser);
         $stmt->execute();

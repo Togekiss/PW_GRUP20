@@ -102,14 +102,14 @@ class MainController {
         return $response;
     }
 
-    public function ShowUser (Application $app, $idUser) {
+    public function ShowUser (Application $app, $idUser, $selection) {
         $userController = new DatabaseController();
         $user = $userController->getActionId($app, $idUser);
 
         if ($user) {
             $user['num_images'] = $userController->getNumImages($app, $idUser);
             $user['comments'] = $userController->getNumComment($app, $idUser);
-            $img = $userController->getPublicImages($app, $idUser);
+            $img = $userController->getPublicImages($app, $idUser, $selection);
 
             $array = array(
                 'app' => ['name' => $app['app.name']],
@@ -120,7 +120,8 @@ class MainController {
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
                 $array['user'] = $this->user;
                 if ($user['id'] == $this->user['id']) {
-                    $img = $userController->getAllImages($app, $idUser);
+                    $img = $userController->getAllImages($app, $idUser, $selection);
+                    var_dump($img);
                     $array['images'] = $img;
                 }
             }
