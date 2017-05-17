@@ -364,6 +364,15 @@ class MainController {
                     $userController->updateNotificationUser($app, $img['user_id'], 1, 1)) {
                     header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
                     die();
+                    /*$img = $userController->getImageAction($app, $idImg);
+                    $array = array('img' => $img);
+
+                    $content = $app['twig']->render('ReloadLike.twig', $array);
+                    $response = new Response();
+                    $response->setStatusCode($response::HTTP_OK);
+                    $response->headers->set('Content-Type', 'text/html');
+                    $response->setContent($content);
+                    return $response;*/
                 }
             }
             $message = 'You can only comment once per photo!';
