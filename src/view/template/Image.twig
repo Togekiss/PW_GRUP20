@@ -19,7 +19,7 @@
                 <form method="post" action="/comment/{{ img.id }}">
                     <div class="form-group comment">
                         <input type="text" name="text" placeholder="Comment" required>
-                    </div> <input type="submit" name="edit" value="Comment">
+                    </div> <input type="submit" name="edit" class="send-comment" id="{{ img.id }}" value="Comment">
                 </form>
             {% endif %}
             <div id="comments-list">

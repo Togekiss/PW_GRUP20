@@ -26,3 +26,26 @@ $(document).on('click', '.like', function(event) {
         $('#reload-' + event.target.id).html(data);
     });
 });
+
+$('.send-comment').on('submit', function(event) {
+    event.preventDefault();
+
+    $.ajax({
+       type:"POST",
+        url: "/comment/" + event.target.id,
+        data: $('.send-comment').serialize(),
+        success: function (data) {
+            $('#reload-' + event.target.id).html(data);
+        }
+    });
+});
+
+/*
+$(document).on('click', '.send-comment', function(event) {
+    //event.preventDefault();
+    $.post("/comment/" + event.target.id, function (data) {
+        alert("commented");
+        $('#reload-' + event.target.id).html(data);
+    });
+});
+*/
