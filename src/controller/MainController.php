@@ -239,7 +239,7 @@ class MainController {
             if ($userController->updateAction($app, $user) == count(array_filter($user))- 1) {
                 if ($user['name']) $app['session']->set('name', $user['name']);
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
-                header('Location: ' . '/', true, 303);
+                header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
                 die();
             }
             $message = 'We had an issue signing you up. Please try again!';

@@ -6,6 +6,31 @@ $('.imageupload').imageupload({
     maxFileSizeKb: 4048
 });
 
+
+$('#register-form').on('submit', function(event) {
+
+    var bdate = new Date($('#birthdate').val());
+
+    if (bdate > Date.now()) {
+        event.preventDefault();
+        $('#date-help').text("This date is a future one!");
+    }
+
+});
+
+$(document).on('click', '#register_submit', function(event) {
+    event.preventDefault();
+    alert("analysing");
+    var bdate = document.getElementById("birthdate").value;
+
+
+    if (bdate > Date.now()) {
+
+        alert("Future date!");
+    }
+
+});
+
 $(document).on('click', '#load_more', function(event) {
     event.preventDefault();
     $.get("/ajax/images", function (data) {

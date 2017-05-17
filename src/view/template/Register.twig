@@ -7,7 +7,7 @@
 {% block content %}
 
     <h1 class="text-center">Register Your New Account</h1><br>
-    <form class="register-form" method="post" action="/register" enctype="multipart/form-data" data-toggle="validator">
+    <form class="register-form" method="post" action="/register" id="register-form" enctype="multipart/form-data" data-toggle="validator">
         <div class="form-group has-feedback">
             <label class="control-label">Username:</label>
             <input type="text" name="user" placeholder="Username" maxlength="20" pattern="^[_A-z0-9]{1,}$" class="form-control" required>
@@ -15,13 +15,13 @@
         </div>
         <div class="form-group has-feedback">
             <label class="control-label">Email:</label>
-            <input type="email" name="email" placeholder="Email" class="form-control" required>
+            <input type="email" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control" required>
             <div class="help-block with-errors"></div>
         </div>
         <div class="form-group">
             <label class="control-label">Birthdate:</label>
-            <input type="date" name="birthdate" class="form-control" required>
-            <div class="help-block with-errors"></div>
+            <input type="date" name="birthdate" id="birthdate" class="form-control" required>
+            <div id="date-help" class="help-block with-errors"></div>
         </div>
         <div class="form-group has-feedback">
             <label class="control-label">Password:</label>
