@@ -78,6 +78,12 @@ h1 {
 
 .container-fluid {
   padding: 0px;
+  margin-bottom: 100px;
+}
+
+.foot {
+  padding-top: 20px;
+  background-color: rgba(245, 245, 245, 0.7);
 }
 
 #load_more {
