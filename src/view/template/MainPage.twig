@@ -27,7 +27,7 @@
                                 <i class="fa fa-heart"></i>{% include 'ReloadLike.twig' %}
                             </span>
                             {% endblock %}<span class="box visits"><i class="fa fa-eye"></i>{{ img.visits }}</span>
-                            <a href="/user/{{ img.user_id }}">{{ img.username }}</a> <span class="date">{{ img.created_at }}</span>
+                            <a href="/user/{{ img.user_id }}/1">{{ img.username }}</a> <span class="date">{{ img.created_at }}</span>
                             <a href="/image/{{ img.id }}" class="title">{{ img.title }}</a>
                             {% if user is defined %}
                                 <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}"><i class="fa fa-heart"> Like</i></a>

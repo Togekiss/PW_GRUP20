@@ -75,28 +75,28 @@ $('#modifyform').on('submit', function(event) {
     location.reload();
 });
 
-$('#editform').on('submit', function(event) {
-    event.preventDefault();
+$(document).ready(function (e) {
+    $('#editform').on('submit',(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
 
-    //var formData = new FormData(document.getElementById("fitxer"));
-    //formData = $('#editform').serialize();
-    //formData.append('file', $('#fitxer')[0].files[0]);
-
-    var file = document.getElementById("fitxer");
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('post', "/edit-image/" + kk2, true);
-    xhr.send(file);
-
-   /* $.ajax({
-        type:"POST",
-        url: "/edit-image/" + kk2,
-        data: formData,
-        processData: false,
-        contentType: false
-    });*/
-
-    location.reload();
+        $.ajax({
+            type:'POST',
+            url: $(this).attr('action') + kk2,
+            data:formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                console.log("success");
+                console.log(data);
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+        });
+    }));
 });
 
 

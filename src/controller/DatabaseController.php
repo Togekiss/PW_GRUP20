@@ -16,6 +16,19 @@ class DatabaseController
         return $user;
     }
 
+    public function getActionIdActive(Application $app, $id)
+    {
+        $sql = "SELECT * FROM user WHERE activate_string = ?";
+        $user = $app['db']->fetchAssoc($sql, array((String)$id));
+        return $user;
+    }
+
+    public function activateUser (Application $app, $id)
+    {
+        $stmt = $app['db']->prepare("UPDATE user SET active= 1 WHERE activate_string=:id");
+        return $stmt->execute(array(':id' => $id));
+    }
+
     public function getImageAction(Application $app, $id)
     {
         $sql = "SELECT * FROM images WHERE id = ?";
@@ -170,14 +183,15 @@ class DatabaseController
 
     public function signUpAction(Application $app, $user)
     {
-        $stmt = $app['db']->prepare("INSERT INTO user (username, email, birthdate, password, img_path, active) VALUES (:username, :email, :birthdate, :password, :img_path, :active)");
+        $stmt = $app['db']->prepare("INSERT INTO user (username, email, birthdate, password, img_path, active, activate_string) VALUES (:username, :email, :birthdate, :password, :img_path, :active, :activate_string)");
         return $stmt->execute(array(
             ':username' => $user['name'],
             ':email' => $user['email'],
             ':birthdate' => $user['birthdate'],
             ':password' => $user['password'],
             ':img_path' => $user['img'],
-            ':active' => 0));
+            ':active' => 0,
+            ':activate_string' => $user['activate_string']));
     }
 
     public function updateAction(Application $app, $user)
