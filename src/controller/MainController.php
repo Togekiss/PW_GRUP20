@@ -12,7 +12,6 @@ use PWGram\controller\DatabaseController;
 use Symfony\Component\HttpFoundation\Session;
 
 
-
 class MainController {
 
     private $user;
