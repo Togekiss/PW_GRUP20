@@ -20,6 +20,14 @@
         <a href="/comment-list/{{ user.id }}">See your comments</a>
     {% endif %}
 
+    <select class="selector" id="{{ user2.id }}" onchange="location = this.value;">
+        <option>Select an Option</option>
+        <option value="/user/{{ user2.id }}/1">Order By Most Likes</option>
+        <option value="/user/{{ user2.id }}/2">Order By Most Comments</option>
+        <option value="/user/{{ user2.id }}/3">Order By Most Visits</option>
+        <option value="/user/{{ user2.id }}/4">Order By Most Recent</option>
+    </select>
+
     <h2>Published images</h2>
     <ul id="user-img" class="img-list list-unstyled">
         <div class="row">
@@ -31,13 +39,14 @@
                             <a href="/image/{{ img.id }}">{{ img.title }}</a>
                             {% if user is defined and user.id == user2.id %}
                                 <button type="button" class="btn btn-sm btn-outline-secondary">
-                                    <a data-toggle="modal" data-target="#edit-image-modal" class="nav-item nav-link" href="">Edit</a>
+                                    <a data-toggle="modal" class="edit-image" id="{{ img.id }}" data-target="#edit-image-modal" class="nav-item nav-link" href="">Edit</a>
                                 </button>
-                                <a href="/remove/{{ img.id }}">Delete</a>
+                                <a class="remove-image" id="{{ img.id }}" href="/remove/{{ img.id }}">Delete</a>
                             {% endif %}
                         </figcaption>
                     </figure>
                 </li>
+            {% endfor %}
 
 
 
@@ -89,12 +98,12 @@
         <div class="modal-dialog">
             <div class="loginmodal-container">
                 <h1>Edit this image</h1><br>
-                <form method="post" action="/edit-image/{{ img.id }}" enctype="multipart/form-data" data-toggle="validator">
+                <form method="post" action="" id="editform" enctype="multipart/form-data" data-toggle="validator">
                     <div class="imageupload panel panel-default form-group">
                         <div class="file-tab panel-body">
                             <label class="btn btn-default btn-file">
                                 <span>Browse</span>
-                                <input type="file" name="img" class="form-control">
+                                <input type="file" id="fitxer" name="img" class="form-control">
                             </label>
                             <button type="button" class="btn btn-default">Remove</button>
                         </div>
@@ -115,7 +124,7 @@
         </div>
     </div>
 
-            {% endfor %}
+
         </div>
     </ul>
 

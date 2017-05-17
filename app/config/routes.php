@@ -130,7 +130,7 @@ $app->get('/logout', 'PWGram\\controller\\MainController::logout');
 $app->get('/upload-image', 'PWGram\\controller\\MainController::upload')->before($before);
 $app->get('/like/{idImg}', 'PWGram\\controller\\MainController::uploadLike')->before($before);
 $app->get('/image/{idImg}', 'PWGram\\controller\\MainController::ShowImage')->before($imgCheck);
-$app->get('/user/{idUser}', 'PWGram\\controller\\MainController::ShowUser');
+$app->get('/user/{idUser}/{selection}', 'PWGram\\controller\\MainController::ShowUser');
 $app->get('/comment-list/{idUser}', 'PWGram\\controller\\MainController::ShowComments')->before($userCheck);
 $app->get('/comment/{idImg}', 'PWGram\\controller\\MainController::uploadComment')->before($before);
 $app->get('/remove/{idImg}', 'PWGram\\controller\\MainController::removeImage')->before($removeCheck);
@@ -152,6 +152,7 @@ $app->post('/upload-image', 'PWGram\\controller\\MainController::upload');
 $app->post('/comment/{idImg}', 'PWGram\\controller\\MainController::uploadComment')->before($before);
 $app->post('/edit-image/{idImg}', 'PWGram\\controller\\MainController::editImage')->before($removeCheck);
 $app->post('/modify-comment/{idComment}', 'PWGram\\controller\\MainController::modifyComment')->before($commentCheck);
+$app->post('/comment-list/{idUser}', 'PWGram\\controller\\MainController::ShowComments')->before($userCheck);
 //$app->post('/login', 'PWGram\\controller\\MainController::login');
 
 $app->get('/register', 'PWGram\\controller\\MainController::ShowsignUp');

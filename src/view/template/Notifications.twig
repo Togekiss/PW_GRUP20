@@ -14,11 +14,11 @@
         {% for notification in notifications %}
             <li>
                 {% if notification.is_like %}
-                <p>User <a href="/user/{{ notification.user_id }}">{{ notification.username }}</a> has liked your
+                <p>User <a href="/user/{{ notification.user_id }}/1">{{ notification.username }}</a> has liked your
                     image <a href="/image/{{ notification.image_id }}">{{ notification.title }}</a>!</p>
                 <a href="/remove-notification/{{ notification.id }}">Already Noticed</a>
                 {% else %}
-                <p>User <a href="/user/{{ notification.user_id }}">{{ notification.username }}</a> has commented your
+                <p>User <a href="/user/{{ notification.user_id }}/1">{{ notification.username }}</a> has commented your
                     image <a href="/image/{{ notification.image_id }}">{{ notification.title }}</a>!</p>
                 <a href="/remove-notification/{{ notification.id }}">Already Noticed</a>
                 {% endif %}

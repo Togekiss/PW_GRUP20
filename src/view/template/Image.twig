@@ -9,7 +9,7 @@
     <figure id="{{ img.id }}">
         <img src="{{ img.img_path }}" alt="{{ img.title }}" width="400" height="300">
         <figcaption>
-            <a href="/user/{{ img.user_id }}">{{ user2.username }}</a>
+            <a href="/user/{{ img.user_id }}/1">{{ user2.username }}</a>
             <div id="reload-{{ img.id }}">
                 {% include 'ReloadLike.twig' %}
             </div><span class="visits">{{ img.visits }}</span>
