@@ -6,8 +6,8 @@
 
 {% block content %}
 
-    <h1>Register Your New Account</h1><br>
-    <form method="post" action="/register" enctype="multipart/form-data" data-toggle="validator">
+    <h1 class="text-center">Register Your New Account</h1><br>
+    <form class="register-form" method="post" action="/register" enctype="multipart/form-data" data-toggle="validator">
         <div class="form-group has-feedback">
             <label class="control-label">Username:</label>
             <input type="text" name="user" placeholder="Username" maxlength="20" pattern="^[_A-z0-9]{1,}$" class="form-control" required>

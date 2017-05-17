@@ -24,17 +24,17 @@
                         <figcaption class="rounded">
                             {% block reload %}
                             <span class="box" id="reload-{{ img.id }}">
-                                <i class="fa fa-heart"></i>{% include 'ReloadLike.twig' %}
+                                {% include 'ReloadLike.twig' %}
                             </span>
                             {% endblock %}<span class="box visits"><i class="fa fa-eye"></i>{{ img.visits }}</span>
                             <a href="/user/{{ img.user_id }}">{{ img.username }}</a> <span class="date">{{ img.created_at }}</span>
                             <a href="/image/{{ img.id }}" class="title">{{ img.title }}</a>
                             {% if user is defined %}
-                                <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}"><i class="fa fa-heart"> Like</i></a>
+                                <a href="/like/{{ img.id }}" class="like" id="{{ img.id }}"><i class="fa fa-heart"></i>Like</a>
                                 <form method="post" action="/comment/{{ img.id }}">
                                     <div class="form-group comment">
-                                        <input type="text" name="text" placeholder="Comment" required>
-                                    </div> <input type="submit" name="edit" class="send-comment" id="{{ img.id }}" value="Comment">
+                                        <input type="text" name="text" class="form-control" placeholder="Comment" required>
+                                    </div> <input type="submit" name="edit" class="send-comment form-control" id="{{ img.id }}" value="Comment">
                                 </form>
                             {% endif %}
                         </figcaption>
@@ -54,7 +54,7 @@
         </div>
     </ul>
 
-    <a href="" id="load_more">Load more images</a>
+    <p class="text-center"><a href="" id="load_more">Load more images</a></p>
     <br><br><br><br><br>
 
 {% endblock %}
