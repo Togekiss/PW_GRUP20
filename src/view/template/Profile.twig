@@ -95,14 +95,14 @@
     </div>
 
     <div class="modal fade" id="edit-image-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
+        <div class="modal-dialog popup">
             <div class="loginmodal-container">
                 <h1>Edit this image</h1><br>
                 <form method="post" action="/edit-image/" id="editform" enctype="multipart/form-data" data-toggle="validator">
                     <div class="imageupload panel panel-default form-group">
                         <div class="file-tab panel-body">
                             <label class="btn btn-default btn-file">
-                                <span>Browse</span>
+                                <span class="browse-button">Browse</span>
                                 <input type="file" id="fitxer" name="img" class="form-control">
                             </label>
                             <button type="button" class="btn btn-default">Remove</button>
@@ -114,7 +114,7 @@
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group">
-                        <label>Make Image Private</label><input type="checkbox" value="1" name="private">
+                        <label class="radio-label">Make Image Private</label><input type="checkbox" value="1" name="private">
                     </div>
                     <div class="form-group">
                         <input type="submit" name="edit" class="login loginmodal-submit form-control" value="Upload Image">
