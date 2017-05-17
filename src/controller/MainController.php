@@ -58,7 +58,7 @@ class MainController {
         return $response;
     }
 
-    public function ShowsignUp (Application $app) {
+   /* public function ShowsignUp (Application $app) {
         $content = $app['twig']->render('Register.twig', array(
             'app' => [
                 'name' => $app['app.name']
@@ -69,9 +69,9 @@ class MainController {
         $response->headers->set('Content-Type', 'text/html');
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function ShowImage (Application $app, $idImg) {
+   /* public function ShowImage (Application $app, $idImg) {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
         $comments = $userController->getImageComments($app, $idImg, 3);
@@ -99,9 +99,9 @@ class MainController {
         $response->headers->set('Content-Type', 'text/html');
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function ShowUser (Application $app, $idUser, $selection) {
+   /* public function ShowUser (Application $app, $idUser, $selection) {
         $userController = new DatabaseController();
         $user = $userController->getActionId($app, $idUser);
 
@@ -206,6 +206,7 @@ class MainController {
             echo "Mail sent!";
         }
     }
+
     public function activateUser (Application $app, Request $request, $idActivate) {
         if ($app['session']->has('name')) {
             $this->user = null;
@@ -229,8 +230,7 @@ class MainController {
             $response->setContent($content);
             return $response;
         }
-    }
-
+    } */
 
     public function login (Application $app, Request $request) {
         $user = $request->get('user');
@@ -264,7 +264,7 @@ class MainController {
         return $response;
     }
 
-    public function edit (Application $app, Request $request) {
+   /* public function edit (Application $app, Request $request) {
 
         $user = array(
             'name' => $request->get('user'),
@@ -304,9 +304,9 @@ class MainController {
         ));
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function upload (Application $app, Request $request) {
+   /* public function upload (Application $app, Request $request) {
         $img = array('title' => $request->get('title'));
 
         $uploadController = new UploadController();
@@ -384,9 +384,9 @@ class MainController {
         ));
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function uploadComment(Application $app, Request $request, $idImg) {
+   /* public function uploadComment(Application $app, Request $request, $idImg) {
         $comment = array('text' => $request->get('text'));
 
         $uploadController = new UploadController();
@@ -414,15 +414,6 @@ class MainController {
                     $userController->updateNotificationUser($app, $img['user_id'], 1, 1)) {
                     header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
                     die();
-                    /*$img = $userController->getImageAction($app, $idImg);
-                    $array = array('img' => $img);
-
-                    $content = $app['twig']->render('ReloadLike.twig', $array);
-                    $response = new Response();
-                    $response->setStatusCode($response::HTTP_OK);
-                    $response->headers->set('Content-Type', 'text/html');
-                    $response->setContent($content);
-                    return $response;*/
                 }
             }
             $message = 'You can only comment once per photo!';
@@ -437,9 +428,9 @@ class MainController {
         ));
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function uploadLike(Application $app, Request $request, $idImg) {
+    /* public function uploadLike(Application $app, Request $request, $idImg) {
 
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
@@ -485,9 +476,9 @@ class MainController {
         $response->headers->set('Content-Type', 'text/html');
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function removeImage (Application $app, $idImg) {
+    /*public function removeImage (Application $app, $idImg) {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
 
@@ -520,9 +511,9 @@ class MainController {
         $userController->deleteNotificationAction($app, $notificationId);
         header('Location: ' . '/notifications', true, 303);
         die();
-    }
+    } */
 
-    public function editImage (Application $app, Request $request, $idImg) {
+  /*  public function editImage (Application $app, Request $request, $idImg) {
         $userController = new DatabaseController();
 
         $imgCheck = array('title' => $request->get('title'));
@@ -566,9 +557,9 @@ class MainController {
         ));
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function modifyComment (Application $app, Request $request, $idComment) {
+  /*  public function modifyComment (Application $app, Request $request, $idComment) {
         $userController = new DatabaseController();
 
         $comment = array('id' => $idComment, 'text' => $request->get('text'));
@@ -588,9 +579,9 @@ class MainController {
         ));
         $response->setContent($content);
         return $response;
-    }
+    } */
 
-    public function ShowComments (Application $app, Request $request, $idUser) {
+   /* public function ShowComments (Application $app, Request $request, $idUser) {
         $userController = new DatabaseController();
         $user = $userController->getActionId($app, $idUser);
         $comments = $userController->getAllComments($app, $idUser);
@@ -639,7 +630,7 @@ class MainController {
         $response->headers->set('Content-Type', 'text/html');
         $response->setContent($content);
         return $response;
-    }
+    } */
 
     public function logout (Application $app) {
         if ($app['session']->has('name')) {
@@ -649,7 +640,6 @@ class MainController {
         header('Location: ' . '/', true, 303);
         die();
     }
-
 
     public function loadMoreImages(Application $app) {
         $response = new Response();
@@ -688,7 +678,6 @@ class MainController {
         $response->setContent($content);
         return $response;
     }
-
 
     public function loadMoreComments (Application $app, $idImg) {
         $userController = new DatabaseController();

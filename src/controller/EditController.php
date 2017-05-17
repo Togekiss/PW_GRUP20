@@ -11,7 +11,12 @@ use PWGram\controller\UserController as UserC;
 
 class EditController {
 
-    public function edit (Application $app, $user) {
+    private $user;
+    public $default = '/assets/img/default_portrait.png';
+    public $upload = __DIR__ . '/../../web/assets/img/';
+    public $path = '/assets/img/';
+
+    public function editValidation (Application $app, $user) {
         $date = date('Y-m-d');
 
         $constraint = new Assert\Collection(array(
@@ -33,4 +38,115 @@ class EditController {
         }
         return count($errors);
     }
+
+    public function editUser (Application $app, Request $request) {
+
+        $user = array(
+            'name' => $request->get('user'),
+            'birthdate' => $request->get('birthdate'),
+            'password' => $request->get('password'),
+        );
+
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+
+        if (!$this->editValidation($app, $user)) {
+            $userController = new DatabaseController();
+            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $user = array(
+                'name' => $user['name']?$user['name']:null,
+                'password' => $user['password']?md5($user['password']):null,
+                'birthdate' => $user['birthdate']?$user['birthdate']:null,
+                'img' => $request->get('img')?$request->get('img'):null,
+                'id' => $this->user['id']
+            );
+
+            if ($userController->updateAction($app, $user) == count(array_filter($user))- 1) {
+                if ($user['name']) $app['session']->set('name', $user['name']);
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
+                die();
+            }
+            $message = 'We had an issue signing you up. Please try again!';
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function editImage (Application $app, Request $request, $idImg) {
+        $userController = new DatabaseController();
+
+        $imgCheck = array('title' => $request->get('title'));
+
+        $uploadController = new UploadController();
+        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+
+        if (!$uploadController->updateValidator($app, $imgCheck)) {
+
+            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+                $tmp_name = $request->files->get('img');
+                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+                $nameBase = uniqid() . "." . $nameBase;
+                $name = $this->upload . $nameBase;
+                move_uploaded_file($tmp_name, $name);
+            }
+
+            $img = array(
+                'id' => $idImg,
+                'title' => $request->get('title')?$request->get('title'):null,
+                'img' => $nameBase?$this->path . $nameBase:null,
+                'private' => $request->get('private') ? 1 : 0,
+            );
+
+            if ($userController->updateImage($app, $img) == count(array_filter($img))- 1) {
+                header('Location: ' . '/user/' . $userController->getAction($app, $app['session']->get('name'))['id'] . "/1", true, 303);
+                die();
+            }
+            $message = 'We had an issue signing you up. Please try again!';
+
+        }
+
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => $message
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
+    public function modifyComment (Application $app, Request $request, $idComment) {
+        $userController = new DatabaseController();
+
+        $comment = array('id' => $idComment, 'text' => $request->get('text'));
+
+        if ($userController->updateComment($app, $comment)) {
+            header('Location: ' . '/comment-list/' . $userController->getAction($app, $app['session']->get('name'))['id'], true, 303);
+            die();
+        }
+
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/html');
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $content = $app['twig']->render('error.twig', array(
+            'app' => ['name' => $app['app.name']],
+            'message' => 'The update of the comment failed. Please, try again!'
+        ));
+        $response->setContent($content);
+        return $response;
+    }
+
 }

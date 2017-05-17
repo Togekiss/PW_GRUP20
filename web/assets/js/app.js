@@ -47,6 +47,7 @@ $(document).on('click', '.load_more_comments', function(event) {
 
 $(document).on('click', '.like', function(event) {
     event.preventDefault();
+    console.log("Marta");
     $.get("/like/" + event.target.id, function (data) {
         $('#reload-' + event.target.id).html(data);
     });
@@ -113,12 +114,10 @@ $(document).ready(function (e) {
             contentType: false,
             processData: false,
             success:function(data){
-                console.log("success");
-                console.log(data);
+                location.reload();
             },
             error: function(data){
-                console.log("error");
-                console.log(data);
+                location.reload();
             }
         });
     }));
