@@ -52,21 +52,34 @@ class EditController {
         if (!$this->editValidation($app, $user)) {
             $userController = new DatabaseController();
             $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+
+                $tmp_name = $request->files->get('img');
+                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+                $nameBase = uniqid() . "." . $nameBase;
+                $name = $this->upload . $nameBase;
+                move_uploaded_file($tmp_name, $name);
+            }
+
             $user = array(
                 'name' => $user['name']?$user['name']:null,
                 'password' => $user['password']?md5($user['password']):null,
                 'birthdate' => $user['birthdate']?$user['birthdate']:null,
-                'img' => $request->get('img')?$request->get('img'):null,
+                'img' => $nameBase?$this->path . $nameBase:null,
                 'id' => $this->user['id']
             );
 
-            if ($userController->updateAction($app, $user) == count(array_filter($user))- 1) {
-                if ($user['name']) $app['session']->set('name', $user['name']);
-                $this->user = $userController->getAction($app, $app['session']->get('name'));
-                header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
-                die();
+            if (!$userController->getAction($app, $user['name'])) {
+                if ($userController->updateAction($app, $user) == count(array_filter($user)) - 1) {
+                    if ($user['name']) $app['session']->set('name', $user['name']);
+                    $this->user = $userController->getAction($app, $app['session']->get('name'));
+                    header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
+                    die();
+                }
             }
-            $message = 'We had an issue signing you up. Please try again!';
+            $message = 'Repeated username. Please try a diferent one!';
         }
 
         $response = new Response();

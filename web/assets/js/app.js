@@ -123,6 +123,28 @@ $(document).ready(function (e) {
     }));
 });
 
+$(document).ready(function (e) {
+    $('#edituserform').on('submit',(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        $.ajax({
+            type:'POST',
+            url: $(this).attr('action'),
+            data:formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                location.reload();
+            },
+            error: function(data){
+                location.reload();
+            }
+        });
+    }));
+});
+
 
 /*
 $(document).on('click', '.send-comment', function(event) {

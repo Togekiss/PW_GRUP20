@@ -256,7 +256,7 @@ class MainController {
             $response->setStatusCode(Response::HTTP_NOT_FOUND);
             $content = $app['twig']->render('error.twig', array(
                 'app' => ['name' => $app['app.name']],
-                'message' => 'You must activate your account! You will found a link in your email!'));
+                'message' => 'You must activate your account! You will find a link in your email!'));
         }
 
         $response->headers->set('Content-Type', 'text/html');

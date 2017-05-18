@@ -69,14 +69,17 @@ class SignupController {
                 $user['img'] = $this->path . $nameBase;
             }
 
-            if (!$user['img']) $user['img'] = $this->default;
+            if (!$request->files->get('img')) $user['img'] = $this->default;
             $user['activate_string'] = md5(uniqid(rand()));
-            if ($userController->signUpAction($app, $user)) {
-                $this->sendMail($user['email'], $user['activate_string']);
-                header('Location: ' . '/', true, 303);
-                die();
+
+            if (!$userController->getAction($app, $user['name']) && !$userController->getActionEmail($app, $user['email'])) {
+                if ($userController->signUpAction($app, $user)) {
+                    $this->sendMail($user['email'], $user['activate_string']);
+                    $message = 'An email with an activation link has been sent to you. Please, check your email!';
+                }
+            }else {
+                $message = 'Repeated username or email. Please try one different!';
             }
-            $message = 'We had an issue signing you up. Please try again!';
         }
 
         $response->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -102,11 +105,6 @@ class SignupController {
         $mail->Subject="ACTIVATE USER PWGRAM";
         $mail->msgHTML("www.grup20.com/activateUser/". $id);
         $mail->addAddress($email," ");
-        if(!$mail->send()) {
-            echo "Error in mail: " . $mail->ErrorInfo;
-        }else {
-            echo "Mail sent!";
-        }
     }
 
     public function activateUser (Application $app, Request $request, $idActivate) {

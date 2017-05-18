@@ -14,6 +14,12 @@ class DatabaseController {
         return $user;
     }
 
+    public function getActionEmail(Application $app, $email) {
+        $sql = "SELECT * FROM user WHERE email = ?";
+        $user = $app['db']->fetchAssoc($sql, array((String)$email));
+        return $user;
+    }
+
     public function getActionIdActive(Application $app, $id)
     {
         $sql = "SELECT * FROM user WHERE activate_string = ?";
@@ -160,10 +166,6 @@ class DatabaseController {
             ':visits' => 0,
             ':private' => $img['private'],
             ':created_at' => $date = date('c')));
-    }
-
-    public function deleteAction(Application $app) {
-
     }
 
     public function signUpAction(Application $app, $user) {
