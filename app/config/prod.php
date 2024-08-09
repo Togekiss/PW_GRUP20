@@ -36,10 +36,14 @@ $app->register(new \PWGram\providers\HelloServiceProvider(), array(
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 
+$url = parse_url(getenv('JAWSDB_URL'));
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array (
     'db.options' => array(
-        'driver' => 'pdo_mysql',
-        'dbname' => 'pwgram',
-        'user' => 'root',
-        'password' => '',
+        'driver'   => 'pdo_mysql',
+        'dbname'   => ltrim($url['path'], '/'),
+        'host'     => $url['host'],
+        'user'     => $url['user'],
+        'password' => $url['pass'],
+        'port'     => isset($url['port']) ? $url['port'] : 3306,
     ),));
