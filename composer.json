@@ -1,5 +1,6 @@
 {
     "name": "pw20/pwgram",
+    "version": "1.0.0", 
     "authors": [
         {
             "name": "Marta \"Togekiss\" Zapatero",
@@ -11,6 +12,7 @@
       }
     ],
     "require": {
+        "php":"^8.0",
         "silex/silex": "~2.0",
         "twig/twig": "^2.3",
         "symfony/asset": "^3.2",
