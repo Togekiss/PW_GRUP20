@@ -13,4 +13,13 @@ require __DIR__.'/app/config/prod.php';
 require __DIR__.'/app/config/routes.php';
 $app['debug'] = true;
 
+// Load and execute the SQL schema file
+$schemaFile = __DIR__ . '/app/config/schema.sql';
+if (file_exists($schemaFile)) {
+    $schemaSQL = file_get_contents($schemaFile);
+    $app['db']->executeQuery($schemaSQL);
+} else {
+    throw new Exception("Schema file not found: $schemaFile");
+}
+
 $app->run();
