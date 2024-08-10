@@ -14,13 +14,13 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',
     'assets.named_packages' => array(
-        'css' => array('base_path' => '/assets/css/'),
-        'js' => array('base_path' => '/assets/js/'),
+        'css' => array('base_path' => '/assets/css/'), // Relative to your application's root URL
+        'js' => array('base_path' => '/assets/js/'), // Relative to your application's root URL
         'images' => array('base_urls' => array(
-            // Use the HEROKU_APP_URL environment variable
-            getenv('HEROKU_APP_URL') . '/assets/img/'
+            getenv('HEROKU_APP_URL') . '/assets/img/' // Full URL based on environment variable
         )),
-    ),
+),
+
 ));
 
 $app->register(new \Silex\Provider\SessionServiceProvider());
@@ -39,14 +39,14 @@ $app->register(new \PWGram\providers\HelloServiceProvider(), array(
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-$url = parse_url(getenv('JAWSDB_URL'));
+$dburl = parse_url(getenv('JAWSDB_URL'));
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array (
     'db.options' => array(
         'driver'   => 'pdo_mysql',
-        'dbname'   => ltrim($url['path'], '/'),
-        'host'     => $url['host'],
-        'user'     => $url['user'],
-        'password' => $url['pass'],
-        'port'     => isset($url['port']) ? $url['port'] : 3306,
+        'dbname'   => ltrim($dburl['path'], '/'),
+        'host'     => $dburl['host'],
+        'user'     => $dburl['user'],
+        'password' => $dburl['pass'],
+        'port'     => isset($dburl['port']) ? $dburl['port'] : 3306,
     ),));
