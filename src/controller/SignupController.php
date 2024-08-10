@@ -43,6 +43,7 @@ class SignupController {
     }
 
     public function signUp(Application $app, Request $request) {
+        // Collect user data from the request
         $user = array(
             'name' => $request->get('user'),
             'email' => $request->get('email'),
@@ -53,43 +54,57 @@ class SignupController {
     
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
-        $message = 'Your introduced data is erroneous. Change the camps with errors!';
+        $message = 'Your introduced data is erroneous. Change the fields with errors!';
     
-        if (!$this->signUpValidation($app, $user)) {
+        // Validate the user data
+        if ($this->signUpValidation($app, $user)) {
             $userController = new DatabaseController();
             $user['password'] = md5($user['password']);
     
-            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
-                $tmp_name = $request->files->get('img');
-                $nameBase = basename($request->files->get('img')->getClientOriginalName());
-                $nameBase = uniqid() . "." . $nameBase;
+            // Check if an image file was uploaded and if there are no errors
+            $imgFile = $request->files->get('img');
+            if ($imgFile && !$imgFile->getError()) {
+                // Process the uploaded image
+                $tmp_name = $imgFile->getPathname();
+                $nameBase = uniqid() . "." . basename($imgFile->getClientOriginalName());
                 $name = $this->upload . $nameBase;
                 move_uploaded_file($tmp_name, $name);
                 $user['img'] = $this->path . $nameBase;
+            } else {
+                // Use the default image if no file was uploaded
+                $user['img'] = $this->default;
             }
     
-            if (!$request->files->get('img')) $user['img'] = $this->default;
+            // Generate an activation string
             $user['activate_string'] = md5(uniqid(rand()));
     
+            // Check if the username or email is already in use
             if (!$userController->getAction($app, $user['name']) && !$userController->getActionEmail($app, $user['email'])) {
+                // Attempt to sign up the user
                 if ($userController->signUpAction($app, $user)) {
-                    // Use the mock email sending
+                    // Use a mock email sending function to simulate activation email
                     $mockEmailResponse = $this->sendMail($user['email'], $user['activate_string']);
                     $message = $mockEmailResponse; // Display mock message instead of actual email
+                    $response->setStatusCode(Response::HTTP_OK);
+                } else {
+                    $message = 'An error occurred while creating your account. Please try again!';
                 }
             } else {
-                $message = 'Repeated username or email. Please try one different!';
+                $message = 'Username or email already in use. Please try a different one!';
             }
         }
     
-        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        // Render the error or success message
         $content = $app['twig']->render('error.twig', array(
             'app' => ['name' => $app['app.name']],
             'message' => $message
         ));
         $response->setContent($content);
+        $response->setStatusCode($response->getStatusCode() === Response::HTTP_OK ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    
         return $response;
     }
+    
     
 
     public function sendMail($email, $id) {
