@@ -14,7 +14,7 @@ class MainController {
 
     private $user;
     public $default = '/assets/img/default_portrait.png';
-    public $upload = __DIR__ . '/../../web/assets/img/';
+    public $upload = __DIR__ . '/../../public/assets/img/';
     public $path = '/assets/img/';
 
     public function renderMainPage (Application $app, Request $request) {

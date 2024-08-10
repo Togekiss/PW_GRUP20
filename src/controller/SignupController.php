@@ -14,7 +14,7 @@ class SignupController {
 
     private $user;
     public $default = '/assets/img/default_portrait.png';
-    public $upload = __DIR__ . '/../../web/assets/img/';
+    public $upload = __DIR__ . '/../../public/assets/img/';
     public $path = '/assets/img/';
 
     public function signUpValidation (Application $app, $user) {
