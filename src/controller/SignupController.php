@@ -63,15 +63,39 @@ class SignupController {
     
             // Check if an image file was uploaded and if there are no errors
             $imgFile = $request->files->get('img');
-            if ($imgFile && !$imgFile->getError()) {
-                // Process the uploaded image
-                $tmp_name = $imgFile->getPathname();
-                $nameBase = uniqid() . "." . basename($imgFile->getClientOriginalName());
-                $name = $this->upload . $nameBase;
-                move_uploaded_file($tmp_name, $name);
-                $user['img'] = $this->path . $nameBase;
+            if ($imgFile instanceof UploadedFile) {
+                // Check for upload errors
+                if (!$imgFile->getError()) {
+                    // Process the uploaded image
+                    $tmp_name = $imgFile->getPathname();
+                    $nameBase = uniqid() . "." . basename($imgFile->getClientOriginalName());
+                    $name = $this->upload . $nameBase;
+        
+                    // Move the uploaded file to the desired location
+                    move_uploaded_file($tmp_name, $name);
+                    $user['img'] = $this->path . $nameBase;
+                } else {
+                    // Handle the upload error appropriately
+                    switch ($imgFile->getError()) {
+                        case UPLOAD_ERR_INI_SIZE:
+                            $message = "The uploaded file exceeds the maximum allowed size.";
+                            break;
+                        case UPLOAD_ERR_FORM_SIZE:
+                            $message = "The uploaded file exceeds the maximum size specified in the form.";
+                            break;
+                        case UPLOAD_ERR_PARTIAL:
+                            $message = "The file was only partially uploaded.";
+                            break;
+                        case UPLOAD_ERR_NO_FILE:
+                            $message = "No file was uploaded.";
+                            break;
+                        default:
+                            $message = "An unknown error occurred.";
+                    }
+                    $user['img'] = $this->default; // or log the error
+                }
             } else {
-                // Use the default image if no file was uploaded
+                // If no file was uploaded, use the default image
                 $user['img'] = $this->default;
             }
     
