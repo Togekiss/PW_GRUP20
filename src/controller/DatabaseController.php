@@ -169,13 +169,14 @@ class DatabaseController {
     }
 
     public function signUpAction(Application $app, $user) {
-        $stmt = $app['db']->prepare("INSERT INTO user (username, email, birthdate, password, img_path, active, activate_string) VALUES (:username, :email, :birthdate, :password, :img_path, :active, :activate_string)");        return $stmt->execute(array(
+        $stmt = $app['db']->prepare("INSERT INTO user (username, email, birthdate, password, img_path, active, activate_string) VALUES (:username, :email, :birthdate, :password, :img_path, :active, :activate_string)");
+        return $stmt->execute(array(
             ':username' => $user['name'],
             ':email' => $user['email'],
             ':birthdate' => $user['birthdate'],
             ':password' => $user['password'],
             ':img_path' => $user['img'],
-            ':active' => 0,
+            ':active' => 1, //because we're not sending activation emails right now
             ':activate_string' => $user['activate_string']));
     }
 
