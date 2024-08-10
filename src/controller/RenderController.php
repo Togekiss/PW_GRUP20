@@ -35,7 +35,8 @@ class RenderController {
         $comments = $userController->getImageComments($app, $idImg, 3);
         $user = $userController->getActionId($app, $img['user_id']);
         // session_start();
-        unset($_SESSION['comments']);
+        $app['session']->remove('comments'); // This is equivalent to unset($_SESSION['comments']);
+
 
 
         $datetime1 = date_create($img['created_at']);

@@ -23,7 +23,8 @@ class MainController {
         $imgViewed = $userController->mostViewed($app);
         $imgRecent = $userController->mostRecent($app, 5);
         // session_start();
-        unset($_SESSION['images']);
+        $app['session']->remove('images'); // This is equivalent to unset($_SESSION['images']);
+
 
         for ($i = 0; $i < count($imgViewed); $i++) {
             $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
