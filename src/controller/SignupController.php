@@ -57,7 +57,7 @@ class SignupController {
         $message = 'Your introduced data is erroneous. Change the fields with errors!';
     
         // Validate the user data
-        if ($this->signUpValidation($app, $user)) {
+        if (!$this->signUpValidation($app, $user)) {
             $userController = new DatabaseController();
             $user['password'] = md5($user['password']);
     
