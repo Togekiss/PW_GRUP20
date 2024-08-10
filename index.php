@@ -6,6 +6,9 @@
  * Time: 19:13
  */
 
+ob_start();
+session_start();
+
 ini_set('display_errors', 1);
 require_once __DIR__.'/vendor/autoload.php';
 $app = require __DIR__.'/app/app.php';
@@ -23,3 +26,5 @@ if (file_exists($schemaFile)) {
 }
 
 $app->run();
+
+ob_end_flush(); // Send the output buffer content
