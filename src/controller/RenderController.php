@@ -34,7 +34,7 @@ class RenderController {
         $img = $userController->getImageAction($app, $idImg);
         $comments = $userController->getImageComments($app, $idImg, 3);
         $user = $userController->getActionId($app, $img['user_id']);
-        session_start();
+        // session_start();
         unset($_SESSION['comments']);
 
 

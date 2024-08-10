@@ -22,7 +22,7 @@ class MainController {
         $userController = new DatabaseController();
         $imgViewed = $userController->mostViewed($app);
         $imgRecent = $userController->mostRecent($app, 5);
-        session_start();
+        // session_start();
         unset($_SESSION['images']);
 
         for ($i = 0; $i < count($imgViewed); $i++) {
@@ -100,7 +100,7 @@ class MainController {
     public function loadMoreImages(Application $app) {
         $response = new Response();
         $userController = new DatabaseController();
-        session_start();
+        // session_start();
         if(!isset($_SESSION['images'])) {
             $_SESSION['images'] = 10;
         } else {
@@ -138,7 +138,7 @@ class MainController {
     public function loadMoreComments (Application $app, $idImg) {
         $userController = new DatabaseController();
         $img = $userController->getImageAction($app, $idImg);
-        session_start();
+        // session_start();
         if(!isset($_SESSION['comments'])) {
             $_SESSION['comments'] = 6;
         } else {
