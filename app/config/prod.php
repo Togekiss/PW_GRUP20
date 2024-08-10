@@ -16,7 +16,10 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.named_packages' => array(
         'css' => array('base_path' => '/assets/css/'),
         'js' => array('base_path' => '/assets/js/'),
-        'images' => array('base_urls' => array('http://grup20.com/assets/img/')),
+        'images' => array('base_urls' => array(
+            // Use the HEROKU_APP_URL environment variable
+            getenv('HEROKU_APP_URL') . '/assets/img/'
+        )),
     ),
 ));
 
