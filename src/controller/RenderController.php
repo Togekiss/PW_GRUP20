@@ -37,12 +37,17 @@ class RenderController {
         // session_start();
         $app['session']->remove('comments'); // This is equivalent to unset($_SESSION['comments']);
 
-
-
         $datetime1 = date_create($img['created_at']);
         $datetime2 = date_create('now');
         $interval = date_diff($datetime1, $datetime2);
         $img['days'] = $interval->format('%a');
+
+        // Check if the image path is valid
+        if (!file_exists($img['img_path']) || !is_file($img['img_path'])) {
+            // Generate a random number between 1 and 5
+            $randomNumber = rand(1, 5);
+            $img['img_path'] = '/assets/img/' . $randomNumber . '.png'; // Set to a random image
+        }
 
         $array = array(
             'app' => ['name' => $app['app.name']],

@@ -143,6 +143,12 @@ class UploadController {
         //header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
         //die();
         $img = $dbController->getImageAction($app, $idImg);
+        // Check if the image path is valid
+        if (!file_exists($img['img_path']) || !is_file($img['img_path'])) {
+            // Generate a random number between 1 and 5
+            $randomNumber = rand(1, 5);
+            $img['img_path'] = '/assets/img/' . $randomNumber . '.png'; // Set to a random image
+        }
         $array = array('img' => $img);
 
         $content = $app['twig']->render('ReloadLike.twig', $array);
