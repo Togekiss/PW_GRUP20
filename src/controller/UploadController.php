@@ -159,7 +159,6 @@ class UploadController {
         $message = 'Your introduced data is erroneous. Change the camps with errors!';
         $imgFile = $request->files->get('img');
         var_dump($imgFile);
-        print_r($imgFile);
 
         if ($request->files->get('img') && !$request->files->get('img')->getError()) {
             if (!$this->uploadValidator($app, $img)) {
