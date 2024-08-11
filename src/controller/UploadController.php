@@ -153,77 +153,68 @@ class UploadController {
         return $response;
     }
 
-    public function uploadImage (Application $app, Request $request) {
+    public function uploadImage(Application $app, Request $request) {
         $img = array('title' => $request->get('title'));
-
+    
         $message = 'Your introduced data is erroneous. Change the camps with errors!';
-        $imgFile = $request->files->get('img');
-        var_dump($imgFile);
-
-        if ($request->files->get('img') && !$request->files->get('img')->getError()) {
+        $imgFileArray = $request->files->get('img');
+        var_dump($imgFileArray);
+    
+        // Check if imgFileArray is an array and contains the necessary file data
+        if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
             if (!$this->uploadValidator($app, $img)) {
                 $userController = new DatabaseController();
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
-
-                $tmp_name = $request->files->get('img');
-                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+    
+                // Assigning the tmp_name for further processing
+                $tmp_name = $imgFileArray['tmp_name'];
+                $nameBase = basename($imgFileArray['name']);
                 $nameBase = uniqid() . "." . $nameBase;
                 $name = $this->upload . $nameBase;
+    
                 move_uploaded_file($tmp_name, $name);
-
+    
                 header('Content-Type: image/jpeg');
-
+    
                 $thumb = imagecreatetruecolor(400, 300);
                 $info = getimagesize($name);
                 list($width, $height) = getimagesize($name);
-
-                if ($info['mime'] == 'image/jpeg')
+    
+                // Create the image resource based on the file type
+                if ($info['mime'] == 'image/jpeg') {
                     $image = imagecreatefromjpeg($name);
-
-                else if ($info['mime'] == 'image/gif')
+                } elseif ($info['mime'] == 'image/gif') {
                     $image = imagecreatefromgif($name);
-
-                else if ($info['mime'] == 'image/png')
+                } elseif ($info['mime'] == 'image/png') {
                     $image = imagecreatefrompng($name);
-
+                }
+    
                 imagecopyresized($thumb, $image, 0, 0, 0, 0, 400, 300, $width, $height);
-
-                imagejpeg($thumb, $this->upload . substr($nameBase, 0, strlen($nameBase) - 4)  . "400x300.jpg", 75);
-
+                imagejpeg($thumb, $this->upload . substr($nameBase, 0, strlen($nameBase) - 4) . "400x300.jpg", 75);
+    
                 $thumb = imagecreatetruecolor(100, 100);
-                $info = getimagesize($name);
-                list($width, $height) = getimagesize($name);
-
-                if ($info['mime'] == 'image/jpeg')
-                    $image = imagecreatefromjpeg($name);
-
-                else if ($info['mime'] == 'image/gif')
-                    $image = imagecreatefromgif($name);
-
-                else if ($info['mime'] == 'image/png')
-                    $image = imagecreatefrompng($name);
-
                 imagecopyresized($thumb, $image, 0, 0, 0, 0, 100, 100, $width, $height);
-
                 imagejpeg($thumb, $this->upload . substr($nameBase, 0, strlen($nameBase) - 4) . "100x100.jpg", 75);
-
+    
                 $img = array(
                     'id' => $this->user['id'],
                     'title' => $request->get('title'),
                     'img' => $this->path . $nameBase,
                     'private' => $request->get('private') ? 1 : 0,
                 );
-
-
+    
                 if ($userController->uploadAction($app, $img)) {
                     header('Location: ' . '/', true, 303);
                     die();
                 }
+    
                 $message = 'We had an issue signing you up. Please try again!';
-
             }
+        } else {
+            // Handle the case where the file is not uploaded correctly
+            $message = 'Image upload failed. Please try again!';
         }
-
+    
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
         $response->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -234,5 +225,6 @@ class UploadController {
         $response->setContent($content);
         return $response;
     }
+    
 
 }
