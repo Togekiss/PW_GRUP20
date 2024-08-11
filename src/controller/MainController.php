@@ -73,7 +73,7 @@ class MainController {
                 'message' => 'User not found'));
         }
         if ($this->user['active']) {
-            $app['session']->start();
+            //$app['session']->start();
             $app['session']->set('name', $this->user['username']);
             header('Location: ' . '/', true, 303);
             die();
