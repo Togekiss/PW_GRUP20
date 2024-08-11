@@ -125,6 +125,15 @@ class RenderController {
             $user['comments'] = $dbController->getNumComment($app, $idUser);
             $img = $dbController->getPublicImages($app, $idUser, $selection);
 
+            for ($i = 0; $i < count($img); $i++) {
+                // Check if the image path is valid
+                if (!file_exists($img[$i]['img_path']) || !is_file($img[$i]['img_path'])) {
+                    // Generate a random number between 1 and 5
+                    $randomNumber = rand(1, 5);
+                    $img[$i]['img_path'] = '/assets/img/' . $randomNumber . '.png'; // Set to a random image
+                } 
+            }
+
             $array = array(
                 'app' => ['name' => $app['app.name']],
                 'user2' => $user,
@@ -135,6 +144,14 @@ class RenderController {
                 $array['user'] = $this->user;
                 if ($user['id'] == $this->user['id']) {
                     $img = $dbController->getAllImages($app, $idUser, $selection);
+                    for ($i = 0; $i < count($img); $i++) {
+                        // Check if the image path is valid
+                        if (!file_exists($img[$i]['img_path']) || !is_file($img[$i]['img_path'])) {
+                            // Generate a random number between 1 and 5
+                            $randomNumber = rand(1, 5);
+                            $img[$i]['img_path'] = '/assets/img/' . $randomNumber . '.png'; // Set to a random image
+                        } 
+                    }
                     $array['images'] = $img;
                 }
             }
