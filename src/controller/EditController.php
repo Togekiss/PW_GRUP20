@@ -53,15 +53,21 @@ class EditController {
             $userController = new DatabaseController();
             $this->user = $userController->getAction($app, $app['session']->get('name'));
 
-            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
-                $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $imgFileArray = $request->files->get('img');
 
-                $tmp_name = $request->files->get('img');
-                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+            if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
+                
+                $this->user = $userController->getAction($app, $app['session']->get('name'));
+            
+                // Using the tmp_name for further processing
+                $tmp_name = $imgFileArray['tmp_name'];
+                $nameBase = basename($imgFileArray['name']);
                 $nameBase = uniqid() . "." . $nameBase;
                 $name = $this->upload . $nameBase;
+            
                 move_uploaded_file($tmp_name, $name);
             }
+            
 
             $user = array(
                 'name' => $user['name']?$user['name']:null,
@@ -93,42 +99,44 @@ class EditController {
         return $response;
     }
 
-    public function editImage (Application $app, Request $request, $idImg) {
+    public function editImage(Application $app, Request $request, $idImg) {
         $userController = new DatabaseController();
-
+    
         $imgCheck = array('title' => $request->get('title'));
-
+    
         $uploadController = new UploadController();
         $message = 'Your introduced data is erroneous. Change the camps with errors!';
-
+    
         if (!$uploadController->updateValidator($app, $imgCheck)) {
-
-            if ($request->files->get('img') && !$request->files->get('img')->getError()) {
+            $imgFileArray = $request->files->get('img');
+    
+            // Check if imgFileArray is an array and contains the necessary file data
+            if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
                 $this->user = $userController->getAction($app, $app['session']->get('name'));
-
-                $tmp_name = $request->files->get('img');
-                $nameBase = basename($request->files->get('img')->getClientOriginalName());
+    
+                // Assigning the tmp_name for further processing
+                $tmp_name = $imgFileArray['tmp_name'];
+                $nameBase = basename($imgFileArray['name']);
                 $nameBase = uniqid() . "." . $nameBase;
                 $name = $this->upload . $nameBase;
+    
                 move_uploaded_file($tmp_name, $name);
             }
-
+    
             $img = array(
                 'id' => $idImg,
-                'title' => $request->get('title')?$request->get('title'):null,
-                'img' => $nameBase?$this->path . $nameBase:null,
+                'title' => $request->get('title') ? $request->get('title') : null,
+                'img' => isset($nameBase) ? $this->path . $nameBase : null,
                 'private' => $request->get('private') ? 1 : 0,
             );
-
-            if ($userController->updateImage($app, $img) == count(array_filter($img))- 1) {
+    
+            if ($userController->updateImage($app, $img) == count(array_filter($img)) - 1) {
                 header('Location: ' . '/user/' . $userController->getAction($app, $app['session']->get('name'))['id'] . "/1", true, 303);
                 die();
             }
             $message = 'We had an issue signing you up. Please try again!';
-
         }
-
-
+    
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
         $response->setStatusCode(Response::HTTP_NOT_FOUND);
@@ -139,6 +147,7 @@ class EditController {
         $response->setContent($content);
         return $response;
     }
+    
 
     public function modifyComment (Application $app, Request $request, $idComment) {
         $userController = new DatabaseController();

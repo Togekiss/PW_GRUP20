@@ -60,23 +60,24 @@ class SignupController {
         if (!$this->signUpValidation($app, $user)) {
             $userController = new DatabaseController();
             $user['password'] = md5($user['password']);
-    
-            // Check if an image file was uploaded and if there are no errors
-            $imgFile = $request->files->get('img');
-            if ($imgFile instanceof UploadedFile) {
-                // Check for upload errors
-                if (!$imgFile->getError()) {
-                    // Process the uploaded image
-                    $tmp_name = $imgFile->getPathname();
-                    $nameBase = uniqid() . "." . basename($imgFile->getClientOriginalName());
-                    $name = $this->upload . $nameBase;
+            
+            // Get the uploaded file data
+            $imgFileArray = $request->files->get('img');
         
-                    // Move the uploaded file to the desired location
-                    move_uploaded_file($tmp_name, $name);
-                    $user['img'] = $this->path . $nameBase;
-                } else {
-                    // Handle the upload error appropriately
-                    switch ($imgFile->getError()) {
+            // Check if an image file was uploaded and if there are no errors
+            if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
+                // Process the uploaded image
+                $tmp_name = $imgFileArray['tmp_name'];
+                $nameBase = uniqid() . "." . basename($imgFileArray['name']);
+                $name = $this->upload . $nameBase;
+        
+                // Move the uploaded file to the desired location
+                move_uploaded_file($tmp_name, $name);
+                $user['img'] = $this->path . $nameBase;
+            } else {
+                // Handle the upload error appropriately
+                if (isset($imgFileArray['error'])) {
+                    switch ($imgFileArray['error']) {
                         case UPLOAD_ERR_INI_SIZE:
                             $message = "The uploaded file exceeds the maximum allowed size.";
                             break;
@@ -92,16 +93,15 @@ class SignupController {
                         default:
                             $message = "An unknown error occurred.";
                     }
-                    $user['img'] = $this->default; // or log the error
+                } else {
+                    $message = "No file was uploaded.";
                 }
-            } else {
-                // If no file was uploaded, use the default image
-                $user['img'] = $this->default;
+                $user['img'] = $this->default; // Use the default image or handle the error accordingly
             }
-    
+        
             // Generate an activation string
             $user['activate_string'] = md5(uniqid(rand()));
-    
+        
             // Check if the username or email is already in use
             if (!$userController->getAction($app, $user['name']) && !$userController->getActionEmail($app, $user['email'])) {
                 // Attempt to sign up the user
@@ -117,6 +117,7 @@ class SignupController {
                 $message = 'Username or email already in use. Please try a different one!';
             }
         }
+        
     
         // Render the error or success message
         $content = $app['twig']->render('error.twig', array(
