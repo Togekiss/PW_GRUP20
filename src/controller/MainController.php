@@ -19,23 +19,23 @@ class MainController {
 
     public function renderMainPage (Application $app, Request $request) {
         $response = new Response();
-        $userController = new DatabaseController();
-        $imgViewed = $userController->mostViewed($app);
-        $imgRecent = $userController->mostRecent($app, 5);
+        $dbController = new DatabaseController();
+        $imgViewed = $dbController->mostViewed($app);
+        $imgRecent = $dbController->mostRecent($app, 5);
         // session_start();
         $app['session']->remove('images'); // This is equivalent to unset($_SESSION['images']);
 
 
         for ($i = 0; $i < count($imgViewed); $i++) {
-            $imgViewed[$i]['username'] = $userController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
+            $imgViewed[$i]['username'] = $dbController->getActionId($app, $imgViewed[$i]['user_id'])['username'];
         }
 
         for ($i = 0; $i < count($imgRecent); $i++) {
-            $imgRecent[$i]['username'] = $userController->getActionId($app, $imgRecent[$i]['user_id'])['username'];
-            $comment = $userController->mostRecentComment($app, $imgRecent[$i]['id']);
+            $imgRecent[$i]['username'] = $dbController->getActionId($app, $imgRecent[$i]['user_id'])['username'];
+            $comment = $dbController->mostRecentComment($app, $imgRecent[$i]['id']);
             $imgRecent[$i]['userc_id'] = $comment['user_id'];
             $imgRecent[$i]['textc'] = htmlentities($comment['text']);
-            $imgRecent[$i]['usernamec'] = $userController->getActionId($app, $comment['user_id'])['username'];
+            $imgRecent[$i]['usernamec'] = $dbController->getActionId($app, $comment['user_id'])['username'];
         }
 
         $array = array(
@@ -44,8 +44,8 @@ class MainController {
             'most_recent_images' => $imgRecent);
 
         if ($app['session']->has('name')) {
-            $userController = new DatabaseController();
-            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $dbController = new DatabaseController();
+            $this->user = $dbController->getAction($app, $app['session']->get('name'));
             $array['user'] = $this->user;
         }
 
@@ -62,8 +62,8 @@ class MainController {
         $pass = $request->get('pass');
         $pass = md5($pass);
 
-        $userController = new DatabaseController();
-        $this->user = $userController->postAction($app, $user, $pass);
+        $dbController = new DatabaseController();
+        $this->user = $dbController->postAction($app, $user, $pass);
         $response = new Response();
 
         if (!$this->user) {
@@ -100,22 +100,22 @@ class MainController {
 
     public function loadMoreImages(Application $app) {
         $response = new Response();
-        $userController = new DatabaseController();
+        $dbController = new DatabaseController();
         // session_start();
         if(!isset($_SESSION['images'])) {
             $_SESSION['images'] = 10;
         } else {
             $_SESSION['images'] = $_SESSION['images'] + 5;
         }
-        $imgRecent = $userController->mostRecent($app, $_SESSION['images']);
+        $imgRecent = $dbController->mostRecent($app, $_SESSION['images']);
 
 
         for ($i = 0; $i < count($imgRecent); $i++) {
-            $imgRecent[$i]['username'] = $userController->getActionId($app, $imgRecent[$i]['user_id'])['username'];
-            $comment = $userController->mostRecentComment($app, $imgRecent[$i]['id']);
+            $imgRecent[$i]['username'] = $dbController->getActionId($app, $imgRecent[$i]['user_id'])['username'];
+            $comment = $dbController->mostRecentComment($app, $imgRecent[$i]['id']);
             $imgRecent[$i]['userc_id'] = $comment['user_id'];
             $imgRecent[$i]['textc'] = htmlentities($comment['text']);
-            $imgRecent[$i]['usernamec'] = $userController->getActionId($app, $comment['user_id'])['username'];
+            $imgRecent[$i]['usernamec'] = $dbController->getActionId($app, $comment['user_id'])['username'];
         }
 
         $array = array(
@@ -123,8 +123,8 @@ class MainController {
             'most_recent_images' => $imgRecent);
 
         if ($app['session']->has('name')) {
-            $userController = new DatabaseController();
-            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $dbController = new DatabaseController();
+            $this->user = $dbController->getAction($app, $app['session']->get('name'));
             $array['user'] = $this->user;
         }
 
@@ -137,16 +137,16 @@ class MainController {
     }
 
     public function loadMoreComments (Application $app, $idImg) {
-        $userController = new DatabaseController();
-        $img = $userController->getImageAction($app, $idImg);
+        $dbController = new DatabaseController();
+        $img = $dbController->getImageAction($app, $idImg);
         // session_start();
         if(!isset($_SESSION['comments'])) {
             $_SESSION['comments'] = 6;
         } else {
             $_SESSION['comments'] = $_SESSION['comments'] + 3;
         }
-        $comments = $userController->getImageComments($app, $idImg, $_SESSION['comments']);
-        $user = $userController->getActionId($app, $img['user_id']);
+        $comments = $dbController->getImageComments($app, $idImg, $_SESSION['comments']);
+        $user = $dbController->getActionId($app, $img['user_id']);
 
         $datetime1 = date_create($img['created_at']);
         $datetime2 = date_create('now');
@@ -158,7 +158,7 @@ class MainController {
             'img' => $img,
             'comments' => $comments,
             'user2'=> $user,
-            'user' =>  $userController->getAction($app, $app['session']->get('name')));
+            'user' =>  $dbController->getAction($app, $app['session']->get('name')));
 
         $content = $app['twig']->render('CommentList.twig', $array);
         $response = new Response();

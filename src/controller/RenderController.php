@@ -30,10 +30,10 @@ class RenderController {
     }
 
     public function ShowImage (Application $app, $idImg) {
-        $userController = new DatabaseController();
-        $img = $userController->getImageAction($app, $idImg);
-        $comments = $userController->getImageComments($app, $idImg, 3);
-        $user = $userController->getActionId($app, $img['user_id']);
+        $dbController = new DatabaseController();
+        $img = $dbController->getImageAction($app, $idImg);
+        $comments = $dbController->getImageComments($app, $idImg, 3);
+        $user = $dbController->getActionId($app, $img['user_id']);
         // session_start();
         $app['session']->remove('comments'); // This is equivalent to unset($_SESSION['comments']);
 
@@ -50,7 +50,7 @@ class RenderController {
             'comments' => $comments,
             'user2'=> $user);
 
-        if ($userController->getAction($app, $app['session']->get('name'))) $array['user'] = $userController->getAction($app, $app['session']->get('name'));
+        if ($dbController->getAction($app, $app['session']->get('name'))) $array['user'] = $dbController->getAction($app, $app['session']->get('name'));
 
         $content = $app['twig']->render('Image.twig', $array);
         $response = new Response();
@@ -61,12 +61,12 @@ class RenderController {
     }
 
     public function ShowComments (Application $app, Request $request, $idUser) {
-        $userController = new DatabaseController();
-        $user = $userController->getActionId($app, $idUser);
-        $comments = $userController->getAllComments($app, $idUser);
+        $dbController = new DatabaseController();
+        $user = $dbController->getActionId($app, $idUser);
+        $comments = $dbController->getAllComments($app, $idUser);
 
         for ($i = 0; $i < count($comments); $i++) {
-            $comments[$i]['title'] = $userController->getImageAction($app, $comments[$i]['image_id'])['title'];
+            $comments[$i]['title'] = $dbController->getImageAction($app, $comments[$i]['image_id'])['title'];
         }
 
         $array = array(
@@ -83,18 +83,18 @@ class RenderController {
     }
 
     public function ShowNotifications (Application $app, Request $request) {
-        $userController = new DatabaseController();
-        $user = $userController->getAction($app, $app['session']->get('name'));
-        $notifications = $userController->getAllNotifications($app, $user['id']);
+        $dbController = new DatabaseController();
+        $user = $dbController->getAction($app, $app['session']->get('name'));
+        $notifications = $dbController->getAllNotifications($app, $user['id']);
 
         for ($i = 0; $i < count($notifications); $i++) {
-            $notifications[$i]['title'] = $userController->getImageAction($app, $notifications[$i]['image_id'])['title'];
+            $notifications[$i]['title'] = $dbController->getImageAction($app, $notifications[$i]['image_id'])['title'];
             if ($notifications[$i]['is_like']) {
-                $notifications[$i]['user_id'] = $userController->getLike($app, $notifications[$i]['image_id'], $notifications[$i]['user_id'])['user_id'];
-                $notifications[$i]['username'] = $userController->getActionId($app, $notifications[$i]['user_id'])['username'];
+                $notifications[$i]['user_id'] = $dbController->getLike($app, $notifications[$i]['image_id'], $notifications[$i]['user_id'])['user_id'];
+                $notifications[$i]['username'] = $dbController->getActionId($app, $notifications[$i]['user_id'])['username'];
             }else {
-                $notifications[$i]['user_id'] = $userController->getComment($app, $notifications[$i]['image_id'], $notifications[$i]['user_id'])['user_id'];
-                $notifications[$i]['username'] = $userController->getActionId($app, $notifications[$i]['user_id'])['username'];
+                $notifications[$i]['user_id'] = $dbController->getComment($app, $notifications[$i]['image_id'], $notifications[$i]['user_id'])['user_id'];
+                $notifications[$i]['username'] = $dbController->getActionId($app, $notifications[$i]['user_id'])['username'];
             }
         }
 
@@ -112,13 +112,13 @@ class RenderController {
     }
 
     public function ShowUser (Application $app, $idUser, $selection) {
-        $userController = new DatabaseController();
-        $user = $userController->getActionId($app, $idUser);
+        $dbController = new DatabaseController();
+        $user = $dbController->getActionId($app, $idUser);
 
         if ($user) {
-            $user['num_images'] = $userController->getNumImages($app, $idUser);
-            $user['comments'] = $userController->getNumComment($app, $idUser);
-            $img = $userController->getPublicImages($app, $idUser, $selection);
+            $user['num_images'] = $dbController->getNumImages($app, $idUser);
+            $user['comments'] = $dbController->getNumComment($app, $idUser);
+            $img = $dbController->getPublicImages($app, $idUser, $selection);
 
             $array = array(
                 'app' => ['name' => $app['app.name']],
@@ -126,10 +126,10 @@ class RenderController {
                 'images' => $img);
 
             if ($app['session']->has('name')) {
-                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                $this->user = $dbController->getAction($app, $app['session']->get('name'));
                 $array['user'] = $this->user;
                 if ($user['id'] == $this->user['id']) {
-                    $img = $userController->getAllImages($app, $idUser, $selection);
+                    $img = $dbController->getAllImages($app, $idUser, $selection);
                     $array['images'] = $img;
                 }
             }

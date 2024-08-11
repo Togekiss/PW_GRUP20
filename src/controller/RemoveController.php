@@ -17,36 +17,36 @@ class RemoveController {
     public $path = '/assets/img/';
 
     public function removeImage (Application $app, $idImg) {
-        $userController = new DatabaseController();
-        $img = $userController->getImageAction($app, $idImg);
+        $dbController = new DatabaseController();
+        $img = $dbController->getImageAction($app, $idImg);
 
-        if ($userController->getNotificationNum($app, $idImg)) {
-            $userController->updateNotificationUser($app, $img['user_id'], $userController->getNotificationNum($app, $idImg), 0);
+        if ($dbController->getNotificationNum($app, $idImg)) {
+            $dbController->updateNotificationUser($app, $img['user_id'], $dbController->getNotificationNum($app, $idImg), 0);
         }
 
-        $userController->deleteImageAction($app, $idImg);
+        $dbController->deleteImageAction($app, $idImg);
         header('Location: ' . '/user/' . $img['user_id'] . "/1", true, 303);
         die();
     }
 
     public function removeComment (Application $app, $idComment) {
-        $userController = new DatabaseController();
-        $com = $userController->getCommentId($app, $idComment);
+        $dbController = new DatabaseController();
+        $com = $dbController->getCommentId($app, $idComment);
 
-        if ($userController->getNumComment($app, $idComment)) {
-            $userController->updateNotificationUser($app, $com['user_id'], $userController->getNumComment($app, $idComment), 0);
+        if ($dbController->getNumComment($app, $idComment)) {
+            $dbController->updateNotificationUser($app, $com['user_id'], $dbController->getNumComment($app, $idComment), 0);
         }
 
-        $userController->deleteCommentAction($app, $idComment);
+        $dbController->deleteCommentAction($app, $idComment);
         header('Location: ' . '/comment-list/' . $com['user_id'], true, 303);
         die();
     }
 
     public function removeNotification (Application $app, $notificationId) {
-        $userController = new DatabaseController();
+        $dbController = new DatabaseController();
 
-        $userController->updateNotificationUser($app, $userController->getAction($app, $app['session']->get('name'))['id'], 1, 0);
-        $userController->deleteNotificationAction($app, $notificationId);
+        $dbController->updateNotificationUser($app, $dbController->getAction($app, $app['session']->get('name'))['id'], 1, 0);
+        $dbController->deleteNotificationAction($app, $notificationId);
         header('Location: ' . '/notifications', true, 303);
         die();
     }

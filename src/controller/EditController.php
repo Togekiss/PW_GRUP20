@@ -50,14 +50,14 @@ class EditController {
         $message = 'Your introduced data is erroneous. Change the camps with errors!';
 
         if (!$this->editValidation($app, $user)) {
-            $userController = new DatabaseController();
-            $this->user = $userController->getAction($app, $app['session']->get('name'));
+            $dbController = new DatabaseController();
+            $this->user = $dbController->getAction($app, $app['session']->get('name'));
 
             $imgFileArray = $request->files->get('img');
 
             if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
                 
-                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                $this->user = $dbController->getAction($app, $app['session']->get('name'));
             
                 // Using the tmp_name for further processing
                 $tmp_name = $imgFileArray['tmp_name'];
@@ -77,10 +77,10 @@ class EditController {
                 'id' => $this->user['id']
             );
 
-            if (!$userController->getAction($app, $user['name'])) {
-                if ($userController->updateAction($app, $user) == count(array_filter($user)) - 1) {
+            if (!$dbController->getAction($app, $user['name'])) {
+                if ($dbController->updateAction($app, $user) == count(array_filter($user)) - 1) {
                     if ($user['name']) $app['session']->set('name', $user['name']);
-                    $this->user = $userController->getAction($app, $app['session']->get('name'));
+                    $this->user = $dbController->getAction($app, $app['session']->get('name'));
                     header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
                     die();
                 }
@@ -100,7 +100,7 @@ class EditController {
     }
 
     public function editImage(Application $app, Request $request, $idImg) {
-        $userController = new DatabaseController();
+        $dbController = new DatabaseController();
     
         $imgCheck = array('title' => $request->get('title'));
     
@@ -112,7 +112,7 @@ class EditController {
     
             // Check if imgFileArray is an array and contains the necessary file data
             if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
-                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                $this->user = $dbController->getAction($app, $app['session']->get('name'));
     
                 // Assigning the tmp_name for further processing
                 $tmp_name = $imgFileArray['tmp_name'];
@@ -130,8 +130,8 @@ class EditController {
                 'private' => $request->get('private') ? 1 : 0,
             );
     
-            if ($userController->updateImage($app, $img) == count(array_filter($img)) - 1) {
-                header('Location: ' . '/user/' . $userController->getAction($app, $app['session']->get('name'))['id'] . "/1", true, 303);
+            if ($dbController->updateImage($app, $img) == count(array_filter($img)) - 1) {
+                header('Location: ' . '/user/' . $dbController->getAction($app, $app['session']->get('name'))['id'] . "/1", true, 303);
                 die();
             }
             $message = 'We had an issue signing you up. Please try again!';
@@ -150,12 +150,12 @@ class EditController {
     
 
     public function modifyComment (Application $app, Request $request, $idComment) {
-        $userController = new DatabaseController();
+        $dbController = new DatabaseController();
 
         $comment = array('id' => $idComment, 'text' => $request->get('text'));
 
-        if ($userController->updateComment($app, $comment)) {
-            header('Location: ' . '/comment-list/' . $userController->getAction($app, $app['session']->get('name'))['id'], true, 303);
+        if ($dbController->updateComment($app, $comment)) {
+            header('Location: ' . '/comment-list/' . $dbController->getAction($app, $app['session']->get('name'))['id'], true, 303);
             die();
         }
 

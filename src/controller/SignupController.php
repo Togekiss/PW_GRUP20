@@ -58,7 +58,7 @@ class SignupController {
     
         // Validate the user data
         if (!$this->signUpValidation($app, $user)) {
-            $userController = new DatabaseController();
+            $dbController = new DatabaseController();
             $user['password'] = md5($user['password']);
             
             // Get the uploaded file data
@@ -103,9 +103,9 @@ class SignupController {
             $user['activate_string'] = md5(uniqid(rand()));
         
             // Check if the username or email is already in use
-            if (!$userController->getAction($app, $user['name']) && !$userController->getActionEmail($app, $user['email'])) {
+            if (!$dbController->getAction($app, $user['name']) && !$dbController->getActionEmail($app, $user['email'])) {
                 // Attempt to sign up the user
-                if ($userController->signUpAction($app, $user)) {
+                if ($dbController->signUpAction($app, $user)) {
                     // Use a mock email sending function to simulate activation email
                     $mockEmailResponse = $this->sendMail($user['email'], $user['activate_string']);
                     $message = $mockEmailResponse; // Display mock message instead of actual email
@@ -162,9 +162,9 @@ class SignupController {
         }
         $response = new Response();
         $response->headers->set('Content-Type', 'text/html');
-        $userController = new DatabaseController();
-        if ($userController->activateUser ($app, $idActivate)) {
-            $user = $userController->getActionIdActive($app, $idActivate);
+        $dbController = new DatabaseController();
+        if ($dbController->activateUser ($app, $idActivate)) {
+            $user = $dbController->getActionIdActive($app, $idActivate);
             $app['session']->start();
             $app['session']->set('name', $user['username']);
             header('Location: ' . '/', true, 303);

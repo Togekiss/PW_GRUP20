@@ -68,16 +68,16 @@ class UploadController {
         $message = 'Your introduced data is erroneous. Change the camps with errors!';
 
         if (!$this->uploadCommentValidator($app, $comment)) {
-            $userController = new DatabaseController();
-            $img = $userController->getImageAction($app, $idImg);
-            $user = $userController->getAction($app, $app['session']->get('name'));
+            $dbController = new DatabaseController();
+            $img = $dbController->getImageAction($app, $idImg);
+            $user = $dbController->getAction($app, $app['session']->get('name'));
 
-            if (!$userController->getComment($app, $idImg, $user['id'])) {
+            if (!$dbController->getComment($app, $idImg, $user['id'])) {
                 $comment['image_id'] = $idImg;
                 $comment['user_id'] = $user['id'];
-                $ok = $userController->uploadCommentAction($app, $comment);
+                $ok = $dbController->uploadCommentAction($app, $comment);
 
-                $comment = $userController->getComment($app, $idImg, $user['id']);
+                $comment = $dbController->getComment($app, $idImg, $user['id']);
                 $notification = array (
                     'user_id' => $img['user_id'],
                     'image_id' => $idImg,
@@ -85,8 +85,8 @@ class UploadController {
                     'is_like' => 0
                 );
 
-                if ($ok && $userController->uploadNotificationAction($app, $notification) &&
-                    $userController->updateNotificationUser($app, $img['user_id'], 1, 1)) {
+                if ($ok && $dbController->uploadNotificationAction($app, $notification) &&
+                    $dbController->updateNotificationUser($app, $img['user_id'], 1, 1)) {
                     header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
                     die();
                 }
@@ -107,19 +107,19 @@ class UploadController {
 
     public function uploadLike(Application $app, Request $request, $idImg) {
 
-        $userController = new DatabaseController();
-        $img = $userController->getImageAction($app, $idImg);
-        $user = $userController->getAction($app, $app['session']->get('name'));
+        $dbController = new DatabaseController();
+        $img = $dbController->getImageAction($app, $idImg);
+        $user = $dbController->getAction($app, $app['session']->get('name'));
 
         $like = array(
             'image_id' => $idImg,
             'user_id' => $user['id']
         );
 
-        if (!$userController->getLike($app, $idImg, $user['id'])) {
+        if (!$dbController->getLike($app, $idImg, $user['id'])) {
 
-            $userController->uploadLikeAction($app, $like);
-            $like = $userController->getLike($app, $idImg, $user['id']);
+            $dbController->uploadLikeAction($app, $like);
+            $like = $dbController->getLike($app, $idImg, $user['id']);
 
             $notification = array (
                 'user_id' => $img['user_id'],
@@ -128,21 +128,21 @@ class UploadController {
                 'is_like' => 1
             );
 
-            $userController->uploadNotificationAction($app, $notification);
-            $userController->updateNotificationUser($app, $img['user_id'], 1,  1);
-            $userController->updateLikeImage ($app, $img['id'], 1);
+            $dbController->uploadNotificationAction($app, $notification);
+            $dbController->updateNotificationUser($app, $img['user_id'], 1,  1);
+            $dbController->updateLikeImage ($app, $img['id'], 1);
         }
         else {
-            $userController->deleteLikeAction($app, $userController->getLike($app, $idImg, $user['id'])['id']);
-            $userController->deleteNotificationAction($app, $userController->getNotification($app, $idImg, $img['user_id'])['id']);
-            $userController->updateNotificationUser($app, $img['user_id'], 1, 0);
-            $userController->updateLikeImage ($app, $img['id'], 0);
+            $dbController->deleteLikeAction($app, $dbController->getLike($app, $idImg, $user['id'])['id']);
+            $dbController->deleteNotificationAction($app, $dbController->getNotification($app, $idImg, $img['user_id'])['id']);
+            $dbController->updateNotificationUser($app, $img['user_id'], 1, 0);
+            $dbController->updateLikeImage ($app, $img['id'], 0);
         }
 
         //header('Location: ' . '/', true, 303);
         //header('Location: ' . $_SERVER['HTTP_REFERER'], true, 303);
         //die();
-        $img = $userController->getImageAction($app, $idImg);
+        $img = $dbController->getImageAction($app, $idImg);
         $array = array('img' => $img);
 
         $content = $app['twig']->render('ReloadLike.twig', $array);
@@ -163,8 +163,8 @@ class UploadController {
         // Check if imgFileArray is an array and contains the necessary file data
         if (is_array($imgFileArray) && isset($imgFileArray['tmp_name']) && $imgFileArray['error'] == 0) {
             if (!$this->uploadValidator($app, $img)) {
-                $userController = new DatabaseController();
-                $this->user = $userController->getAction($app, $app['session']->get('name'));
+                $dbController = new DatabaseController();
+                $this->user = $dbController->getAction($app, $app['session']->get('name'));
     
                 // Assigning the tmp_name for further processing
                 $tmp_name = $imgFileArray['tmp_name'];
@@ -203,7 +203,7 @@ class UploadController {
                     'private' => $request->get('private') ? 1 : 0,
                 );
     
-                if ($userController->uploadAction($app, $img)) {
+                if ($dbController->uploadAction($app, $img)) {
                     header('Location: ' . '/', true, 303);
                     die();
                 }

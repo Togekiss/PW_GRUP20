@@ -23,8 +23,8 @@ $before = function (Request $request, Application $app) {
 
 $imgCheck = function (Request $request, Application $app) {
     $idImg = $request->get('idImg');
-    $userController = new DatabaseController();
-    $img = $userController->getImageAction($app, $idImg);
+    $dbController = new DatabaseController();
+    $img = $dbController->getImageAction($app, $idImg);
 
     if (!$img || $img['private']) {
         $response = new Response();
@@ -33,7 +33,7 @@ $imgCheck = function (Request $request, Application $app) {
         $response->setStatusCode(Response::HTTP_FORBIDDEN);
         return $response;
     }
-    $userController->updateVisits($app, $idImg);
+    $dbController->updateVisits($app, $idImg);
 };
 
 $removeCheck = function (Request $request, Application $app) {
@@ -45,10 +45,10 @@ $removeCheck = function (Request $request, Application $app) {
         return $response;
     }else {
         $idImg = $request->get('idImg');
-        $userController = new DatabaseController();
-        $img = $userController->getImageAction($app, $idImg);
+        $dbController = new DatabaseController();
+        $img = $dbController->getImageAction($app, $idImg);
 
-        if (!$img || ($img['user_id'] != $userController->getAction($app, $app['session']->get('name'))['id'])) {
+        if (!$img || ($img['user_id'] != $dbController->getAction($app, $app['session']->get('name'))['id'])) {
             $response = new Response();
             $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'The image does not exist or you are not the owner.'));
             $response->setContent($content);
@@ -67,8 +67,8 @@ $userCheck = function (Request $request, Application $app) {
         return $response;
     }else {
         $idUser = $request->get('idUser');
-        $userController = new DatabaseController();
-        if($userController->getAction($app, $app['session']->get('name'))['id'] != $idUser) {
+        $dbController = new DatabaseController();
+        if($dbController->getAction($app, $app['session']->get('name'))['id'] != $idUser) {
             $response = new Response();
             $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You cannot access other users comment page'));
             $response->setContent($content);
@@ -87,10 +87,10 @@ $notificationCheck = function (Request $request, Application $app) {
         return $response;
     } else {
         $idNot = $request->get('notificationId');
-        $userController = new DatabaseController();
-        $notification = $userController->getNotificationId($app, $idNot);
+        $dbController = new DatabaseController();
+        $notification = $dbController->getNotificationId($app, $idNot);
 
-        if ($notification['user_id'] != $userController->getAction($app, $app['session']->get('name'))['id']) {
+        if ($notification['user_id'] != $dbController->getAction($app, $app['session']->get('name'))['id']) {
             $response = new Response();
             $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You cannot access other account notifications!'));
             $response->setContent($content);
@@ -109,10 +109,10 @@ $commentCheck = function (Request $request, Application $app) {
         return $response;
     }else {
         $idCom = $request->get('idComment');
-        $userController = new DatabaseController();
-        $comment = $userController->getCommentId($app, $idCom);
+        $dbController = new DatabaseController();
+        $comment = $dbController->getCommentId($app, $idCom);
 
-        if ($comment['user_id'] != $userController->getAction($app, $app['session']->get('name'))['id']) {
+        if ($comment['user_id'] != $dbController->getAction($app, $app['session']->get('name'))['id']) {
             $response = new Response();
             $content = $app['twig']->render('error.twig', array('app' => ['name' => $app['app.name']], 'message' => 'You cannot access other account comments!'));
             $response->setContent($content);
